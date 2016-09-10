@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h4 class="modal-title">Crop Image</h4>
+</div>
+
+<div class="modal-body">
+    <image-crop image-out="imageOut" crop-options="options" ng-transclude>
+        <edit-crop></edit-crop>
+        <!--<view-crop></view-crop>-->
+    </image-crop>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="cropImage()">Crop</button>
+</div>

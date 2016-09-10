@@ -1,0 +1,25 @@
+<div class="input-group-btn" uib-dropdown data-ng-if2="vmSelectorMenu.enabled">
+    <button type="button" class="btn bg-slate-300 btn-icon p-5" uib-dropdown-toggle>
+        <span ng-hide="vmSelectorMenu.enabled && !vmSelectorMenu.readonly">&nbsp;</span>
+        <span class="icon-more2" ng-show="vmSelectorMenu.enabled && !vmSelectorMenu.readonly"></span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right" role="menu"
+        ng-show="vmSelectorMenu.enabled && !vmSelectorMenu.readonly">
+        <li ng-if="vmSelectorMenu.locked">
+            <a href ng-click="vmSelectorMenu.unlock()"><i class="icon-unlocked2"></i> <span translate>Unlock</span></a>
+        </li>
+        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasAdd">
+            <a href access="create_{{vmSelectorMenu.domain}}_module"
+               ng-click="vmSelectorMenu.add()"><i class="icon-plus3"></i> <span translate>Add New</span></a>
+        </li>
+        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasEdit">
+            <a href access="update_{{vmSelectorMenu.domain}}_module"
+               ng-click="vmSelectorMenu.edit()"><i class="icon-pencil"></i> <span translate>Edit</span></a>
+        </li>
+        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasReload">
+            <a href access="read_{{vmSelectorMenu.domain}}_module"
+               ng-click="vmSelectorMenu.reload()"><i class="icon-database-refresh"></i> <span
+                    translate>Reload</span></a>
+        </li>
+    </ul>
+</div>

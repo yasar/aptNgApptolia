@@ -1,0 +1,337 @@
+/**
+ * Created by yasar on 21.12.2015.
+ */
+
+
+(function (app) {
+
+    app.directive('aptDatatable', fn);
+
+    var path = 'directives/datatable';
+
+    fn.$inject = ['$templateRequest', '$compile', '$parse', '$interpolate', 'gettextCatalog', '$rootScope'];
+    function fn($templateRequest, $compile, $parse, $interpolate, gettextCatalog, $rootScope) {
+        return {
+            restrict: 'EA',
+            compile : compileFn,
+        };
+        function compileFn(element, attrs) {
+
+            var clone            = element.clone();
+            var placeholder      = angular.element('<!-- placeholder -->');
+            var datasource       = null;
+            var datasourcePipe   = null;
+            var datasourceFilter = null;
+            var modelBase        = null;
+            var itemData         = 'row';
+            var rowSpan          = 1;
+            var options          = {
+                addRowIndex         : true,
+                addRowMenu          : true,
+                enableSorting       : true,
+                showAddNewButton    : true,
+                showHeader          : true,
+                showPageSizeSelector: true,
+                showPaginator       : true,
+                showReloadButton    : true,
+                showSearchBox       : true,
+                showTotals          : true,
+            };
+
+            var promise = $templateRequest(path + '/datatable.tpl.html');
+            element.replaceWith(placeholder);
+            return link;
+
+            function link(scope, element, attrs) {
+                if (attrs.datasource) {
+                    datasource = attrs.datasource;
+                }
+
+                if (attrs.datasourceFilter) {
+                    datasourceFilter = $parse(attrs.datasourceFilter)(scope)
+                }
+
+
+                if (attrs.modelBase) {
+                    modelBase = attrs.modelBase;
+                }
+
+                if (attrs.options) {
+                    var _options = $parse(attrs.options)(scope);
+
+                    /**
+                     * check if aptCreateListDirective has the options defined in its vm
+                     */
+                    if (_.isUndefined(_options) && scope.$parent) {
+                        _options = $parse(attrs.options)(scope.$parent);
+                    }
+
+                    options = _.defaults(_options, options);
+                }
+
+                promise.then(function (templateString) {
+
+                    element.removeAttr('apt-datatable');
+                    element.find('apt-datatable').remove();
+                    delete attrs.aptDatatable;
+
+                    var parsers   = {
+                        header: function ($el, $template) {
+                            $template.find('thead > [inject]').replaceWith($el.html());
+                        },
+                        body  : function ($el, $template) {
+                            var $tr = $el.find('tr');
+                            rowSpan = $tr.length;
+
+                            // var ngRepeatStr = itemData + ' in ' + $template.attr('st-table') + ' track by $index';
+                            var ngRepeatStr = itemData + ' in ' + $template.attr('st-table') + (datasourceFilter ? ' | filter:' + datasourceFilter : '') + ' track by $index';
+
+                            if ($tr.length == 1) {
+                                $tr.attr('ng-repeat', ngRepeatStr);
+                            } else {
+                                $tr.first().attr('ng-repeat-start', ngRepeatStr);
+                                $tr.last().attr('ng-repeat-end', '');
+                            }
+                            $template.find('tbody').empty().append($tr);
+                        },
+                        footer: function ($el, $template) {
+                            $template.find('tfoot').empty().append($el.html());
+                        }
+                    };
+                    var $template = angular.element(templateString);
+
+                    /**
+                     * if the <apt-datatable> element has any class,
+                     * then we should transfer it into new template
+                     */
+                    if (clone.attr('class')) {
+                        $template.addClass(clone.attr('class'));
+                    }
+
+                    // $template.addClass('table table-compressed table-striped table-bordered no-border apt-datatable');
+                    // $template.addClass('table table-compressed table-bordered no-border apt-datatable');
+                    $template.addClass('table table-compressed apt-datatable');
+                    $template.attr('st-table', vm(datasource) + '_Virtual');
+                    $template.attr('st-safe-src', vm(datasource));
+                    //$template.attr('st-pipe', 'vmDatatable.getFilteredRowCount');
+
+                    angular.forEach(clone.children(), function (el) {
+                        var $el = angular.element(el);
+
+                        var tagName = $el.prop('tagName');
+                        if (tagName) {
+                            switch (tagName.toLowerCase()) {
+                                case 'thead':
+                                    parsers.header($el, $template);
+                                    break;
+                                case 'tbody':
+                                    parsers.body($el, $template);
+                                    break;
+                                case 'tfoot':
+                                    parsers.footer($el, $template);
+                                    break;
+                            }
+                        }
+                    });
+
+                    if (!options.showHeader) {
+                        $template.find('thead>tr:first-child').remove();
+                    } else {
+                        showSearchBox();
+                        showPageSizeSelector();
+                        showReloadButton();
+                        showAddNewButton();
+                        showTotals();
+                    }
+                    showPaginator();
+                    addRowIndex();
+                    addRowMenu();
+                    enableSorting();
+
+                    return $template;
+
+                    function showSearchBox() {
+                        var searchBox = $template.find('input[apt-search-box]');
+
+                        if (!options.showSearchBox) {
+                            searchBox.remove();
+                            return;
+                        }
+
+                        if (searchBox.length) {
+                            searchBox.removeAttr('apt-search-box')
+                                .attr('st-search', '')
+                                .attr('placeholder', gettextCatalog.getString('search in the list'));
+                        }
+                    }
+
+                    function showPageSizeSelector() {
+                        var pageSize = $template.find('[apt-page-size]');
+
+                        if (!options.showPageSizeSelector) {
+                            pageSize.remove();
+                            return;
+                        }
+
+                        if (pageSize.length) {
+                            pageSize.removeAttr('apt-page-size').attr('ng-model', vm('pageSize'));
+                            $interpolate(vm('pageSize') + '=defaults.pageSize')($rootScope);
+                        }
+                    }
+
+                    function showReloadButton() {
+                        var reloadBtn = $template.find('[apt-reload-button]');
+
+                        if (!options.showReloadButton) {
+                            reloadBtn.remove();
+                            return;
+                        }
+
+                        if (reloadBtn.length) {
+                            reloadBtn.removeAttr('apt-reload-button').attr('ng-click', vm('reload') + '()');
+                        }
+                    }
+
+                    function showAddNewButton() {
+                        var addNewBtn = $template.find('[apt-addnew-button]');
+
+                        if (!options.showAddNewButton) {
+                            addNewBtn.remove();
+                            return;
+                        }
+
+                        if (addNewBtn.length) {
+                            addNewBtn.removeAttr('apt-addnew-button').attr('ng-click', vm('addNew') + '()');
+                        }
+                    }
+
+                    function showTotals() {
+                        var rowCount = $template.find('[apt-row-count]');
+
+                        if (!options.showTotals) {
+                            rowCount.remove();
+                            return;
+                        }
+
+                        if (rowCount.length) {
+                            rowCount.removeAttr('apt-row-count').attr('ng-bind', vm(datasource) + '.length');
+                        }
+                    }
+
+                    function showPaginator() {
+                        var footer = $template.find('tfoot');
+
+                        if (!options.showPaginator) {
+                            footer.remove();
+                            return;
+                        }
+                        footer.append('<tr><td colspan="100%" class="text-center" ' +
+                                      'st-items-by-page="' + vm('pageSize') + '" ' +
+                                      'st-pagination ' +
+                                      'st-template="directives/smartTable/pagination.tpl.html"></td></tr>');
+
+                        footer.attr('ng-show', vm(datasource) + '.length>' + vm('pageSize'));
+                    }
+
+                    function addRowIndex() {
+                        return false;
+                        if (!options.addRowIndex) {
+                            return;
+                        }
+                        var th = addColumnTo('thead', 'left');
+                        th.html('<span uib-tooltip="{{\'Row Number\'|translate}}">#</span>');
+                        th.css('width', '80px');
+                        th.css('text-align', 'right');
+
+                        var td = addColumnTo('tbody', 'left');
+                        td.html('{{$index+1}}');
+                        td.css('text-align', 'right');
+                    }
+
+                    function addRowMenu() {
+                        if (!options.addRowMenu) {
+                            return;
+                        }
+                        var header = addColumnTo('thead');
+                        header.addClass('text-right td-menu');
+                        header.css('width', '20px');
+
+                        _.set(scope, vm('rowMenuConfig'), _.defaults(_.get(scope, vm('rowMenuConfig')), {
+                            translate: true
+                        }));
+
+                        var menu = addColumnTo('tbody');
+                        menu.html('<div apt-menu-builder ' +
+                                  'menu-type="table-row-menu" ' +
+                                  'ng-model="' + vm('rowMenu') + '" ' +
+                                  'item-data="' + itemData + '" ' +
+                                  'watch-item-data="true"' +
+                                  'data-config="' + vm('rowMenuConfig') + '" ' +
+                                  'btn-size="xs"></div>');
+                        // menu.addClass('text-right td-menu bg-grey-300');
+                        menu.addClass('text-right td-menu');
+                    }
+
+                    function enableSorting() {
+                        var sortableEls = $template.find('[apt-sort]');
+
+                        if (!options.enableSorting) {
+                            sortableEls.remove();
+                            return;
+                        }
+                        angular.forEach(sortableEls, function (el) {
+                            $(el).attr('st-sort', $(el).attr('apt-sort'));
+                            $(el).removeAttr('apt-sort');
+                        });
+
+                    }
+
+                    function addColumnTo(where, side) {
+                        var col, find;
+                        side = side || 'right';
+
+                        switch (where) {
+                            case 'thead':
+                                col  = $('<th></th>');
+                                find = 'tr:last-child:not(:first-child)';
+                                break;
+                            default:
+                                col  = $('<td rowspan="' + rowSpan + '"></td>');
+                                find = 'tr:first-child'
+                        }
+
+                        if (side == 'right') {
+                            $template.find(where).find(find).append(col);
+                        } else {
+                            $template.find(where).find(find).prepend(col);
+                        }
+                        return col;
+                    }
+                })
+
+                //----------------------
+
+                    .then(function (template) {
+                        if (attrs.responsive == 'true') {
+                            template = $('<div class="table-responsive"></div>').append(template);
+                        }
+                        var replacement = $compile(template)(scope);
+                        element.replaceWith(replacement);
+                    });
+
+                scope.$on('$destroy', function () {
+                    // Put everything back to normal
+                    element.replaceWith(clone);
+                });
+
+            }
+
+            function vm(prop) {
+                return modelBase ? modelBase + '.' + prop : prop;
+            }
+
+        }
+
+    }
+
+})(angular.module('ngApptolia'));

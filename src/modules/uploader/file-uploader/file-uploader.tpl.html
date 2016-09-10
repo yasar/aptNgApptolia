@@ -1,0 +1,22 @@
+<div class="thumbnail">
+    <div class="thumb">
+        <a ng-href="{{uploadFileOrig||uploadFile}}" rel="lightbox" target="_blank">
+            <img alt=""
+                 ng-src="{{imageFile || 'http://placehold.it/300x40&text='+(model.filename ? model.filename : 'UPLOAD+FILE')}}">
+        </a>
+    </div>
+    <div class="button-group" ng-if="!readonly">
+        <span class="btn btn-icon btn-default" ng-click="selectFile()" ng-if="!uploadFile"><i icon="upload"></i><input
+                type="file" class="hide"/></span>
+        <span class="btn btn-icon btn-success btn-xl" ng-click="upload()"
+              ng-if="state.is_modified && ! state.is_uploaded && uploadFile"><i icon="upload"></i></span>
+        <span class="btn btn-icon btn-danger" ng-click="delete()" ng-if="uploadFile"><i icon="delete"></i></span>
+    </div>
+    <div class="caption">
+        <!--<h5 ng-if="!readonly">{{model.title}}</h5>-->
+    </div>
+    <div class="description" data-ng-dblclick="editDescription()">
+        <div ng-if="!readonly">{{model.title}}</div>
+        <div ng-if="!readonly">{{model.description || 'double click to edit'}}</div>
+    </div>
+</div>

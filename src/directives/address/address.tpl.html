@@ -1,0 +1,43 @@
+<div>
+	<div class="row">
+		<div class="col-md-6">
+			<apt-field type="locationChain"
+			           model-base="modelBase"
+			           field="country_id" parent-id="null"
+			           label="{{'Country'|translate:'addressTitle'}}"></apt-field>
+		</div>
+
+		<div class="col-md-6">
+			<apt-field type="locationChain"
+			           model-base="modelBase"
+			           field="state_id" parent-id="modelBase.country_id"
+			           label="{{'State'|translate:'addressTitle'}}"></apt-field>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<apt-field type="locationChain"
+			           model-base="modelBase"
+			           field="city_id" parent-id="modelBase.state_id"
+			           label="{{'City'|translate:'addressTitle'}}"></apt-field>
+		</div>
+
+		<div class="col-md-6">
+			<apt-field type="locationChain"
+			           model-base="modelBase"
+			           field="district_id" parent-id="modelBase.city_id"
+			           label="{{'District'|translate:'addressTitle'}}"></apt-field>
+		</div>
+	</div>
+	<!--<apt-field type="textarea" field="address" model-base="modelBase"/>-->
+	<div class="form-group">
+		<label translate>Address</label>
+		<textarea class="form-control" data-ng-model="modelBase.address" rows="3"></textarea>
+	</div>
+	<div class="row">
+		<div class="col-sm-3">
+			<apt-field field="postal_code" model-base="modelBase" label="{{'Postal Code'|translate:'addressTitle'}}"></apt-field>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+<div class="input-group">
+    <div class="input-group-btn">
+        <select class="btn btn-default border-default"
+                data-ng-options="item as item.unit for item in vmMoney.currencies"
+                ng-model-options="{getterSetter: true}"
+                ng-model="vmMoney.selectedCurrencyItem"></select>
+    </div>
+    <input ng-model="vmMoney.amount" class="form-control"/>
+</div>

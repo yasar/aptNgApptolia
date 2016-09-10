@@ -1,0 +1,25 @@
+<div class="panel" ng-class="vmWidgetBuilder.conf.bgColor">
+    <div class="panel-body">
+        <div class="heading-elements">
+            <apt-menu-builder ng-if="vmWidgetBuilder.conf.headingMenu"
+                              menu-type="table-row-menu"
+                              config="vmWidgetBuilder.conf.headingMenuConfig"
+                              ng-model="vmWidgetBuilder.conf.headingMenu"></apt-menu-builder>
+        </div>
+
+        <h3 class="no-margin" translate ng-bind="vmWidgetBuilder.params.title">Title</h3>
+        <span ng-if="vmWidgetBuilder.params.subTitle"
+              data-ng-bind="vmWidgetBuilder.params.subTitle"
+              translate>Sub Title</span>
+        <div class="text-muted text-size-small"
+             ng-if="vmWidgetBuilder.params.description"
+             data-ng-bind="vmWidgetBuilder.params.description" translate>Description
+        </div>
+    </div>
+
+    <div ng-if="vmWidgetBuilder.hasGraph">
+        <nvd3 options="vmWidgetBuilder.conf.graph.options"
+              api="vmWidgetBuilder.graphApi"
+              data="vmWidgetBuilder.conf.graph.data"></nvd3>
+    </div>
+</div>
