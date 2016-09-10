@@ -1,0 +1,26 @@
+<div class="thumbnail">
+    <div class="thumb">
+        <a ng-href="{{uploadFileOrig||uploadFile}}" rel="lightbox" target="_blank">
+            <img alt="" ng-src="{{uploadFile || 'http://placehold.it/300x200&text=UPLOAD'}}">
+        </a>
+    </div>
+    <div class="button-group" ng-if="!readonly">
+        <button class="btn btn-icon btn-default" ng-click="selectFile()" ng-if="!uploadFile"><i
+                icon="picture-o"></i><input type="file" class="hide"/></button>
+        <button class="btn btn-icon btn-default" ng-click="crop()" ng-if="uploadFile"><i icon="crop"></i></button>
+        <button class="btn btn-icon btn-success btn-xl" ng-click="upload()"
+                ng-if="state.is_modified && ! state.is_uploaded && uploadFile"><i icon="upload"></i></button>
+        <button class="btn btn-icon btn-danger" ng-click="delete()" ng-if="uploadFile"><i icon="delete"></i></button>
+        <button class="btn btn-icon btn-default" ng-click="rotate(-90)"
+                ng-if="! state.is_modified && state.is_uploaded"><i icon="rotate-left"></i></button>
+        <button class="btn btn-icon btn-default" ng-click="rotate(90)" ng-if="! state.is_modified && state.is_uploaded">
+            <i icon="rotate-right"></i></button>
+    </div>
+    <div class="caption">
+        <h5>{{ caption }}</h5>
+    </div>
+    <div class="description">
+        <div ng-if="!readonly" data-ng-dblclick="editDescription()">{{title || 'double click to edit'}}</div>
+        {{description}}
+    </div>
+</div>

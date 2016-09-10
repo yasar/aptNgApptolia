@@ -1,0 +1,39 @@
+<div class="thumbnail">
+    <div class="thumb">
+        <img alt="" ng-src="{{uploadFile || 'http://placehold.it/225x150&text='+('No Image'|translate)}}"
+             style="min-width: 100%; min-height: 150px;">
+        <div class="caption-overflow">
+            <span ng-init="btnClass='btn border-white text-white btn-flat btn-icon btn-xs btn-rounded ml-5'">
+                <a href ng-class="btnClass" class="no-margin-left"
+                   ng-if="uploadFile || state.is_uploaded"
+                   data-popup="lightbox"><i class="icon-eye4"></i></a>
+
+                <a href ng-class="btnClass" ng-click="selectFile()"
+                   ng-if="!uploadFile"><i class="icon-plus2"></i><input type="file" class="hide"/></a>
+                <a href ng-class="btnClass" ng-click="crop()"
+                   ng-if="uploadFile"><i class="icon-crop"></i></a>
+                <a href ng-class="btnClass" ng-click="upload()"
+                   ng-if="state.is_modified && ! state.is_uploaded && uploadFile"><i class="icon-upload"></i></a>
+                <a href ng-class="btnClass" ng-click="rotate(-90)"
+                   ng-if="! state.is_modified && state.is_uploaded"><i class="icon-rotate-ccw2"></i></a>
+                <a href ng-class="btnClass" ng-click="rotate(90)"
+                   ng-if="! state.is_modified && state.is_uploaded"> <i class="icon-rotate-cw2"></i></a>
+                <a href ng-class="btnClass" ng-click="delete()"
+                   ng-if="uploadFile"><i class="icon-trash"></i></a>
+
+            </span>
+        </div>
+    </div>
+
+    <div class="caption">
+        <h6 class="no-margin-top text-semibold border-bottom" data-ng-if="caption">
+            <span class="text-default">{{caption}}</span>
+        </h6>
+        <span data-ng-bind="title" data-ng-if="title"></span>
+        <span class="text-muted small" data-ng-if="!title" translate>Add title</span><br/>
+        <span data-ng-bind="description" data-ng-if="description"></span>
+        <span class="text-muted small" data-ng-if="!description" translate>Add description</span><br/>
+        <a href style="border-bottom: 1px dotted #f00;" class="text-muted small" ng-if="!readonly"
+           data-ng-click="editDescription()" translate>Edit</a>
+    </div>
+</div>

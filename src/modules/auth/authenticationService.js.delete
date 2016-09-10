@@ -1,0 +1,62 @@
+(function (angular) {
+    'use strict';
+
+    angular.module('aptAuth')
+        .factory('aptAuthenticationService', [
+            '$q',
+            '$timeout', '$rootScope', 'UserService',
+            function ($q, $timeout, $rootScope, UserService) {
+                var User                = UserService.getAuthUser(),
+                    login               = function (login, password) {
+
+                        // debugger;
+
+                        var defer = $q.defer();
+
+                        $timeout(function () {
+                            UserService.login(login, password).finally(function () {
+
+                                if (!User.is_authenticated) {
+                                    defer.reject('Unknown Username / Password combination');
+                                    return;
+                                } else {
+                                    if (User.hasOwnProperty('permissions') && angular.isArray(User.permissions) && User.permissions.length > 0) {
+                                        defer.resolve();
+                                    } else {
+                                        UserService.loadPermissions().then(function () {
+                                            defer.resolve();
+                                        }, function () {
+                                            UserService.logout();
+                                            defer.reject('Permissions can not be loaded.');
+                                        });
+                                    }
+                                }
+
+                            });
+
+                        });
+
+                        return defer.promise;
+                    },
+                    logout              = function () {
+                        debugger;
+                        // we should only remove the current user.
+                        // routing back to login login page is something we shouldn't
+                        // do here as we are mixing responsibilities if we do.
+                        UserService.logout().then(function () {
+                            $rootScope.$broadcast('auth:logout:success');
+                        });
+                    },
+                    getCurrentLoginUser = function () {
+                        debugger;
+                        return User;
+                    };
+
+                return {
+                    login              : login,
+                    logout             : logout,
+                    getCurrentLoginUser: getCurrentLoginUser
+                };
+            }
+        ]);
+}(angular));

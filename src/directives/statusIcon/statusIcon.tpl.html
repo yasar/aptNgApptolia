@@ -1,0 +1,17 @@
+<div>
+<span ng-if="status"
+      class="btn btn-icon btn-xs text-white"
+      ng-style="{backgroundColor: '{{
+      status.conf.backgroundColor
+      ? status.conf.backgroundColor
+      : $root.Templ.appConfig.defaults.colors[status.name||status]}}' }"
+      uib-tooltip="{{status.title||status}}"
+      tooltip-placement="right">
+    <i ng-if="status.conf.icon" icon="{{status.conf.icon}}"></i>
+    <i ng-if="!status.conf.icon" icon="status-{{status.name||status}}"></i>
+</span>
+<span ng-if="!status"
+      uib-tooltip="{{'Not Set'|translate}}"
+      tooltip-placement="right"
+      class="btn bg-grey-300 btn-icon btn-xs"> <i icon="null"></i> </span>
+</div>

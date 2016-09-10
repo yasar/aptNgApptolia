@@ -1,0 +1,39 @@
+@import '../../../../themes/limitless13/src/less/core/colors/palette.less';
+@import '../../../../themes/limitless13/src/less/variables.less';
+
+.apt-datatable {
+  .td-menu {
+    padding: 0 !important;
+    a.dropdown-toggle {
+      padding: 14px 8px;
+    }
+  }
+  > tbody > tr:hover .td-menu {
+    background-color: @color-slate-600;
+  }
+}
+.apt-datatable.table-compressed {
+  .td-menu {
+    padding: 0 !important;
+    a.dropdown-toggle {
+      padding: @table-compressed-cell-padding;
+    }
+  }
+}
+
+.apt-datatable.table-bordered.no-border{
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th:first-child,
+      > td:first-child {
+        border-left: 0;
+      }
+      > th:last-child,
+      > td:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}

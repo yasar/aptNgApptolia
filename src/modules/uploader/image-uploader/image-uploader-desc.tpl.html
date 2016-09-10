@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h4 class="modal-title">Edit Image Description</h4>
+</div>
+
+<div class="modal-body">
+    <form role="form" class="has-padding">
+        <label translate>Title</label>
+        <apt-field field="title" label="Title" model-base="data"></apt-field>
+        <label translate>Description</label>
+        <textarea ng-model="data.description" class="form-control">{{data.title}}</textarea>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="done()">Done</button>
+</div>

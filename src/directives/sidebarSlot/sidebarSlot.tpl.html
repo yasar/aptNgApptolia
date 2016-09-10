@@ -1,0 +1,13 @@
+<div class="sidebar-category">
+    <div class="category-title category-collapsed" ng-click="vmSidebarSlot.isCollapsed = !vmSidebarSlot.isCollapsed">
+        <span ng-transclude="title">Slot Title</span>
+        <ul class="icons-list">
+            <li><a href data-action="collapse"
+                   ng-class="{'rotate-180': vmSidebarSlot.isCollapsed}"></a></li>
+        </ul>
+    </div>
+
+    <div class="category-content no-padding"
+         uib-collapse="vmSidebarSlot.isCollapsed"
+         ng-transclude="body"></div>
+</div>

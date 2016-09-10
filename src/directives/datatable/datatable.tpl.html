@@ -1,0 +1,43 @@
+<table>
+	<thead>
+	<tr class="table-toolbar">
+		<th colspan="100%">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="input-group input-group-sm">
+                        <span class="input-group-addon">
+                            <span st-summary></span> / <span apt-row-count></span>
+                        </span>
+						<div class="input-group input-group-sm has-feedback-left display-block">
+							<span class="form-control-feedback"><i class="icon-search4 text-size-base text-muted"></i></span>
+							<input apt-search-box class="form-control" type="search" />
+						</div>
+						<div class="input-group-btn">
+							<select apt-page-size
+							        class="btn btn-default border-default"
+							        title="{{'Page Size'|translate}}">
+								<option value="5">5</option>
+								<option value="10">10</option>
+								<option value="25">25</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+						</div>
+						<div class="btn-toolbar pull-right" role="toolbar">
+							<div class="btn-group btn-group-sm" role="group">
+                        <span apt-reload-button class="btn btn-icon bg-slate-300" title="{{'Reload'|translate}}"><i
+		                        class="icon-database-refresh"></i></span>
+                        <span apt-addnew-button class="btn btn-icon bg-pink-300" title="{{'Add New'|translate}}"><i
+		                        class="icon-database-add"></i></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr inject></tr>
+	</thead>
+	<tbody></tbody>
+	<tfoot></tfoot>
+</table>
