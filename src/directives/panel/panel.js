@@ -102,17 +102,17 @@
              * so, first process the body, and do the rest in the next cycle (timeout!).
              */
             processBody();
-            // $timeout(proceed);
+            $timeout(proceed);
 
-            // function proceed() {
-            processTitle();
-            processHeadingElements();
-            processTabs();
-            processFooter();
+            function proceed() {
+                processTitle();
+                processHeadingElements();
+                processTabs();
+                processFooter();
 
-            applyFixes();
-            callback();
-            // }
+                applyFixes();
+                callback();
+            }
 
             function applyFixes() {
                 if (vm.class) {
