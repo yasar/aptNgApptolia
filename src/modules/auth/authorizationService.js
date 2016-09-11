@@ -5,8 +5,8 @@
         .factory('aptAuthorizationService', [
             'aptAuthEnumService', 'UserService',
             function (enums, UserService) {
-                var User         = UserService.getAuthUser();
-                var authorize    = function (loginRequired, requiredPermissions, permissionCheckType) {
+                var User      = UserService.getAuthUser();
+                var authorize = function (loginRequired, requiredPermissions, permissionCheckType) {
                     var result             = enums.authorised.authorised,
                         loweredPermissions = [],
                         hasPermission      = true,
@@ -51,8 +51,11 @@
 
                     return result;
                 };
-                var isAuthorized = function (loginRequired, requiredPermissions, permissionCheckType) {
-                    return authorize(loginRequired, requiredPermissions, permissionCheckType) == enums.authorised.authorised;
+                // var isAuthorized = function (loginRequired, requiredPermissions, permissionCheckType) {
+                //     return authorize(loginRequired, requiredPermissions, permissionCheckType) == enums.authorised.authorised;
+                // };
+                var isAuthorized = function (requiredPermissions) {
+                    return authorize(true, requiredPermissions, enums.permissionCheckType.combinationRequired) == enums.authorised.authorised;
                 };
 
 
