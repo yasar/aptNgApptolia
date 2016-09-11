@@ -5,71 +5,32 @@
     'use strict';
 
     angular.module('aptAuth')
-        //.service('aptAuthEnumService', function () {
-        //    this.authorised = {
-        //        authorised: 0,
-        //        loginRequired: 1,
-        //        notAuthorised: 2
-        //    };
-        //
-        //    this.permissionCheckType = {
-        //        atLeastOne: 0,
-        //        combinationRequired: 1
-        //    };
-        //
-        //    this.right = {
-        //        access: 'access',
-        //        create: 'write',
-        //        read: 'read',
-        //        update: 'update',
-        //        delete: 'delete'
-        //    };
-        //})
         .provider('aptAuthEnumService', [function () {
 
-            //var serviceObject = {
-            //    authorised: {
-            //        authorised: 0,
-            //        loginRequired: 1,
-            //        notAuthorised: 2
-            //    },
-            //    permissionCheckType: {
-            //        atLeastOne: 0,
-            //        combinationRequired: 1
-            //    },
-            //    right: {
-            //        access: 'access',
-            //        create: 'write',
-            //        read: 'read',
-            //        update: 'update',
-            //        delete: 'delete'
-            //    }
-            //};
-
             this.authorised = {
-                authorised: 0,
+                authorised   : 0,
                 loginRequired: 1,
                 notAuthorised: 2
             };
 
             this.permissionCheckType = {
-                atLeastOne: 0,
+                atLeastOne         : 0,
                 combinationRequired: 1
             };
 
             this.right = {
                 access: 'access',
                 create: 'write',
-                read: 'read',
+                read  : 'read',
                 update: 'update',
                 delete: 'delete'
             };
 
             this.$get = function () {
                 return {
-                    authorised: this.authorised,
+                    authorised         : this.authorised,
                     permissionCheckType: this.permissionCheckType,
-                    right: this.right
+                    right              : this.right
                 };
             };
         }])
