@@ -742,6 +742,11 @@
                             formObj.isSavingFailed = false;
                             formObj.data           = backupDataAndGetCopy(formObj.data);
                             //notify(formObj.data, 'formDataUpdated');
+
+                            var $formController    = angular.element('[name=' + formObj.name + ']').data('$formController');
+                            if ($formController && $formController.$setPristine) {
+                                $formController.$setPristine();
+                            }
                         }).catch(function (error) {
                             formObj.isSaving       = false;
                             formObj.isSavingFailed = true;
