@@ -11,6 +11,7 @@
     function fn($injector, $templateCache, $compile, $timeout, aptTempl) {
         return {
             scope       : true,
+            replace     : true,
             // scope       : false,
             restrict    : 'E',
             priority    : 9100,
@@ -82,19 +83,19 @@
                 // $compile($tpl)(scope);
                 var compiledElement = $compile($tpl)(scope);
 
-                // if (ctrls && ctrls.length > 0 && ctrls[0]) {
-                if (ctrls && ctrls.length > 0) {
-                    if(!ctrls[0]){
-                        console.warn('FormController is expected, but got nothing.');
-                    } else {
-                    $timeout(function () {
-                        var $formController = ctrls[0];
-                        // $formController.$addControl($tpl.get(0));
-                        // $formController.$addControl(angular.element($tpl.get(0)));
-                        $formController.$addControl(compiledElement);
-                    });
-                }
-                }
+                // // if (ctrls && ctrls.length > 0 && ctrls[0]) {
+                // if (ctrls && ctrls.length > 0) {
+                //     if (!ctrls[0]) {
+                //         console.warn('FormController is expected, but got nothing.');
+                //     } else {
+                //         $timeout(function () {
+                //             var $formController = ctrls[0];
+                //             // $formController.$addControl($tpl.get(0));
+                //             // $formController.$addControl(angular.element($tpl.get(0)));
+                //             $formController.$addControl(compiledElement);
+                //         });
+                //     }
+                // }
 
                 /**
                  * this will fix the ui-switch directive to initialize itself twice.

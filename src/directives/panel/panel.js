@@ -145,7 +145,14 @@
             }
 
             function processHeadingElements() {
-                element.find('.heading-elements').append(vm.headingElements);
+                // element.find('.heading-elements').append(vm.headingElements);
+
+                /**
+                 * above code did not work for save button on /access_write/manager page
+                 * so keep an attention on if anything breaks due to this change.
+                 */
+                var compiled = $compile(vm.headingElements)($scope);
+                element.find('.heading-elements').append(compiled);
             }
 
             function processBody() {
