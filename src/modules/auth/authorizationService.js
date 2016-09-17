@@ -55,8 +55,14 @@
                 //     return authorize(loginRequired, requiredPermissions, permissionCheckType) == enums.authorised.authorised;
                 // };
                 var isAuthorized = function (requiredPermissions) {
-                    return authorize(true, requiredPermissions, enums.permissionCheckType.combinationRequired) == enums.authorised.authorised;
+                    var result = authorize(true, requiredPermissions, enums.permissionCheckType.combinationRequired) == enums.authorised.authorised;
+
+                    if (!result) {
+                        console.warn('Authorization is failed for: ' + requiredPermissions.toString());
+                    }
+                    return result;
                 };
+
 
 
                 return {

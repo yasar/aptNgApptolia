@@ -9,23 +9,48 @@
 
     var path = 'directives/datatable';
 
-    fn.$inject = ['$templateRequest', '$compile', '$parse', '$interpolate', 'gettextCatalog', '$rootScope'];
-    function fn($templateRequest, $compile, $parse, $interpolate, gettextCatalog, $rootScope) {
+    fn.$inject = ['$templateRequest', '$compile', '$parse', '$interpolate', 'gettextCatalog', '$rootScope', '$injector'];
+    function fn($templateRequest, $compile, $parse, $interpolate, gettextCatalog, $rootScope, $injector) {
         return {
             restrict: 'EA',
             compile : compileFn,
         };
         function compileFn(element, attrs) {
 
-            var clone            = element.clone();
-            var placeholder      = angular.element('<!-- placeholder -->');
-            var datasource       = null;
-            var datasourcePipe   = null;
-            var datasourceFilter = null;
-            var modelBase        = null;
-            var itemData         = 'row';
-            var rowSpan          = 1;
-            var options          = {
+            var clone                   = element.clone();
+            var placeholder             = angular.element('<!-- placeholder -->');
+            var datasource              = null;
+            // var datasourcePipe          = null;
+            var datasourceFilter        = null;
+            var modelBase               = null;
+            var aptAuthorizationService = null;
+            var itemData                = 'row';
+            var rowSpan                 = 1;
+            var options                 = {
+                /**
+                 * authorize is used for menu actions.
+                 * if set to false then authorization is by-passed.
+                 * otherwise, we can provide a string for the module-domain
+                 * or an object containing required privileges for individual parts.
+                 *
+                 * ex:
+                 *
+                 * No authorization
+                 *      <apt-datatable table-options={authorize:false, ..} ..
+                 *
+                 * Authorize with module-domain
+                 *      <apt-datatable table-options={authorize:'mast', ..} ..
+                 *
+                 * Authorize with required privileges
+                 *      <apt-datatable table-options={authorize: {
+                 *          create: 'create_mast_module',
+                 *          read: 'read_mast_module',
+                 *          // for now only create and read is used
+                 *          // edit and delete should be set in rowMenu outside.
+                 *          edit: 'update_mast_module',
+                 *          delete:'delete_mast_module'}, ..} ..
+                 */
+                authorize           : false,
                 addRowIndex         : true,
                 addRowMenu          : true,
                 enableSorting       : true,
@@ -51,7 +76,6 @@
                     datasourceFilter = $parse(attrs.datasourceFilter)(scope)
                 }
 
-
                 if (attrs.modelBase) {
                     modelBase = attrs.modelBase;
                 }
@@ -67,6 +91,34 @@
                     }
 
                     options = _.defaults(_options, options);
+                }
+
+                if (attrs.authorize) {
+                    options.authorize = attrs.authorize;
+                }
+
+                if (options.authorize !== false) {
+                    aptAuthorizationService = $injector.get('aptAuthorizationService');
+
+                    /**
+                     * if options.authorize is a string
+                     * then we assume it is the module domain.
+                     */
+                    if (_.isString(options.authorize)) {
+                        var domain        = options.authorize;
+                        options.authorize = {
+                            create: ['create_' + domain + '_module'],
+                            read  : ['read_' + domain + '_module'],
+                            edit  : ['update_' + domain + '_module'],
+                            delete: ['delete_' + domain + '_module'],
+                        };
+                    }
+
+                    if (!aptAuthorizationService.isAuthorized(options.authorize.read)) {
+                        var unauthorizedMessage = '<apt-inline-help translate>You are not authorized to view the content of this table. Please consult your system administrator.</apt-inline-help>';
+                        element.replaceWith($compile($(unauthorizedMessage))(scope));
+                        return;
+                    }
                 }
 
                 promise.then(function (templateString) {
@@ -193,9 +245,10 @@
                     }
 
                     function showAddNewButton() {
+
                         var addNewBtn = $template.find('[apt-addnew-button]');
 
-                        if (!options.showAddNewButton) {
+                        if (!options.showAddNewButton || (options.authorize && !aptAuthorizationService.isAuthorized(options.authorize.create))) {
                             addNewBtn.remove();
                             return;
                         }

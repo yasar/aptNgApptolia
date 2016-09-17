@@ -1,0 +1,9 @@
+<div data-ng-if="vmDsTotal.total>0" class="alert alert-success alert-bordered m-10">
+    <span class="text-semibold">Total:</span>
+    <span class="text-success-300 pull-right">{{vmDsTotal.total}}</span>
+</div>
+
+<div data-ng-if="vmDsTotal.total<0" class="alert alert-danger alert-bordered m-10">
+    <span class="text-semibold">Total:</span>
+    <span class="text-danger-300 pull-right">{{vmDsTotal.total}}</span>
+</div>
