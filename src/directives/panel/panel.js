@@ -131,16 +131,16 @@
             }
 
             function processTitle() {
+                var titleEl = element.children('.panel-heading').children('.panel-title');
                 if (!vm.title) {
-                    element.find('.panel-title').remove();
+                    titleEl.remove();
                     return;
                 }
 
-                var pt = element.find('.panel-title');
-                pt.append(vm.title);
+                titleEl.append(vm.title);
 
                 if (vm.icon) {
-                    pt.prepend('<i class="' + vm.icon + '"></i>');
+                    titleEl.prepend('<i class="' + vm.icon + '"></i>');
                 }
             }
 

@@ -294,7 +294,7 @@
             aptTempl.blurPage(false);
         }, true);
 
-        NotifyingService.subscribe($scope, options.type + ':updated', function (event, stay) {
+        NotifyingService.subscribe($scope, _.camelCase(options.type) + ':updated', function (event, stay) {
             if (stay.stay) {
                 return;
             }
@@ -302,7 +302,7 @@
             aptTempl.blurPage(false);
         }, true);
 
-        NotifyingService.subscribe($scope, options.type + '.formCanceled', function () {
+        NotifyingService.subscribe($scope, _.camelCase(options.type) + '.formCanceled', function () {
             $uibModalInstance.close('apt:formCloseConfirmed');
             aptTempl.blurPage(false);
         }, false);
@@ -314,7 +314,7 @@
                 return;
             }
 
-            NotifyingService.notify(options.type + '.formCancelRequested');
+            NotifyingService.notify(_.camelCase(options.type) + '.formCancelRequested');
             return event.preventDefault();
 
         });

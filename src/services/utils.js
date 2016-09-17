@@ -204,10 +204,15 @@
 
 
             if (conf.hasOwnProperty('segment')) {
-                if (angular.isObject(conf.segment)) {
-                    url = $routeSegment.getSegmentUrl(conf.segment.name, conf.segment.params);
-                } else {
-                    url = $routeSegment.getSegmentUrl(conf.segment);
+                try {
+                    if (angular.isObject(conf.segment)) {
+                        url = $routeSegment.getSegmentUrl(conf.segment.name, conf.segment.params);
+                    } else {
+                        url = $routeSegment.getSegmentUrl(conf.segment);
+                    }
+                } catch (e) {
+                    console.error((conf.segment.name || conf.segment) + ' is not exist');
+                    url = $routeSegment.getSegmentUrl('main.page404');
                 }
             } else if (conf.hasOwnProperty('url')) {
                 url = conf.url;
@@ -743,7 +748,7 @@
                             formObj.data           = backupDataAndGetCopy(formObj.data);
                             //notify(formObj.data, 'formDataUpdated');
 
-                            var $formController    = angular.element('[name=' + formObj.name + ']').data('$formController');
+                            var $formController = angular.element('[name=' + formObj.name + ']').data('$formController');
                             if ($formController && $formController.$setPristine) {
                                 $formController.$setPristine();
                             }

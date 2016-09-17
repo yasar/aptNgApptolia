@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('aptAuth', [
-            'ngRoute'
-        ])
+        'ngRoute'
+    ])
 
         .run([
             '$rootScope',
@@ -42,14 +42,20 @@
                         if (next.$$route.hasOwnProperty('access')) {
                             next.access = next.$$route.access;
                         }
-
-                        if (!next.hasOwnProperty('access')) {
-                            next.access = {
-                                loginRequired: true
-                            };
-                        } else if (!next.access.hasOwnProperty('loginRequired')) {
-                            next.access.loginRequired = true;
+                        /**
+                         * if no access property is defined in the route
+                         * then we dont need to perform any check.
+                         * just cease the routine here.
+                         */
+                        else {
+                            return;
                         }
+
+                        next.access = _.defaults(next.access, {
+                            loginRequired      : true,
+                            permissions        : [],
+                            permissionCheckType: enums.permissionCheckType.combinationRequired
+                        });
 
                         authorised = authorization.authorize(next.access.loginRequired,
                             next.access.permissions,
@@ -58,13 +64,15 @@
                         if (authorised === enums.authorised.loginRequired) {
                             routeChangeRequiredAfterLogin = true;
                             loginRedirectUrl              = next.originalPath;
-                            //aptUtils.goto({segment: 'login'});
+                            event.preventDefault();
                             aptUtils.goto({url: loginRedirectUrl});
                         }
 
                         else if (authorised === enums.authorised.notAuthorised) {
                             console.log('Could not authorize against: ' + next.access.permissions);
-                            aptUtils.goto({segment: 'not_authorised'});
+                            // aptUtils.goto({segment: 'not_authorised'});
+                            event.preventDefault();
+                            aptUtils.goto({segment: 'main.page403'});
                         }
                     }
                 });

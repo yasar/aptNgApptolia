@@ -56,9 +56,32 @@
                 if (_.has(attrs, 'params')) {
                     scope.vmField.params = $parse(attrs.params)(scope);
                 }
-                var showLabel = _.has(attrs, 'showLabel') && attrs.showLabel == 'false' ? false : true;
-                var label     = showLabel ? getLabel(attrs) : null;
-                var $tpl      = $(getTemplate(scope, attrs));
+                var showLabel       = _.has(attrs, 'showLabel') && attrs.showLabel == 'false' ? false : true;
+                var label           = showLabel ? getLabel(attrs) : null;
+                var $tpl            = $(getTemplate(scope, attrs));
+                var isSelfContained = false;
+
+                if (!_.isNull(bindTo)) {
+                    /**
+                     * check the template file `checkbox-input-group.tpl.html`
+                     * in this template, we dont use anything from the aptField engine.
+                     * the template is self-contained.
+                     * so we should be able to set the ng-model properly.
+                     *
+                     * in order to do this, check if the template has ng-model attribute at any element.
+                     * if not found, then this is regular apt-field tag and set the ng-model at the most outer element ($tpl).
+                     * otherwise, set the ng-model at the found element (tplModel) and also
+                     * set the isSelfContained flag to true.
+                     */
+                    var tplModel = $tpl.find('[ng-model],[data-ng-model]');
+                    if (tplModel.length == 0) {
+                        $tpl.attr('data-ng-model', bindTo);
+                    } else {
+                        tplModel.removeAttr('ng-model data-ng-model');
+                        tplModel.attr('data-ng-model', bindTo);
+                        isSelfContained = true;
+                    }
+                }
 
                 if (showLabel && label !== null) {
                     if ((!_.has(attrs, 'translate') || (_.has(attrs, 'translate') && attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
@@ -67,23 +90,25 @@
                         delete attrs.translate;
                     }
 
-                    $tpl.attr('data-label', label);
+                    if (!isSelfContained) {
+                        $tpl.attr('data-label', label);
+                    } else {
+                        scope.vmField.label = label;
+                    }
                 }
 
-                if (!_.isNull(bindTo)) {
-                    $tpl.attr('data-ng-model', bindTo);
+                if (!isSelfContained) {
+                    transferAttributes(attrs, $tpl);
+
+                    $tpl = finalize(elem, attrs, $tpl);
                 }
-
-                transferAttributes(attrs, $tpl);
-
-                $tpl = finalize(elem, attrs, $tpl);
 
                 elem.after($tpl);
                 elem.remove();
                 // $compile($tpl)(scope);
                 var compiledElement = $compile($tpl)(scope);
 
-                // // if (ctrls && ctrls.length > 0 && ctrls[0]) {
+                // if (ctrls && ctrls.length > 0 && ctrls[0]) {
                 // if (ctrls && ctrls.length > 0) {
                 //     if (!ctrls[0]) {
                 //         console.warn('FormController is expected, but got nothing.');
