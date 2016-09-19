@@ -21,8 +21,8 @@
                         }
                     },
                     replace    : true,
-                    controller : ['$scope', 'Restangular', 'aptUtils',
-                        function ($scope, Restangular, aptUtils) {
+                    controller : ['$scope', 'Restangular', 'aptUtils', 'Lightbox',
+                        function ($scope, Restangular, aptUtils, Lightbox) {
                             $scope.state = {
                                 is_modified: false,
                                 is_uploaded: false
@@ -52,7 +52,7 @@
 
                             $scope.title       = $scope.settings.dbval_title;
                             $scope.description = $scope.settings.dbval_desc;
-                            $scope.caption     = $scope.model.caption || $scope.model.type;
+                            $scope.caption     = _.startCase($scope.model.caption) || _.startCase($scope.model.type);
 
                             /**
                              * todo type için sorulacak.
@@ -236,6 +236,10 @@
                                     $scope.uploadFile     = data.data.thumb + '?' + Math.floor((Math.random() * 100000000) + 1);
                                     $scope.uploadFileOrig = data.data.orig + '?' + Math.floor((Math.random() * 100000000) + 1);
                                 });
+                            };
+
+                            $scope.openLightboxModal = function () {
+                                Lightbox.openModal([$scope.uploadFile], 0);
                             };
 
                         }],
