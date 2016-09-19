@@ -7,7 +7,11 @@
         /**
          * needed for `datepickerPopup.js`
          */
-        'ui.bootstrap'
+        'ui.bootstrap',
+        /**
+         * for image manager, to show images in lightbox
+         */
+        'bootstrapLightbox'
     ]);
 
 })(window.angular);

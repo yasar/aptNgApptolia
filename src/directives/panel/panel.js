@@ -156,12 +156,20 @@
             }
 
             function processBody() {
+                var elBody = element.find('.panel-body');
                 if (!vm.body) {
-                    element.find('.panel-body').remove();
+                    elBody.remove();
                     return;
                 }
-                // element.find('.panel-body').append(vm.body);
-                element.find('.panel-body').append(vm.body.contents());
+                // elBody.append(vm.body);
+                elBody.append(vm.body.contents());
+                var bodyClasses = vm.body.prop("classList");
+                if (bodyClasses.length) {
+                    _.forEach(bodyClasses, function (value) {
+                        elBody.addClass(value);
+                    });
+                }
+                vm.body.remove();
             }
 
             function processFooter() {
