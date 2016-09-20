@@ -713,12 +713,6 @@
             }
 
             function add(mute) {
-                if (_.isUndefined(mute)) {
-                    mute = {
-                        mute: options.mute,
-                        stay: options.stay
-                    };
-                }
                 $timeout(function () {
                     formObj.isSaving       = true;
                     formObj.isSavingFailed = false;
@@ -730,14 +724,13 @@
                     }).catch(function (error) {
                         formObj.isSaving       = false;
                         formObj.isSavingFailed = true;
+
+                        handleException(_.defaults(error, {type: 'rest-error'}));
                     });
                 });
             }
 
             function update(mute) {
-                if (angular.isUndefined(mute)) {
-                    mute = false;
-                }
                 $timeout(function () {
                     formObj.isSaving       = true;
                     formObj.isSavingFailed = false;

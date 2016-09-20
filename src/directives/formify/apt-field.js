@@ -7,8 +7,14 @@
 
     angular.module('ngApptolia').directive('aptField', fn);
 
-    fn.$inject = ['$injector', '$templateCache', '$compile', '$timeout', 'aptTempl'];
-    function fn($injector, $templateCache, $compile, $timeout, aptTempl) {
+    fn.$inject = ['$injector'];
+    function fn($injector) {
+        var $interpolate   = $injector.get('$interpolate');
+        var $parse         = $injector.get('$parse');
+        var $templateCache = $injector.get('$templateCache');
+        var $compile       = $injector.get('$compile');
+        var aptTempl       = $injector.get('aptTempl');
+
         return {
             scope       : true,
             replace     : true,
@@ -50,9 +56,15 @@
                     scope.vmField = {};
                 }
 
-                var $interpolate = $injector.get('$interpolate');
-                var $parse       = $injector.get('$parse');
-                var bindTo       = getBindTo(attrs);
+                if (_.has(attrs, 'field')) {
+                    attrs.field = $interpolate(attrs.field)(scope);
+                }
+
+                if (_.has(attrs, 'type')) {
+                    attrs.type = $interpolate(attrs.type)(scope);
+                }
+
+                var bindTo = getBindTo(attrs, scope);
                 if (_.has(attrs, 'params')) {
                     scope.vmField.params = $parse(attrs.params)(scope);
                 }
@@ -353,7 +365,7 @@
                                 attrs    : {
                                     type           : 'text',
                                     class          : 'form-control',
-                                    'moment-picker': getBindTo(attrs),
+                                    'moment-picker': getBindTo(attrs, scope),
                                     'autoclose'    : 'false',
                                     'today'        : 'true',
                                     'keyboard'     : 'true',
@@ -422,7 +434,7 @@
             return null;
         }
 
-        function getBindTo(attrs) {
+        function getBindTo(attrs, scope) {
             var bindTo = null;
 
             if (_.has(attrs, 'field')) {
