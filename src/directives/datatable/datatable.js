@@ -287,7 +287,7 @@
                             var tplPagination = $('<tr><td colspan="100%" class="text-center" ' +
                                 'st-items-by-page="' + vm('pageSize') + '" ' +
                                 'st-pagination ' +
-                                'st-template="apt/smartTable/pagination.tpl.html"></td></tr>');
+                                'st-template="directives/smartTable/pagination.tpl.html"></td></tr>');
 
                             footer.append(tplPagination);
 
