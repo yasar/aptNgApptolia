@@ -271,20 +271,34 @@
                         }
                     }
 
-                    function showPaginator() {
-                        var footer = $template.find('tfoot');
+                        function showPaginator() {
+                            var hasCustomFooter = false;
+                            var footer          = $template.find('tfoot');
 
-                        if (!options.showPaginator) {
-                            footer.remove();
-                            return;
+                            if (footer.children().length > 0) {
+                                hasCustomFooter = true;
+                            }
+
+                            if (!options.showPaginator && !hasCustomFooter) {
+                                footer.remove();
+                                return;
+                            }
+
+                            var tplPagination = $('<tr><td colspan="100%" class="text-center" ' +
+                                'st-items-by-page="' + vm('pageSize') + '" ' +
+                                'st-pagination ' +
+                                'st-template="apt/smartTable/pagination.tpl.html"></td></tr>');
+
+                            footer.append(tplPagination);
+
+                            var targetEl = null;
+                            if (hasCustomFooter) {
+                                targetEl = tplPagination;
+                            } else {
+                                targetEl = footer;
+                            }
+                            targetEl.attr('ng-show', vm(datasource) + '.length>' + vm('pageSize'));
                         }
-                        footer.append('<tr><td colspan="100%" class="text-center" ' +
-                                      'st-items-by-page="' + vm('pageSize') + '" ' +
-                                      'st-pagination ' +
-                                      'st-template="directives/smartTable/pagination.tpl.html"></td></tr>');
-
-                        footer.attr('ng-show', vm(datasource) + '.length>' + vm('pageSize'));
-                    }
 
                     function addRowIndex() {
                         return false;
