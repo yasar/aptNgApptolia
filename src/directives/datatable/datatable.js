@@ -105,17 +105,30 @@
                      * then we assume it is the module domain.
                      */
                     if (_.isString(options.authorize)) {
-                        var domain        = options.authorize;
-                        options.authorize = {
-                            create: ['create_' + domain + '_module'],
-                            read  : ['read_' + domain + '_module'],
-                            edit  : ['update_' + domain + '_module'],
-                            delete: ['delete_' + domain + '_module'],
-                        };
+                        var domain  = options.authorize;
+                        var builder = _.has(window, domain + 'Builder') ? _.get(window, domain + 'Builder') : null;
+                        if (builder) {
+                            options.authorize = {
+                                create: [builder.permission('create', 'module')],
+                                read  : [builder.permission('read', 'module')],
+                                edit  : [builder.permission('update', 'module')],
+                                delete: [builder.permission('delete', 'module')],
+                                // create: ['create_' + domain + '_module'],
+                                // read  : ['read_' + domain + '_module'],
+                                // edit  : ['update_' + domain + '_module'],
+                                // delete: ['delete_' + domain + '_module'],
+                            };
+                        }
                     }
 
                     if (!aptAuthorizationService.isAuthorized(options.authorize.read)) {
-                        var unauthorizedMessage = '<apt-inline-help translate>You are not authorized to view the content of this table. Please consult your system administrator.</apt-inline-help>';
+                        // var unauthorizedMessage = '<apt-inline-help translate>You are not authorized to view the content of this table. Please consult your system administrator.</apt-inline-help>';
+                        /**
+                         * the `builder` above is not same as aptBuilder
+                         * builder is the specific one for the module.
+                         * aptBuilder is generic.
+                         */
+                        var unauthorizedMessage = aptBuilder.directiveObject.notAuthorized;
                         element.replaceWith($compile($(unauthorizedMessage))(scope));
                         return;
                     }
@@ -271,34 +284,34 @@
                         }
                     }
 
-                        function showPaginator() {
-                            var hasCustomFooter = false;
-                            var footer          = $template.find('tfoot');
+                    function showPaginator() {
+                        var hasCustomFooter = false;
+                        var footer          = $template.find('tfoot');
 
-                            if (footer.children().length > 0) {
-                                hasCustomFooter = true;
-                            }
-
-                            if (!options.showPaginator && !hasCustomFooter) {
-                                footer.remove();
-                                return;
-                            }
-
-                            var tplPagination = $('<tr><td colspan="100%" class="text-center" ' +
-                                'st-items-by-page="' + vm('pageSize') + '" ' +
-                                'st-pagination ' +
-                                'st-template="directives/smartTable/pagination.tpl.html"></td></tr>');
-
-                            footer.append(tplPagination);
-
-                            var targetEl = null;
-                            if (hasCustomFooter) {
-                                targetEl = tplPagination;
-                            } else {
-                                targetEl = footer;
-                            }
-                            targetEl.attr('ng-show', vm(datasource) + '.length>' + vm('pageSize'));
+                        if (footer.children().length > 0) {
+                            hasCustomFooter = true;
                         }
+
+                        if (!options.showPaginator && !hasCustomFooter) {
+                            footer.remove();
+                            return;
+                        }
+
+                        var tplPagination = $('<tr><td colspan="100%" class="text-center" ' +
+                                              'st-items-by-page="' + vm('pageSize') + '" ' +
+                                              'st-pagination ' +
+                                              'st-template="directives/smartTable/pagination.tpl.html"></td></tr>');
+
+                        footer.append(tplPagination);
+
+                        var targetEl = null;
+                        if (hasCustomFooter) {
+                            targetEl = tplPagination;
+                        } else {
+                            targetEl = footer;
+                        }
+                        targetEl.attr('ng-show', vm(datasource) + '.length>' + vm('pageSize'));
+                    }
 
                     function addRowIndex() {
                         return false;
