@@ -95,7 +95,7 @@
                         backdrop : true,
                         animation: true
                     },
-                    small       : {
+                    small        : {
                         size     : 'md',
                         keyboard : true,
                         backdrop : true,
@@ -231,6 +231,7 @@
         {
             var configDefault = {
                 miniSidebar        : true,
+                darkSidebar        : true,
                 sidebarNicescroll  : true,
                 showSidebarLeft    : false,
                 showSidebarRight   : false,
