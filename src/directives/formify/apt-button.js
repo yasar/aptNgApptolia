@@ -25,6 +25,10 @@
          * attrs can have:
          *      type
          *      label
+         *      iconPosition (left|right, default: right)
+         *      actionType (post|cancel)
+         *      isBusy
+         *      isFailed
          */
 
         function linkFn(scope, elem, attrs, ctrl) {

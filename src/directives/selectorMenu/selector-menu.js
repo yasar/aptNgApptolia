@@ -29,11 +29,12 @@
 
     controllerFn.$inject = ['$attrs', '$scope', '$element'];
     function controllerFn($attrs, $scope, $element) {
-        var vm        = this,
-            modelBase = null,
-            fnNameReload,
-            fnNameAdd,
-            fnNameEdit;
+        var vm        = this;
+        var modelBase = null;
+        var fnNameReload;
+        var fnNameResetSelect;
+        var fnNameAdd;
+        var fnNameEdit;
 
         if ($attrs.domain) {
             vm.domain = _.snakeCase($attrs.domain);
@@ -64,12 +65,16 @@
             vm.hasAdd = true;
         }
 
+        if (_.has($scope, fnNameResetSelect = modelize('resetSelect' + vm.Domain)) || _.has($scope, fnNameResetSelect = modelize('resetSelect'))) {
+            vm.hasResetSelect = true;
+        }
+
         if (_.has($scope, fnNameEdit = modelize('edit' + vm.Domain)) || _.has($scope, fnNameEdit = modelize('edit'))) {
             vm.hasEdit = true;
         }
 
 
-        vm.enabled = vm.hasAdd || vm.hasEdit || vm.hasReload;
+        vm.enabled = vm.hasResetSelect || vm.hasAdd || vm.hasEdit || vm.hasReload;
 
 
         vm.reload = function () {
@@ -78,6 +83,10 @@
 
         vm.add = function () {
             _.get($scope, fnNameAdd)();
+        };
+
+        vm.resetSelect = function () {
+            _.get($scope, fnNameResetSelect)();
         };
 
         vm.edit = function () {
