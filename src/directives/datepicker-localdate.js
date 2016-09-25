@@ -5,8 +5,8 @@
         .directive('datepickerLocaldate', ['$parse', function ($parse) {
             var directive = {
                 restrict: 'A',
-                require: ['ngModel'],
-                link: link
+                require : ['ngModel'],
+                link    : link
             };
             return directive;
 
@@ -29,8 +29,13 @@
                     if (!modelValue) {
                         return undefined;
                     }
-                    // date constructor will apply timezone deviations from UTC (i.e. if locale is behind UTC 'dt' will be one day behind)
-                    var dt = new Date(modelValue);
+                    var dt = null;
+                    if (moment.isMoment(modelValue)) {
+                        dt = modelValue.toDate();
+                    } else {
+                        // date constructor will apply timezone deviations from UTC (i.e. if locale is behind UTC 'dt' will be one day behind)
+                        dt = new Date(modelValue);
+                    }
                     // 'undo' the timezone offset again (so we end up on the original date again)
                     dt.setMinutes(dt.getMinutes() + dt.getTimezoneOffset());
                     return dt;
