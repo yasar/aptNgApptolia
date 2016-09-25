@@ -350,33 +350,35 @@
                                 attrs    : {
                                     type                  : 'text',
                                     class                 : 'form-control',
-                                    'uib-datepicker-popup': 'dd.MM.yyyy',
+                                    'uib-datepicker-popup': aptTempl.appConfig.defaults.formats.screenDateUib,
                                     'datepicker-options'  : 'dateOptions',
                                     'is-open'             : 'vmField.status.open',
-                                    'datepicker-localdate': ''
+                                    // 'datepicker-localdate': ''
                                 },
                                 formify  : true
                             };
                             break;
-                        case 'date-moment':
-                            control = {
-                                tag      : 'input',
-                                selfClose: true,
-                                attrs    : {
-                                    type           : 'text',
-                                    class          : 'form-control',
-                                    'moment-picker': getBindTo(attrs, scope),
-                                    'autoclose'    : 'false',
-                                    'today'        : 'true',
-                                    'keyboard'     : 'true',
-                                    'locale'       : 'tr',
-                                    'format'       : 'L',
-                                    'max-view'     : 'day',
-                                    'start-view'   : 'month'
-                                },
-                                formify  : true
-                            };
-                            break;
+                        // case 'date-moment':
+                        //     control = {
+                        //         tag      : 'input',
+                        //         selfClose: true,
+                        //         attrs    : {
+                        //             type              : 'text',
+                        //             class             : 'form-control',
+                        //             'moment-picker'   : getBindTo(attrs, scope),
+                        //             'autoclose'       : 'true',
+                        //             'today'           : 'true',
+                        //             'keyboard'        : 'true',
+                        //             'locale'          : 'tr',
+                        //             // 'format'          : 'L',
+                        //             'format'          : aptTempl.appConfig.defaults.formats.screenDate,
+                        //             'max-view'        : 'day',
+                        //             'start-view'      : 'month',
+                        //             'ng-model-options': "{ updateOn: 'blur' }"
+                        //         },
+                        //         formify  : true
+                        //     };
+                        //     break;
 
                         case 'date-range-single':
                             control = {
@@ -473,7 +475,6 @@
 
         function finalize(elem, attrs, $tpl) {
             if (attrs.type === 'date-ui') {
-                // $tpl = $('<div data-apt-formify class="input-group"></div>')
                 $tpl = $('<div ' + (attrs.useFormify !== 'false' ? 'data-apt-formify ' : '') + 'class="input-group input-group-xs"></div>')
                     .append($tpl)
                     .append('<span class="input-group-btn"> ' +
@@ -489,6 +490,7 @@
             //      */
             //     $tpl.removeAttr('data-ng-model');
             // }
+
 
             else if (attrs.type == 'switch') {
                 $tpl = $('<div class="checkbox checkbox-switchery checkbox-right switchery-xs"></div>')

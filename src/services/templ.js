@@ -74,6 +74,7 @@
                     screenDateTime         : 'DD.MM.YYYY HH:mm:ss',
                     screenDateTimeAlternate: 'dd.MM.yyyy HH:mm',
                     screenDate             : 'DD.MM.YYYY',
+                    screenDateUib          : 'dd.MM.yyyy',
                     screenTime             : 'HH:mm'
                 },
                 dialogs: {

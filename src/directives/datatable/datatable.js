@@ -211,7 +211,7 @@
                     showPaginator();
                     addRowIndex();
                     addRowMenu();
-                    enableSorting();
+                    processSorting();
 
                     return $template;
 
@@ -352,18 +352,48 @@
                         menu.addClass('text-right td-menu');
                     }
 
-                    function enableSorting() {
-                        var sortableEls = $template.find('[apt-sort]');
+                    function processSorting() {
 
-                        if (!options.enableSorting) {
-                            sortableEls.remove();
-                            return;
+                        process('apt-sort');
+                        process('apt-sort-date');
+
+                        function process(type) {
+                            /**
+                             * find all elements having apt-sort
+                             */
+                            var sortableEls = $template.find('[' + type + ']');
+
+                            /**
+                             * if sorting is not enabled then,
+                             * remove elements having apt-sort attribute
+                             */
+                            if (!options.enableSorting) {
+                                sortableEls.remove();
+                                return;
+                            }
+
+                            /**
+                             * convert apt-sort into st-sort
+                             */
+                            angular.forEach(sortableEls, function (el) {
+                                var sortBy = $(el).attr(type);
+                                switch (type) {
+                                    case 'apt-sort':
+                                        $(el).attr('st-sort', sortBy);
+                                        break;
+                                    case 'apt-sort-date':
+                                        $(el).attr('st-sort', 'getters.' + sortBy);
+                                        _.set(scope, 'getters.' + sortBy, function (row) {
+                                            if (!_.isDate(row[sortBy]) && (_.isNull(row[sortBy]) || _.isUndefined(row[sortBy]) || _.isEmpty(row[sortBy]))) {
+                                                return row[sortBy];
+                                            }
+                                            return row[sortBy].getTime();
+                                        });
+                                        break;
+                                }
+                                $(el).removeAttr(type);
+                            });
                         }
-                        angular.forEach(sortableEls, function (el) {
-                            $(el).attr('st-sort', $(el).attr('apt-sort'));
-                            $(el).removeAttr('apt-sort');
-                        });
-
                     }
 
                     function addColumnTo(where, side) {
