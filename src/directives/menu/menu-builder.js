@@ -360,91 +360,6 @@
                                     });
                                 };
 
-                                // var buildPagesVerticalButtonGroupMenu = function (menu, parent) {
-                                //
-                                //     var $parent = null;
-                                //
-                                //     // !!! do not confuse parent and $parent
-                                //     // parent is the passed in argument
-                                //     // $parent is the element we are referring to parent.
-                                //     if (parent.is('div')) {
-                                //         $parent = parent;
-                                //     } else {
-                                //         $parent = angular.element('<div></div>');
-                                //         parent.append($parent);
-                                //     }
-                                //
-                                //     parent.addClass('btn-group');
-                                //     if (menu.class) {
-                                //         parent.addClass(menu.class);
-                                //     }
-                                //
-                                //     angular.forEach(menu.children, function (menuItem, key) {
-                                //         if (menuItem.hasOwnProperty('show')) {
-                                //             if (menuItem.show === false) {
-                                //                 return;
-                                //             } else if (angular.isFunction(menuItem.show)) {
-                                //                 var cont = menuItem.show.call(undefined, scope.itemData);
-                                //                 if (!cont) {
-                                //                     return;
-                                //                 }
-                                //             }
-                                //         }
-                                //
-                                //         if (menuItem.hasOwnProperty('auth') && menuItem.auth) {
-                                //             //if (!authAccountModel.can(menuItem.auth.right, menuItem.auth.type, menuItem.auth.topic)) {
-                                //             //    return;
-                                //             //}
-                                //             if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
-                                //                 return;
-                                //             }
-                                //         }
-                                //
-                                //
-                                //         var $a = angular.element(menuItem.href ? '<a />' : '<button type="button"' + (scope.btnSize ? ' class="btn-' + scope.btnSize + '"' : '') + ' />');
-                                //         if (menuItem.href) {
-                                //             $a.attr('ui-sref', menuItem.href);
-                                //         }
-                                //         if (menuItem.click) {
-                                //             $a.click(function () {
-                                //                 menuItem.click(scope.itemData);
-                                //             });
-                                //         }
-                                //         $a.addClass('btn');
-                                //
-                                //         //$a.addClass(menuItem.class ? menuItem.class : 'btn-default');
-                                //         var itemClass = !menuItem.class ? 'btn-default' : (angular.isFunction(menuItem.class) ? menuItem.class.call(undefined, scope.itemData) : menuItem.class);
-                                //         $a.addClass(itemClass);
-                                //
-                                //
-                                //         if (menuItem.icon) {
-                                //             $a.append('<span class="p-t-5 p-b-5"><i icon="' + menuItem.icon + '" class="fs-15"></i></span><br/>');
-                                //         }
-                                //         if (menuItem.text !== '') {
-                                //             $a.append('<span class="fs-11 font-montserrat text-uppercase">' + menuItem.text + '</span>');
-                                //         }
-                                //         $parent.append($a);
-                                //
-                                //
-                                //         if (!!menuItem.children.length) {
-                                //             $a.wrap('<div class="btn-group" uib-dropdown />');
-                                //
-                                //             //var $caret = angular.element('<button type="button" class="btn' + (scope.btnSize ? ' btn-' + scope.btnSize : '') + ' dropdown-toggle" data-toggle="dropdown"><span class="caret caret-split"></span></button>');
-                                //             var $caret = angular.element('<button type="button" class="btn' + (scope.btnSize ? ' btn-' + scope.btnSize : '') + '" uib-dropdown-toggle><span class="caret caret-split"></span></button>');
-                                //             //$caret.addClass(menuItem.class ? menuItem.class : 'btn-default');
-                                //             $caret.addClass(itemClass);
-                                //             $a.parent().append($caret);
-                                //
-                                //             //var $ul = angular.element('<ul class="uib-dropdown-menu dropdown-menu-right dropdown-icons-right" role="menu" />');
-                                //             var $ul = angular.element('<ul class="dropdown-menu dropdown-menu-right dropdown-icons-right" role="menu" />');
-                                //             $a.parent().append($ul);
-                                //
-                                //
-                                //             buildDropdownMenu(menuItem, $ul);
-                                //         }
-                                //     });
-                                // };
-
                                 var buildLimitlessMenu = function (menu, parent) {
 
                                     ctr++;
@@ -487,7 +402,8 @@
                                         }
 
                                         if (menuItem.hasOwnProperty('auth') && menuItem.auth) {
-                                            if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
+                                            // if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
+                                            if (!authorization.isAuthorized(menuItem.auth)) {
                                                 return;
                                             }
                                         }
@@ -557,243 +473,6 @@
                                         }
                                     });
                                 };
-
-                                // var buildPagesMenu = function (menu, parent) {
-                                //
-                                //     ctr++;
-                                //
-                                //     var $ul = null;
-                                //
-                                //     if (parent.is('ul')) {
-                                //         $ul = parent;
-                                //     } else if (menu.children.length) {
-                                //         $ul = angular.element('<ul></ul>');
-                                //         if (ctr > 0 && config.ulIsSubMenuClass !== null) {
-                                //             $ul.addClass(config.ulIsSubMenuClass);
-                                //         }
-                                //         parent.append($ul);
-                                //     }
-                                //
-                                //
-                                //     angular.forEach(menu.children, function (menuItem, key) {
-                                //         if (menuItem.hasOwnProperty('show')) {
-                                //             if (menuItem.show === false) {
-                                //                 return;
-                                //             } else if (angular.isFunction(menuItem.show)) {
-                                //                 var cont = menuItem.show.call(undefined, scope.itemData);
-                                //                 if (!cont) {
-                                //                     return;
-                                //                 }
-                                //             }
-                                //         }
-                                //
-                                //         if (menuItem.hasOwnProperty('auth') && menuItem.auth) {
-                                //             if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
-                                //                 return;
-                                //             }
-                                //         }
-                                //
-                                //         var $li = angular.element('<li></li>');
-                                //         if (menuItem.hasOwnProperty('children') && menuItem.children.length > 0 && config.liHasSubMenuClass !== null) {
-                                //             $li.addClass(config.liHasSubMenuClass);
-                                //         }
-                                //         $li.attr('ui-sref-active-eq', 'active');
-                                //         $ul.append($li);
-                                //
-                                //         var $a = angular.element('<a></a>');
-                                //
-                                //         if (menuItem.href) {
-                                //             $a.attr('ng-href', menuItem.href);
-                                //         }
-                                //
-                                //         if (menuItem.click) {
-                                //             $a.click(function () {
-                                //                 menuItem.click(scope.itemData);
-                                //             });
-                                //         }
-                                //
-                                //         if (menuItem.children.length) {
-                                //             $a.addClass('expand');
-                                //         }
-                                //
-                                //         if (menuItem.icon) {
-                                //             $li.append('<span class="icon-thumbnail"><i class="' + menuItem.icon + '"></i></span>');
-                                //         }
-                                //
-                                //         $a.append('<span class="title">' + menuItem.text + '</span>');
-                                //
-                                //         if (menuItem.details) {
-                                //             $a.append('<span class="details">' + menuItem.details + '</span>');
-                                //             $a.addClass('detailed');
-                                //         }
-                                //         $li.append($a);
-                                //
-                                //         if (menuItem.children.length) {
-                                //             $a.append('<span class="arrow"></span>');
-                                //             buildFn(menuItem, $li);
-                                //         }
-                                //     });
-                                // };
-
-                                // var buildPagesListMenu = function (menu, parent) {
-                                //
-                                //     ctr++;
-                                //
-                                //     var $ul = null;
-                                //
-                                //     if (parent.is('ul')) {
-                                //         $ul = parent;
-                                //     } else if (menu.children.length) {
-                                //         $ul = angular.element('<ul></ul>');
-                                //         if (ctr > 0 && config.ulIsSubMenuClass !== null) {
-                                //             $ul.addClass(config.ulIsSubMenuClass);
-                                //         }
-                                //         parent.append($ul);
-                                //     }
-                                //
-                                //
-                                //     angular.forEach(menu.children, function (menuItem, key) {
-                                //         if (menuItem.hasOwnProperty('show')) {
-                                //             if (menuItem.show === false) {
-                                //                 return;
-                                //             } else if (angular.isFunction(menuItem.show)) {
-                                //                 var cont = menuItem.show.call(undefined, scope.itemData);
-                                //                 if (!cont) {
-                                //                     return;
-                                //                 }
-                                //             }
-                                //         }
-                                //
-                                //         if (menuItem.hasOwnProperty('auth') && menuItem.auth) {
-                                //             if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
-                                //                 return;
-                                //             }
-                                //         }
-                                //
-                                //         var $li = angular.element('<li class="item padding-15"></li>');
-                                //         if (menuItem.hasOwnProperty('children') && menuItem.children.length > 0 && config.liHasSubMenuClass !== null) {
-                                //             $li.addClass(config.liHasSubMenuClass);
-                                //         }
-                                //         $li.attr('ui-sref-active-eq', 'active');
-                                //         $ul.append($li);
-                                //
-                                //         var $a = angular.element('<a></a>');
-                                //
-                                //         if (menuItem.href) {
-                                //             $a.attr('ng-href', menuItem.href);
-                                //         }
-                                //
-                                //         if (menuItem.click) {
-                                //             $a.click(function () {
-                                //                 menuItem.click(scope.itemData);
-                                //             });
-                                //         }
-                                //
-                                //         if (menuItem.children.length) {
-                                //             $a.addClass('expand');
-                                //         }
-                                //
-                                //         if (menuItem.icon) {
-                                //             //$li.append('<span class="icon-thumbnail"><i class="' + menuItem.icon + '"></i></span>');
-                                //             $li.append('<div class="thumbnail-wrapper d32 circular bordered b-success"><i class="' + menuItem.icon + '"></i></div>');
-                                //         }
-                                //
-                                //         $a.append('<span class="title">' + menuItem.text + '</span>');
-                                //
-                                //         if (menuItem.details) {
-                                //             $a.append('<span class="details">' + menuItem.details + '</span>');
-                                //             $a.addClass('detailed');
-                                //         }
-                                //         //$li.append($a);
-                                //         var $inline = angular.element('<div class="inline m-l-15"></div>');
-                                //         $inline.append($a);
-                                //         $li.append($inline);
-                                //
-                                //         if (menuItem.children.length) {
-                                //             $a.append('<span class="arrow"></span>');
-                                //             buildFn(menuItem, $li);
-                                //         }
-                                //     });
-                                // };
-
-                                // var buildPagesTableMenu = function (menu, parent) {
-                                //
-                                //     ctr++;
-                                //
-                                //     var $table = null;
-                                //
-                                //     if (parent.is('table')) {
-                                //         $table = parent;
-                                //     } else if (menu.children.length) {
-                                //         $table = angular.element('<table></table>');
-                                //         if (ctr > 0 && config.ulIsSubMenuClass !== null) {
-                                //             $table.addClass(config.ulIsSubMenuClass);
-                                //         }
-                                //         parent.append($table);
-                                //     }
-                                //
-                                //     $table.addClass('table condensed table-hover');
-                                //
-                                //     var $tbody = angular.element('<tbody></tbody>');
-                                //     $table.append($tbody);
-                                //
-                                //
-                                //     angular.forEach(menu.children, function (menuItem, key) {
-                                //         if (menuItem.hasOwnProperty('show')) {
-                                //             if (menuItem.show === false) {
-                                //                 return;
-                                //             } else if (angular.isFunction(menuItem.show)) {
-                                //                 var cont = menuItem.show.call(undefined, scope.itemData);
-                                //                 if (!cont) {
-                                //                     return;
-                                //                 }
-                                //             }
-                                //         }
-                                //
-                                //         if (menuItem.hasOwnProperty('auth') && menuItem.auth) {
-                                //             if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
-                                //                 return;
-                                //             }
-                                //         }
-                                //
-                                //         var $tr = angular.element('<tr></tr>');
-                                //         if (menuItem.hasOwnProperty('children') && menuItem.children.length > 0 && config.liHasSubMenuClass !== null) {
-                                //             $tr.addClass(config.liHasSubMenuClass);
-                                //         }
-                                //         $tr.attr('ui-sref-active-eq', 'selected');
-                                //         $tbody.append($tr);
-                                //
-                                //         var $a = angular.element('<a><i class="fa fa-chevron-right"></i></a>');
-                                //
-                                //         if (menuItem.href) {
-                                //             $a.attr('ng-href', menuItem.href);
-                                //         }
-                                //
-                                //         if (menuItem.click) {
-                                //             $a.click(function () {
-                                //                 menuItem.click(scope.itemData);
-                                //             });
-                                //         }
-                                //
-                                //         if (menuItem.icon) {
-                                //             //$tr.append('<span class="icon-thumbnail"><i class="' + menuItem.icon + '"></i></span>');
-                                //             //$tr.append('<div class="thumbnail-wrapper d32 circular bordered b-success"><i class="' + menuItem.icon + '"></i></div>');
-                                //         }
-                                //
-                                //         var $td = angular.element('<td class="font-montserrat all-caps fs-12 col-xs-11 col-md-11 b-r b-dashed b-grey"></td>');
-                                //         $td.append(menuItem.text);
-                                //
-                                //         if (menuItem.details) {
-                                //             $td.append('<small style="display: block; font-size: 8px;;">' + menuItem.details + '</small>');
-                                //         }
-                                //
-                                //         $tr.append($td);
-                                //         var $td2 = angular.element('<td class="col-xs-1"></td>');
-                                //         $td2.append($a);
-                                //         $tr.append($td2);
-                                //     });
-                                // };
-
 
                                 var buildFloatingMenu = function (menu, parent) {
 
@@ -950,20 +629,8 @@
                                     case 'limitless-group':
                                         buildFn = buildLimitlessButtonGroupMenu;
                                         break;
-                                    case 'pages':
-                                        buildFn = buildPagesMenu;
-                                        break;
-                                    case 'pages-list':
-                                        buildFn = buildPagesListMenu;
-                                        break;
-                                    case 'pages-table':
-                                        buildFn = buildPagesTableMenu;
-                                        break;
                                     case 'floating':
                                         buildFn = buildFloatingMenu;
-                                        break;
-                                    case 'pages-vertical-button-group':
-                                        buildFn = buildPagesVerticalButtonGroupMenu;
                                         break;
                                     default:
                                         buildFn = buildDropdownMenu;
@@ -1008,6 +675,13 @@
                             }, true);
                         }
 
+                        /**
+                         * make sure that below commented out code will not break anything.
+                         * it seems like it looks for any changes in the menu-model.
+                         * however, supposedly we should never listen for it.
+                         * if any privileges is changed on the fly, we ask user to re-login.
+                         * so there should be no need for this.
+                         */
                         scope.$watch(function () {
                             return scope.model;
                         }, function (newVal, oldVal) {
