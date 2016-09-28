@@ -146,6 +146,39 @@
                         backdrop : true,
                         animation: true
                     }
+                },
+                icons  : {
+                    icomoon: {
+                        add          : 'thumbs-up2',
+                        'add-new'    : 'plus3',
+                        'add-to-list': 'folder-plus4',
+                        calendar     : 'calendar52',
+                        cancel       : 'x',
+                        check        : 'checkmark2',
+                        close        : 'times',
+                        completed    : 'check',
+                        configuration: 'equalizer3',
+                        create       : 'cogs',
+                        desc         : 'file-text-o',
+                        delete       : 'trash',
+                        edit         : 'pencil',
+                        entity       : 'office',
+                        images       : 'camera',
+                        'item-menu'  : 'more',
+                        notes        : 'notebook',
+                        null         : 'circle',
+                        option       : 'circle-o',
+                        preview      : 'eye',
+                        remove       : 'minus2',
+                        reload       : 'database-refresh',
+                        reset        : 'x',
+                        save         : 'floppy-disk',
+                        'select-item': 'eye8',
+                        unlocked     : 'unlocked',
+                        upload       : 'cloud-upload',
+                        update       : 'floppy-disk',
+                        view         : 'desktop',
+                    }
                 }
             }
         };
@@ -188,8 +221,6 @@
                     }
                 });
         };
-
-//this.blurPage = false;
 
         this.resetWithBuilder = function (builder) {
             var gettextCatalog    = self.$injector.get('gettextCatalog');
@@ -383,53 +414,12 @@
                             return;
                         }
 
-// load();
                         self.loadSlot();
                     },
 
                     true);
             }
 
-// function load(segment) {
-//     if (self.data._route.lastModifiedAt == null) {
-//         return;
-//     }
-//
-//     segment      = segment || $routeSegment.name;
-//     var segments = segment.split('.');
-//
-//     var dataRoute    = self.data._route;
-//     var segmentChain = [];
-//     var slotRepo     = self.data.slots;
-//     var __slots      = null;
-//     _.forIn(segments, function (s) {
-//         segmentChain.push(s);
-//         if (_.has(dataRoute, segmentChain)) {
-//
-//             __slots = _.clone(segmentChain);
-//             __slots.push('_slots');
-//
-//             var __slotsClone = _.clone(__slots);
-//             var slotNames    = _.get(dataRoute, __slotsClone);
-//             _.forIn(slotNames, function (slotObj, slotName) {
-//                 var oneSlot = _.clone(__slots);
-//                 oneSlot.push(slotName);
-//
-//                 if (_.has(dataRoute, oneSlot)) {
-//
-//                     if (!_.has(slotRepo, slotName)) {
-//                         slotRepo[slotName] = {};
-//                     }
-//
-//                     aptUtils.removeObjectProperties(slotRepo[slotName]);
-//                     angular.merge(slotRepo[slotName], slotObj);
-//                 }
-//             });
-//
-//         }
-//     });
-//
-// }
         };
 
         this.setSlotRouteSegment = function (route) {

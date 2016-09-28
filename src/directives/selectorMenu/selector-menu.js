@@ -36,8 +36,25 @@
         var fnNameAdd;
         var fnNameEdit;
 
+        if (!$scope.builder.selector.showMenu) {
+            vm.enabled = false;
+            return;
+        }
+
+        var menuConf = {
+            addNew: true,
+            edit  : true,
+            reload: true,
+            reset : true
+        };
+
+        if (_.isObject($scope.builder.selector.showMenu)) {
+            menuConf = _.merge(menuConf, $scope.builder.selector.showMenu);
+        }
+
         if ($attrs.domain) {
-            vm.domain = _.snakeCase($attrs.domain);
+            // vm.domain = _.snakeCase($attrs.domain);
+            vm.domain = $attrs.domain;
 
 
             /**
@@ -57,20 +74,28 @@
             modelBase = $attrs.modelBase;
         }
 
-        if (_.has($scope, fnNameReload = modelize('reload' + vm.Domain)) || _.has($scope, fnNameReload = modelize('reload'))) {
-            vm.hasReload = true;
+        if (menuConf.reload) {
+            if (_.hasIn($scope, fnNameReload = modelize('reload' + vm.Domain)) || _.hasIn($scope, fnNameReload = modelize('reload'))) {
+                vm.hasReload = true;
+            }
         }
 
-        if (_.has($scope, fnNameAdd = modelize('addNew' + vm.Domain)) || _.has($scope, fnNameAdd = modelize('addNew'))) {
-            vm.hasAdd = true;
+        if (menuConf.addNew) {
+            if (_.hasIn($scope, fnNameAdd = modelize('addNew' + vm.Domain)) || _.hasIn($scope, fnNameAdd = modelize('addNew'))) {
+                vm.hasAdd = true;
+            }
         }
 
-        if (_.has($scope, fnNameResetSelect = modelize('resetSelect' + vm.Domain)) || _.has($scope, fnNameResetSelect = modelize('resetSelect'))) {
-            vm.hasResetSelect = true;
+        if (menuConf.reset) {
+            if (_.hasIn($scope, fnNameResetSelect = modelize('resetSelect' + vm.Domain)) || _.hasIn($scope, fnNameResetSelect = modelize('resetSelect'))) {
+                vm.hasResetSelect = true;
+            }
         }
 
-        if (_.has($scope, fnNameEdit = modelize('edit' + vm.Domain)) || _.has($scope, fnNameEdit = modelize('edit'))) {
-            vm.hasEdit = true;
+        if (menuConf.edit) {
+            if (_.hasIn($scope, fnNameEdit = modelize('edit' + vm.Domain)) || _.hasIn($scope, fnNameEdit = modelize('edit'))) {
+                vm.hasEdit = true;
+            }
         }
 
 

@@ -600,8 +600,17 @@
                 /**
                  * if `itemId` is undefined, then we are in `new` mode
                  * and we should create an empty model object.
+                 *
+                 * checking for only undefined is not good enough.
+                 * in some cases, we may initialize the itemId with null
+                 * which is to be updated later on in the code (to be used with watch=true).
+                 * in this case, form will send a get request without an itemId,
+                 * and it will end up with receving the whole table list (a possible huge array).
+                 *
+                 * to prevent this case, we should check against if the itemId has a numeric value.
                  */
-                if (angular.isUndefined(itemId)) {
+                // if (angular.isUndefined(itemId)) {
+                if (!_.isNumber(itemId)) {
                     // formObj.data = backupDataAndGetCopy(model.one());
                     _.merge(formObj.data, backupDataAndGetCopy(model.one()));
                     formObj.submitLabel = getSubmitLabel();
