@@ -610,7 +610,10 @@
                  * to prevent this case, we should check against if the itemId has a numeric value.
                  */
                 // if (angular.isUndefined(itemId)) {
-                if (!_.isNumber(itemId)) {
+                /**
+                 * note that + sign is to ensure itemId is converted to integer.
+                 */
+                if (!_.isNumber(+itemId)) {
                     // formObj.data = backupDataAndGetCopy(model.one());
                     _.merge(formObj.data, backupDataAndGetCopy(model.one()));
                     formObj.submitLabel = getSubmitLabel();

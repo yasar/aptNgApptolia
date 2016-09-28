@@ -147,10 +147,10 @@
                                         $scope.state.is_uploaded = false;
                                     }, function () {
                                         var errMsg = 'Error occured while deleting the file file on the server ' +
-                                            'side.\n\nYou can ignore the error and try uploading a new file file, ' +
-                                            'or cancel the operation and create a support ticket regarding to ' +
-                                            'resolve the issue. \n\n Do you want ignore the error and ' +
-                                            'upload a new file?';
+                                                     'side.\n\nYou can ignore the error and try uploading a new file file, ' +
+                                                     'or cancel the operation and create a support ticket regarding to ' +
+                                                     'resolve the issue. \n\n Do you want ignore the error and ' +
+                                                     'upload a new file?';
                                         aptUtils.showConfirm('Error', errMsg, function () {
                                             $scope.uploadFile        = null;
                                             $scope.model.filename    = null;
