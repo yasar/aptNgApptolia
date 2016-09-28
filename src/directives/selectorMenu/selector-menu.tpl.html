@@ -1,30 +1,30 @@
 <div class="input-group-btn" uib-dropdown data-ng-if="vmSelectorMenu.enabled">
-    <button type="button" class="btn bg-slate-300 btn-icon p-5" uib-dropdown-toggle>
-        <span ng-hide="vmSelectorMenu.enabled && !vmSelectorMenu.readonly">&nbsp;</span>
-        <span class="icon-more2" ng-show="vmSelectorMenu.enabled && !vmSelectorMenu.readonly"></span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-xs dropdown-menu-right bg-slate-300" role="menu"
-        ng-show="vmSelectorMenu.enabled && !vmSelectorMenu.readonly">
-        <li ng-if="vmSelectorMenu.locked">
-            <a href ng-click="vmSelectorMenu.unlock()"><i class="icon-unlocked2"></i> <span translate>Unlock</span></a>
-        </li>
-        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasResetSelect">
-            <a href access="create_{{vmSelectorMenu.domain}}_module"
-               ng-click="vmSelectorMenu.resetSelect()"><i class="icon-x"></i> <span translate>Reset Selection</span></a>
-        </li>
-        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasResetSelect" class="divider"></li>
-        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasAdd">
-            <a href access="create_{{vmSelectorMenu.domain}}_module"
-               ng-click="vmSelectorMenu.add()"><i class="icon-plus3"></i> <span translate>Add New</span></a>
-        </li>
-        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasEdit">
-            <a href access="update_{{vmSelectorMenu.domain}}_module"
-               ng-click="vmSelectorMenu.edit()"><i class="icon-pencil"></i> <span translate>Edit</span></a>
-        </li>
-        <li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasReload">
-            <a href access="read_{{vmSelectorMenu.domain}}_module"
-               ng-click="vmSelectorMenu.reload()"><i class="icon-database-refresh"></i> <span
-                    translate>Reload</span></a>
-        </li>
-    </ul>
+	<button type="button" class="btn bg-slate-300 btn-icon p-5" uib-dropdown-toggle>
+		<span ng-hide="vmSelectorMenu.enabled && !vmSelectorMenu.readonly">&nbsp;</span>
+		<span icon="item-menu" ng-show="vmSelectorMenu.enabled && !vmSelectorMenu.readonly"></span>
+	</button>
+	<ul class="dropdown-menu dropdown-menu-xs dropdown-menu-right bg-slate-300" role="menu"
+	    ng-show="vmSelectorMenu.enabled && !vmSelectorMenu.readonly">
+		<li ng-if="vmSelectorMenu.locked">
+			<a href ng-click="vmSelectorMenu.unlock()"><i icon="unlock"></i> <span translate>Unlock</span></a>
+		</li>
+		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasResetSelect">
+			<a href access="{{builder.permission('create','module')}}"
+			   ng-click="vmSelectorMenu.resetSelect()"><i icon="reset"></i> <span translate>Reset Selection</span></a>
+		</li>
+		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasResetSelect" class="divider"></li>
+		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasAdd">
+			<a href access="{{builder.permission('create','module')}}"
+			   ng-click="vmSelectorMenu.add()"><i icon="add-new"></i> <span translate>Add New</span></a>
+		</li>
+		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasEdit">
+			<a href access="{{builder.permission('update','module')}}"
+			   ng-click="vmSelectorMenu.edit()"><i icon="edit"></i> <span translate>Edit</span></a>
+		</li>
+		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasReload">
+			<a href access="{{builder.permission('read','module')}}"
+			   ng-click="vmSelectorMenu.reload()"><i icon="reload"></i> <span
+					translate>Reload</span></a>
+		</li>
+	</ul>
 </div>

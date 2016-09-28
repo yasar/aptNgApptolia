@@ -21,7 +21,8 @@
                         };
                         var process      = function (resetFirst) {
                             var result;
-                            result = authorization.authorize(true, roles, attrs.accessPermissionType);
+                            // result = authorization.authorize(true, roles, attrs.accessPermissionType);
+                            result = authorization.isAuthorized(roles, attrs.accessPermissionType);
 
                             // if (resetFirst) {
                             //     makeVisible();
@@ -32,7 +33,8 @@
                             //     makeHidden();
                             // }
 
-                            if (result !== enums.authorised.authorised) {
+                            // if (result !== enums.authorised.authorised) {
+                            if (!result) {
                                 element.prop({disabled: true});
                                 element.attr({disabled: true});
                                 // element.css('pointer-events', 'none');
