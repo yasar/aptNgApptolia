@@ -17,6 +17,9 @@
 
         return {
             scope       : true,
+            // scope       : {
+            //     modelBase: '='
+            // },
             replace     : true,
             // scope       : false,
             restrict    : 'E',
@@ -286,7 +289,7 @@
                                 selfClose: true,
                                 attrs    : {
                                     type       : 'checkbox',
-                                    class      : 'js-switch',
+                                    class      : 'js-switch pull-right',
                                     'ui-switch': '{size: \'small\'}'
                                 },
                                 formify  : true
@@ -509,9 +512,14 @@
         }
     };
 
-    controllerFn.$inject = ['$injector', '$scope'];
-    function controllerFn($injector, $scope) {
-        var vm = this;
+    controllerFn.$inject = ['$injector', '$scope', '$attrs'];
+    function controllerFn($injector, $scope, $attrs) {
+        var vm     = this;
+        var $parse = $injector.get('$parse');
+
+        if (_.has($attrs, 'modelBase')) {
+            vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
+        }
 
         vm.reset = reset;
 
