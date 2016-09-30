@@ -38,6 +38,12 @@ module.exports = function (grunt) {
             js    : [
                 'vendor/screenfull/dist/screenfull.js',
                 'vendor/angular-screenfull/dist/angular-screenfull.js',
+                'vendor/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+
+                /**
+                 * see the patched version in patched folder
+                 */
+                // 'vendor/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.js'
             ],
             css   : [],
             assets: []

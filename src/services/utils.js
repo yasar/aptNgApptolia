@@ -613,7 +613,7 @@
                 /**
                  * note that + sign is to ensure itemId is converted to integer.
                  */
-                if (!_.isNumber(+itemId)) {
+                if (angular.isUndefined(itemId) || !_.isNumber(+itemId)) {
                     // formObj.data = backupDataAndGetCopy(model.one());
                     _.merge(formObj.data, backupDataAndGetCopy(model.one()));
                     formObj.submitLabel = getSubmitLabel();

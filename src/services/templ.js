@@ -71,11 +71,11 @@
             showInlineHelp: true,
             defaults      : {
                 formats: {
-                    screenDateTime         : 'DD.MM.YYYY HH:mm:ss',
-                    screenDateTimeAlternate: 'dd.MM.yyyy HH:mm',
-                    screenDate             : 'DD.MM.YYYY',
-                    screenDateUib          : 'dd.MM.yyyy',
-                    screenTime             : 'HH:mm'
+                    screenDateTime   : 'DD.MM.YYYY HH:mm',
+                    screenDateTimeUib: 'dd.MM.yyyy HH:mm',
+                    screenDate       : 'DD.MM.YYYY',
+                    screenDateUib    : 'dd.MM.yyyy',
+                    screenTime       : 'HH:mm'
                 },
                 dialogs: {
                     edit         : {
