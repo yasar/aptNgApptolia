@@ -346,42 +346,66 @@
                                 formify  : true
                             };
                             break;
-                        case 'date-ui':
-                            control = {
-                                tag      : 'input',
-                                selfClose: true,
-                                attrs    : {
-                                    type                  : 'text',
-                                    class                 : 'form-control',
-                                    'uib-datepicker-popup': aptTempl.appConfig.defaults.formats.screenDateUib,
-                                    'datepicker-options'  : 'dateOptions',
-                                    'is-open'             : 'vmField.status.open',
-                                    // 'datepicker-localdate': ''
-                                },
-                                formify  : true
-                            };
-                            break;
-                        // case 'date-moment':
+                        // case 'date-ui':
                         //     control = {
                         //         tag      : 'input',
                         //         selfClose: true,
                         //         attrs    : {
-                        //             type              : 'text',
-                        //             class             : 'form-control',
-                        //             'moment-picker'   : getBindTo(attrs, scope),
-                        //             'autoclose'       : 'true',
-                        //             'today'           : 'true',
-                        //             'keyboard'        : 'true',
-                        //             'locale'          : 'tr',
-                        //             // 'format'          : 'L',
-                        //             'format'          : aptTempl.appConfig.defaults.formats.screenDate,
-                        //             'max-view'        : 'day',
-                        //             'start-view'      : 'month',
-                        //             'ng-model-options': "{ updateOn: 'blur' }"
+                        //             type                  : 'text',
+                        //             class                 : 'form-control',
+                        //             'uib-datepicker-popup': aptTempl.appConfig.defaults.formats.screenDateUib,
+                        //             // 'datepicker-options'  : 'dateOptions',
+                        //             'is-open'             : 'vmField.status.open',
+                        //             // 'datepicker-localdate': ''
                         //         },
                         //         formify  : true
                         //     };
                         //     break;
+                        case 'date':
+                        case 'date-ui':
+                            aptTempl.appConfig.aeDateOptions = {
+                                format          : aptTempl.appConfig.defaults.formats.screenDate,
+                                showClear       : true,
+                                showClose       : true,
+                                showTodayButton : true,
+                                keepOpen        : false,
+                                allowInputToggle: true,
+                                debug           : false
+                            };
+                            control                          = {
+                                tag      : 'input',
+                                selfClose: true,
+                                attrs    : {
+                                    type            : 'text',
+                                    class           : 'form-control',
+                                    'datetimepicker': '',
+                                    options         : '$root.apt.Templ.appConfig.aeDateOptions'
+                                },
+                                formify  : true
+                            };
+                            break;
+                        case 'datetime':
+                            aptTempl.appConfig.aeDatetimeOptions = {
+                                format          : aptTempl.appConfig.defaults.formats.screenDateTime,
+                                showClear       : true,
+                                showClose       : true,
+                                showTodayButton : true,
+                                keepOpen        : false,
+                                allowInputToggle: true,
+                                debug           : false
+                            };
+                            control                              = {
+                                tag      : 'input',
+                                selfClose: true,
+                                attrs    : {
+                                    type            : 'text',
+                                    class           : 'form-control',
+                                    'datetimepicker': '',
+                                    options         : '$root.apt.Templ.appConfig.aeDatetimeOptions'
+                                },
+                                formify  : true
+                            };
+                            break;
 
                         case 'date-range-single':
                             control = {
@@ -397,18 +421,18 @@
                             };
                             break;
 
-                        case 'date':
-                            control = {
-                                tag      : 'input',
-                                selfClose: true,
-                                attrs    : {
-                                    type                  : 'date',
-                                    class                 : 'form-control',
-                                    'datepicker-localdate': ''
-                                },
-                                formify  : true
-                            };
-                            break;
+                        // case 'date':
+                        //     control = {
+                        //         tag      : 'input',
+                        //         selfClose: true,
+                        //         attrs    : {
+                        //             type                  : 'date',
+                        //             class                 : 'form-control',
+                        //             'datepicker-localdate': ''
+                        //         },
+                        //         formify  : true
+                        //     };
+                        //     break;
                     }
                 }
 
@@ -477,13 +501,23 @@
         }
 
         function finalize(elem, attrs, $tpl) {
-            if (attrs.type === 'date-ui') {
+            if (['date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
+                // if (attrs.type === 'date-ui') {
                 $tpl = $('<div ' + (attrs.useFormify !== 'false' ? 'data-apt-formify ' : '') + 'class="input-group input-group-xs"></div>')
                     .append($tpl)
-                    .append('<span class="input-group-btn"> ' +
+                    .append('<span class="input-group-addon no-border no-padding"> ' +
                             '<button type="button" data-ng-click="vmField.open()" class="btn btn-default btn-xs">' +
                             '<i class="icon-calendar"></i></button> </span>');
             }
+
+            /*if (['datetime'].indexOf(attrs.type) !== -1) {
+             // if (attrs.type === 'date-ui') {
+             $tpl = $('<div ' + (attrs.useFormify !== 'false' ? 'data-apt-formify ' : '') + 'class="input-group input-group-xs"></div>')
+             .append($tpl)
+             .append('<span class="input-group-addon no-border no-padding"> ' +
+             '<button type="button" class="btn btn-default btn-xs">' +
+             '<i class="icon-calendar"></i></button> </span>');
+             }*/
 
             // else if(attrs.type === 'date-moment'){
             //     /**

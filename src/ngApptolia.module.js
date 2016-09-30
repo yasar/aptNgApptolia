@@ -1,27 +1,33 @@
 /*global window */
 (function (angular) {
     'use strict';
-    angular.module('ngApptolia', [
-        'ui.gravatar',
-        'nvd3',
+    var dependencies = [];
 
-        /**
-         * needed for `datepickerPopup.js`
-         */
-        'ui.bootstrap',
+    dependencies.push('ui.gravatar');
+    dependencies.push('nvd3');
 
-        /**
-         * for image manager, to show images in lightbox
-         */
-        'bootstrapLightbox',
+    /**
+     * needed for `datepickerPopup.js`
+     */
+    dependencies.push('ui.bootstrap');
 
-        /**
-         * routing
-         */
-        'ngRoute', 'route-segment', 'view-segment',
+    /**
+     * for image manager, to show images in lightbox
+     */
+    dependencies.push('bootstrapLightbox');
 
-        'angularScreenfull'
-    ])
+    /**
+     * routing
+     */
+    dependencies.push('ngRoute');
+    dependencies.push('route-segment');
+    dependencies.push('view-segment');
+    ///
+
+    dependencies.push('angularScreenfull');
+    dependencies.push('ae-datetimepicker');
+
+    angular.module('ngApptolia', dependencies)
         .config([
             '$routeSegmentProvider',
             '$routeProvider',

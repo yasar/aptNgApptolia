@@ -1,17 +1,7 @@
 @import (less) '../directives/miniCalendar/miniCalendar.less';
 @import (less) '../directives/datatable/datatable.less';
+//@import (less) '../../vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
+@import (reference) '../../../themes/limitless13/src/less/_main/bootstrap.less';
+@import (less) '../../vendor/eonasdan-bootstrap-datetimepicker/src/less/_bootstrap-datetimepicker.less';
 
-.fullscreen {
-  overflow: auto;
-  position: relative;
-  background-color: white;
-  display: block;
-
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-
-  -webkit-transform: translate3d(0%, 0%, 0px);
-  -webkit-animation: bounceIn 0.5s;
-}
+@import 'custom';
