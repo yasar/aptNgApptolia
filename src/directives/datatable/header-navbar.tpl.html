@@ -1,0 +1,66 @@
+<div class="navbar-component no-margin no-padding pb-5 bg-orange">
+	<div class="navbar navbar-inverse navbar-xs">
+		<div class="navbar-header">
+			<span class="navbar-brand"><span apt-title translate></span></span>
+			
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mix-first"><i class="icon-tree5"></i></a>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="navbar-collapse collapse" id="navbar-alt">
+			<form class="navbar-form navbar-left">
+				<div class="form-group form-group-xs has-feedback">
+					<input type="search" class="form-control input-xs" apt-search-box>
+					<div class="form-control-feedback">
+						<i class="icon-search4 text-size-base"></i>
+					</div>
+				</div>
+				<div class="form-group form-group-xs">
+					<select apt-page-size
+					        class="btn btn-default btn-xs"
+					        title="{{'Page Size'|translate}}">
+						<option value="5">5</option>
+						<option value="10">10</option>
+						<option value="25">25</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
+					</select>
+				</div>
+			</form>
+			<ul class="nav navbar-nav">
+				<li>
+					<a class="cursor-default">
+						<span class="visible-xs-inline-block visible-lg-inline position-right">Records</span>
+						<span class="position-right">
+								<span st-summary></span> / <span apt-row-count></span>
+							</span>
+					</a>
+				</li>
+			</ul>
+			
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a apt-reload-button>
+						<i icon="reload"></i>
+						<span class="visible-xs-inline-block visible-lg-inline position-right">{{'Reload'|translate}}</span>
+					</a>
+				</li>
+				<li>
+					<a apt-addnew-button>
+						<i icon="add-new"></i>
+						<span class="visible-xs-inline-block visible-lg-inline position-right">{{'Add New'|translate}}</span>
+					</a>
+				</li>
+				<li>
+					<a apt-fullscreen-button>
+						<i icon="fullscreen"></i>
+						<span class="visible-xs-inline-block  position-right">{{'Full Screen'|translate}}</span>
+					</a>
+				</li>
+			</ul>
+		
+		</div>
+	</div>
+</div>

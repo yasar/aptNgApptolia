@@ -18,7 +18,9 @@
         /**
          * routing
          */
-        'ngRoute', 'route-segment', 'view-segment'
+        'ngRoute', 'route-segment', 'view-segment',
+
+        'angularScreenfull'
     ])
         .config([
             '$routeSegmentProvider',

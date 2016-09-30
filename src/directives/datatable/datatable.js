@@ -16,7 +16,7 @@
             compile : compileFn,
         };
         function compileFn(element, attrs) {
-
+            var $q                      = $injector.get('$q');
             var clone                   = element.clone();
             var placeholder             = angular.element('<!-- placeholder -->');
             var datasource              = null;
@@ -55,15 +55,40 @@
                 addRowMenu          : true,
                 enableSorting       : true,
                 showAddNewButton    : true,
+                showFullscreenButton: true,
                 showHeader          : true,
                 showPageSizeSelector: true,
                 showPaginator       : true,
                 showReloadButton    : true,
                 showSearchBox       : true,
+                showTitle           : true,
                 showTotals          : true,
+                /**
+                 * title is auto-generated in aptCreateListDirective
+                 * however, we can manually set it at where we call the list-directive
+                 * by providing the table-options attribute.
+                 */
+                title               : null
             };
 
-            var promise = $templateRequest(path + '/datatable.tpl.html');
+            // var promise = $templateRequest(path + '/datatable.tpl.html');
+
+            // var headerTpl = '';
+            // var promise   = $templateRequest(path + '/header-navbar.tpl.html');
+            // promise.then(function (data) {
+            //     headerTpl = data;
+            //     promise   = $templateRequest(path + '/datatable.tpl.html');
+            // });
+
+            var deferred = $q.defer();
+            var promise  = deferred.promise;
+            $templateRequest(path + '/header-navbar.tpl.html').then(function (header) {
+                $templateRequest(path + '/datatable.tpl.html').then(function (template) {
+                    template = template.replace(/\<tr header\>\<\/tr\>/g, '<tr><th colspan="100%" class="no-border p-5">' + header + '</th></tr>');
+                    deferred.resolve(template);
+                });
+            });
+
             element.replaceWith(placeholder);
             return link;
 
@@ -142,7 +167,9 @@
 
                     var parsers   = {
                         header: function ($el, $template) {
+                            $el.find('th').addClass('no-border-top');
                             $template.find('thead > [inject]').replaceWith($el.html());
+                            $template.find('thead > tr:last').addClass('border-double');
                         },
                         body  : function ($el, $template) {
                             var $tr = $el.find('tr');
@@ -211,9 +238,25 @@
                     showPaginator();
                     addRowIndex();
                     addRowMenu();
+                    addFullScreen();
                     processSorting();
+                    showTitle();
 
                     return $template;
+
+                    function addFullScreen() {
+                        var btn = $template.find('[apt-fullscreen-button]');
+
+                        if (!options.showFullscreenButton) {
+                            btn.remove();
+                            return;
+                        }
+
+                        if (btn.length) {
+                            btn.removeAttr('apt-fullscreen-button').attr('ngsf-toggle-fullscreen', '');
+                            $template.attr('ngsf-fullscreen', '');
+                        }
+                    }
 
                     function showSearchBox() {
                         var searchBox = $template.find('input[apt-search-box]');
@@ -227,6 +270,19 @@
                             searchBox.removeAttr('apt-search-box')
                                 .attr('st-search', '')
                                 .attr('placeholder', gettextCatalog.getString('search in the list'));
+                        }
+                    }
+
+                    function showTitle() {
+                        var titleEl = $template.find('[apt-title]');
+
+                        if (!options.showTitle) {
+                            titleEl.remove();
+                            return;
+                        }
+
+                        if (titleEl.length) {
+                            titleEl.removeAttr('apt-title').html(options.title);
                         }
                     }
 
@@ -333,11 +389,12 @@
                             return;
                         }
                         var header = addColumnTo('thead');
-                        header.addClass('text-right td-menu');
+                        header.addClass('text-right td-menu no-border-top');
                         header.css('width', '20px');
 
                         _.set(scope, vm('rowMenuConfig'), _.defaults(_.get(scope, vm('rowMenuConfig')), {
-                            translate: true
+                            translate       : true,
+                            ulIsSubMenuClass: ''
                         }));
 
                         var menu = addColumnTo('tbody');

@@ -1,2 +1,17 @@
 @import (less) '../directives/miniCalendar/miniCalendar.less';
 @import (less) '../directives/datatable/datatable.less';
+
+.fullscreen {
+  overflow: auto;
+  position: relative;
+  background-color: white;
+  display: block;
+
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+
+  -webkit-transform: translate3d(0%, 0%, 0px);
+  -webkit-animation: bounceIn 0.5s;
+}
