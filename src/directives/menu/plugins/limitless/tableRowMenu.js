@@ -52,7 +52,9 @@
                          '</li>' +
                          '</ul>';
             var $holder = $(holderTpl);
-            service.element.append($holder.find('li').append($menuEl.addClass('dropdown-menu dropdown-menu-right')).end());
+            service.element
+                .append($holder.find('li')
+                    .append($menuEl.addClass('dropdown-menu dropdown-menu-xs dropdown-menu-right bg-slate-300')).end());
         }
 
         function buildMenu(menu, parent) {

@@ -6,3 +6,4 @@ syntax: glob
 bin
 build
 node_modules
+vendor

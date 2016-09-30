@@ -1,5 +1,7 @@
-@import '../../../../themes/limitless13/src/less/core/colors/palette.less';
-@import '../../../../themes/limitless13/src/less/variables.less';
+@import (reference) '../../../../themes/limitless13/src/less/_bootstrap/variables.less';
+@import (reference) '../../../../themes/limitless13/src/less/variables.less';
+@import (reference) '../../../../themes/limitless13/src/less/core/colors/palette.less';
+@import (reference) '../../../../themes/limitless13/src/less/core/colors/colors.less';
 
 .apt-datatable {
   .td-menu {
@@ -9,9 +11,11 @@
     }
   }
   > tbody > tr:hover .td-menu {
-    background-color: @color-slate-600;
+    background-color: @color-slate-300;
+    color: @component-active-color;
   }
 }
+
 .apt-datatable.table-compressed {
   .td-menu {
     padding: 0 !important;
@@ -21,7 +25,7 @@
   }
 }
 
-.apt-datatable.table-bordered.no-border{
+.apt-datatable.table-bordered.no-border {
   > thead,
   > tbody,
   > tfoot {
