@@ -5,11 +5,16 @@
         .provider('aptMenu', [function () {
             var menuHolder = {};
 
-            var MenuItemConstructor = function (params) {
+            var MenuItemConstructor = function (params, optionalParams) {
                 if (!angular.isObject(params)) {
-                    params = {
-                        name: params
-                    };
+                    if (_.isObject(optionalParams)) {
+                        params = getMenuConf(params, optionalParams);
+                    } else {
+                        params = {
+                            name: params
+                        };
+                    }
+
                 }
 
                 var defaultParams = {
@@ -104,6 +109,35 @@
                 }
                 return m;
             };
+
+            var getMenuConf = function (name, conf) {
+                var _conf = {};
+                switch (name) {
+                    case 'delete':
+                        _conf = {
+                            text: 'Delete',
+                            icon: 'icon-trash',
+                        }
+                        break;
+                    case 'edit':
+                        _conf = {
+                            text: 'Edit',
+                            icon: 'icon-pencil',
+                            auth: true
+                        };
+                        break;
+                    case 'row-menu':
+                        _conf = {
+                            name: 'row-menu',
+                            // 'class': 'dropdown-toggle btn-group-xs',
+                            icon: 'icon-gear'
+                        };
+                        break;
+                }
+                _conf.name = name;
+                _.merge(_conf, conf);
+                return _conf;
+            }
 
             // will add a new menuItem and will return the reference for the added menuItem
             this.add = function (name) {

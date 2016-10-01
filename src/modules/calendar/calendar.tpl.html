@@ -1,0 +1,72 @@
+<div class="panel panel-flat">
+	<div class="panel-heading" ng-if="configCalendar.changeView">
+		<div class="btn-toolbar ng-scope">
+			<p class="pull-right lead" translate>Calendar</p>
+
+			<div class="btn-group">
+				<button class="btn btn-success" ng-click="changeView('agendaDay', calendar_name)" translate>Day</button>
+				<button class="btn btn-success"
+				        ng-click="changeView('agendaWeek', calendar_name)"
+				        translate>Week
+				</button>
+				<button class="btn btn-success" ng-click="changeView('month', calendar_name)" translate>Month</button>
+
+				<button ng-if="configCalendar.addEvent"
+				        type="button"
+				        ng-click="addEvent()"
+				        class="btn bg-teal-400 btn-labeled">
+					<b><i class=" icon-add"></i></b> <span translate>Add New</span>
+				</button>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="panel-body no-padding" ng-if="configCalendar.timeDuration || configCalendar.addEvent">
+		<div class="row pull-right" ng-if="configCalendar.timeDuration">
+			<div class="form-group">
+				<label class="display-block" translate>Select Duration</label>
+				<select class="select-fixed" data-ng-change="selectDuration()" ng-model="slot_duration">
+					<option value="00:05:00">5</option>
+					<option value="00:10:00">10</option>
+					<option value="00:15:00">15</option>
+					<option value="00:30:00">30</option>
+					<option value="00:60:00">60</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+
+	<div ng-if="toggleableEventSources.length"
+	     class="navbar navbar-inverse navbar-component bg-grey-700">
+		<!--<div class="navbar-header">
+			<div class="lead ml-10" translate>Departments</div>
+
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-departments"><i class="icon-menu2"></i></a></li>
+			</ul>
+		</div>-->
+		<div class="navbar-collapse collapse mr-20 ml-20" id="navbar-departments">
+
+			<form class="navbar-form navbar-left">
+				<div class="form-group" data-ng-repeat="eventSource in toggleableEventSources">
+					<label class="checkbox-inline">
+						<input type="checkbox" ui-jq2="uniform"
+						       class="styled"
+						       ng-click="eventSource.callback.toggle()"
+						       ng-checked="eventSource.is_enabled" />
+						{{eventSource.name}}
+					</label>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" class="fc-view-container"
+	     calendar="{{calendar_name}}">
+	</div>
+</div>
+
+
