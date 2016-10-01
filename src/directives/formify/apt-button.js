@@ -32,7 +32,7 @@
          */
 
         function linkFn(scope, elem, attrs, ctrl) {
-
+            var vm = scope.vmButton;
             var label, isBusy, isFailed;
             if (angular.isDefined(attrs.label)) {
                 label = attrs.label;
@@ -56,9 +56,9 @@
             }
 
             var $tpl = $('<button type="' + attrs.type + '" ng-disabled="' + isBusy + '" ' +
-                'ng-class="{\'' + scope.vmButton.buttonClass + '\': !' + isBusy + ', \'' + scope.vmButton.busyButtonClass + '\': ' + isBusy + ', \'' + scope.vmButton.failedButtonClass + '\': ' + isFailed + '}"></button>');
+                'ng-class="{\'' + scope.vmButton.buttonClass + '\': !' + isBusy + ', \'' + vm.busyButtonClass + '\': ' + isBusy + ', \'' + vm.failedButtonClass + '\': ' + isFailed + '}"></button>');
             $tpl.append('<span data-ng-bind="' + label + '|translate"></span>');
-            $tpl.append('<i ng-class="{\'' + scope.vmButton.iconClass + '\': !' + isBusy + ', \'' + scope.vmButton.busyIconClass + '\': ' + isBusy + ', \'' + scope.vmButton.failedIconClass + '\': ' + isFailed + '}"></i>');
+            $tpl.append('<i ng-class="{\'' + vm.iconClass + '\': !' + isBusy + ', \'' + vm.busyIconClass + '\': ' + isBusy + ', \'' + vm.failedIconClass + '\': ' + isFailed + '}"></i>');
 
 
             /**
@@ -107,6 +107,10 @@
             case 'post':
                 vm.iconClass = 'icon-database-upload';
                 vm.buttonClass += ' btn-primary btn-xs';
+                break;
+            case 'import':
+                vm.iconClass = 'icon-import';
+                vm.buttonClass += ' btn-default btn-xs';
                 break;
             case 'cancel':
                 vm.iconClass = 'icon-cancel-circle2';
