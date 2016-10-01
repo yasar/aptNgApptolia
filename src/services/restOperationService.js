@@ -231,18 +231,19 @@
             /**
              * vesselPosition gibi type 'ları parçalamak için
              */
-                // options.type = _.kebabCase(options.type);
+            // options.type = _.kebabCase(options.type);
             $timeout(function () {
                 var dialogsOptions = Templ.appConfig.defaults.dialogs.edit;
                 if (options.hasOwnProperty('size')) {
                     dialogsOptions.size = options.size;
                 }
 
-                $templateCache.put('/' + options.type + '/edit.html',
+                var _path = '/' + options.type + '/edit.html';
+                $templateCache.put(_path,
                     '<div data-apt-' + _.kebabCase(options.type) + '-' + options.suffix + ' ' +
                     'data-item="item"' + '  ' + 'stay=' + options.stay + '  ' +
                     'data-readonly-items="readonlyItems"></div>');
-                dialogs.create('/' + options.type + '/edit.html'
+                dialogs.create(_path
                     , ['$scope', '$injector', '$uibModalInstance', dialogControllerFn]
                     , undefined
                     , dialogsOptions);
