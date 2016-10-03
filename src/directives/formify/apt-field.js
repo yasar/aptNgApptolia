@@ -261,7 +261,7 @@
                                 selfClose: true,
                                 attrs    : {
                                     type : 'password',
-                                    class: 'password'
+                                    class: 'password input-xs'
                                 },
                                 formify  : true
                             };
@@ -309,7 +309,7 @@
                                 tag      : 'select',
                                 selfClose: false,
                                 attrs    : {
-                                    class: 'form-control'
+                                    class: 'form-control input-xs'
                                 },
                                 formify  : true
                             };
@@ -365,7 +365,7 @@
                                 selfClose: true,
                                 attrs    : {
                                     type            : 'text',
-                                    class           : 'form-control',
+                                    class           : 'form-control input-xs',
                                     'datetimepicker': '',
                                     options         : '$root.apt.Templ.appConfig.aeDateOptions'
                                 },
@@ -387,7 +387,7 @@
                                 selfClose: true,
                                 attrs    : {
                                     type            : 'text',
-                                    class           : 'form-control',
+                                    class           : 'form-control input-xs',
                                     'datetimepicker': '',
                                     options         : '$root.apt.Templ.appConfig.aeDatetimeOptions'
                                 },
@@ -401,7 +401,7 @@
                                 selfClose: true,
                                 attrs    : {
                                     type               : 'text',
-                                    class              : 'form-control date-picker',
+                                    class              : 'form-control date-picker input-xs',
                                     'date-range-picker': '',
                                     'options'          : '{singleDatePicker: true, showDropdowns: true, locale: {format: ' + aptTempl.appConfig.defaults.formats.screenDate + '}}',
                                 },
