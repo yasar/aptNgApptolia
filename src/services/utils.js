@@ -873,10 +873,18 @@
          * @param address
          */
         function formatAddressForPrint(address) {
-            return address.address + '\n\r'
-                   + address.city.name + '\n\r '
-                   + address.state.name + ', '
-                   + address.country.name
+            var arr = [];
+            address.address && arr.push(address.address);
+            _.isObject(address.city) && arr.push(address.city.name);
+            _.isObject(address.state) && arr.push(address.state.name);
+            _.isObject(address.country) && arr.push(address.country.name);
+
+            return arr.join('\n\r');
+
+            // return address.address + '\n\r'
+            //        + address.city.name + '\n\r '
+            //        + address.state.name + ', '
+            //        + address.country.name
         }
 
         function handlePromiseCatch(e) {
