@@ -36,7 +36,7 @@
         var fnNameAdd;
         var fnNameEdit;
 
-        if (!$scope.builder.selector.showMenu) {
+        if (!_.get($scope, 'builder.selector.showMenu')) {
             vm.enabled = false;
             return;
         }

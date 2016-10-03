@@ -47,6 +47,7 @@
             setUrlSearchParamValue           : setUrlSearchParamValue,
             getScopeById                     : getScopeById,
             goto                             : goto,
+            handleException                  : handleException,
             handlePromiseCatch               : handlePromiseCatch,
             showError                        : showError,
             showConfirm                      : showConfirm,

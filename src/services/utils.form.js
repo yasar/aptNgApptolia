@@ -4,13 +4,18 @@
 
 function aptUtilsForm($injector) {
     return function aptUtilsFormInner(domain, data, _options) {
-        _options             = _.defaults(_options, {
-            integrate: true
-        });
+        var aptUtils         = $injector.get('aptUtils');
         var formObj          = this;
         var $timeout         = $injector.get('$timeout');
         var gettextCatalog   = $injector.get('gettextCatalog');
         var NotifyingService = $injector.get('NotifyingService');
+
+        _options = _.defaults(_options, {
+            /**
+             * when set to false, it can be used for ordinary forms.
+             */
+            integrate: true
+        });
 
         if (_options.integrate) {
             var Restangular = $injector.get('Restangular');
@@ -49,15 +54,10 @@ function aptUtilsForm($injector) {
             options.hasParent = false;
         }
 
-        // formObj.mode           = (data || options.itemId) ? 'edit' : 'new';
-        formObj.mode = ((data && _.get(data, '__is_incomplete') !== true) || options.itemId) ? 'edit' : 'new';
-        //if(formObj.mode == 'new' && _.has(data, '__is_incomplete')){
-        //    data.__is_incomplete = null;
-        //}
+        formObj.mode           = ((data && _.get(data, '__is_incomplete') !== true) || options.itemId) ? 'edit' : 'new';
         formObj.isBusy         = false;
         formObj.isSaving       = false;
         formObj.isSavingFailed = false;
-        // formObj.submitLabel    = 'Save';
         formObj.submitLabel    = getSubmitLabel();
         formObj.submit         = submit;
         formObj.add            = add;
@@ -138,7 +138,6 @@ function aptUtilsForm($injector) {
              * note that + sign is to ensure itemId is converted to integer.
              */
             if (angular.isUndefined(itemId) || !_.isNumber(+itemId)) {
-                // formObj.data = backupDataAndGetCopy(model.one());
                 _.merge(formObj.data, backupDataAndGetCopy(model.one()));
                 formObj.submitLabel = getSubmitLabel();
                 notify(formObj.data, 'formDataLoaded');
@@ -150,7 +149,7 @@ function aptUtilsForm($injector) {
                 message : gettextCatalog.getString('Please wait while form data is being retrieved from server'),
                 progress: 10
             };
-            showWait(waitConf);
+            aptUtils.showWait(waitConf);
 
             /**
              * if we have the `itemId`, we should grab the data from server
@@ -158,8 +157,6 @@ function aptUtilsForm($injector) {
              */
             formObj.isBusy = true;
             model.one(itemId).get().then(function (remoteData) {
-                // formObj.data   = backupDataAndGetCopy(remoteData);
-                // removeAndMerge(formObj.data, backupDataAndGetCopy(remoteData));
                 loadDataFromData(remoteData);
                 formObj.isBusy      = false;
                 formObj.submitLabel = getSubmitLabel(remoteData);
@@ -168,7 +165,7 @@ function aptUtilsForm($injector) {
         }
 
         function loadDataFromData(remoteData) {
-            removeAndMerge(formObj.data, backupDataAndGetCopy(remoteData));
+            aptUtils.removeAndMerge(formObj.data, backupDataAndGetCopy(remoteData));
             if (_.isFunction(options.onDataLoad)) {
                 options.onDataLoad($injector, options.$scope, formObj);
             }
@@ -261,7 +258,7 @@ function aptUtilsForm($injector) {
                     formObj.isSaving       = false;
                     formObj.isSavingFailed = true;
 
-                    handleException(_.defaults(error, {type: 'rest-error'}));
+                    aptUtils.handleException(_.defaults(error, {type: 'rest-error'}));
                 });
             });
         }
@@ -284,13 +281,13 @@ function aptUtilsForm($injector) {
                     }).catch(function (error) {
                         formObj.isSaving       = false;
                         formObj.isSavingFailed = true;
-                        handleException(_.defaults(error, {type: 'rest-error'}));
+                        aptUtils.handleException(_.defaults(error, {type: 'rest-error'}));
                     });
                 } catch (error) {
                     formObj.isSaving       = false;
                     formObj.isSavingFailed = true;
 
-                    handleException(error);
+                    aptUtils.handleException(error);
                     return error;
                 }
             });
@@ -307,7 +304,7 @@ function aptUtilsForm($injector) {
             if ($formController && $formController.$dirty) {
                 var title   = gettextCatalog.getString('Confirmation');
                 var message = gettextCatalog.getString('You have un-saved changes that will be lost if you continue.') + ' ' + gettextCatalog.getString('Are you sure that you want to continue?');
-                showConfirm(title, message, function () {
+                aptUtils.showConfirm(title, message, function () {
                     notify(null, 'formCanceled');
                 });
             } else {
