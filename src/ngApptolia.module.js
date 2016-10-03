@@ -27,6 +27,18 @@
     dependencies.push('angularScreenfull');
     dependencies.push('ae-datetimepicker');
 
+    /**
+     * angular-dialog-service
+     */
+    dependencies.push('dialogs.main');
+    dependencies.push('ngSanitize');
+    ///
+
+    dependencies.push('NgSwitchery');
+
+
+    ////////////////////////////////////////////////
+
     angular.module('ngApptolia', dependencies)
         .config([
             '$routeSegmentProvider',
