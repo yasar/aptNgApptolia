@@ -139,7 +139,6 @@
                                         if (hasChildren && config.liHasSubMenuClass !== null) {
                                             $li.addClass(config.liHasSubMenuClass);
                                         }
-                                        $li.attr('ui-sref-active-eq', 'active');
                                         $ul.append($li);
 
                                         var $a = angular.element('<a></a>');
@@ -148,7 +147,6 @@
                                         }
 
                                         if (menuItem.href) {
-//                                        $a.attr('ui-sref', menuItem.href);
                                             $a.attr('ng-href', menuItem.href);
                                         }
 
@@ -224,7 +222,7 @@
 
                                         var $a = angular.element(menuItem.href ? '<a />' : '<button type="button"' + (scope.btnSize ? ' class="btn-' + scope.btnSize + '"' : '') + ' />');
                                         if (menuItem.href) {
-                                            $a.attr('ui-sref', menuItem.href);
+                                            $a.attr('ng-href', menuItem.href);
                                         }
                                         if (menuItem.click) {
                                             $a.click(function () {
@@ -417,7 +415,6 @@
                                         if (hasChildren && config.liHasSubMenuClass !== null) {
                                             $li.addClass(config.liHasSubMenuClass);
                                         }
-                                        //$li.attr('ui-sref-active-eq', 'active');
                                         $li.attr('ng-class', '{active: (\'' + menuItem.segment + '\' | routeSegmentStartsWith)}');
                                         $ul.append($li);
 

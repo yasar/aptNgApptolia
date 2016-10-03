@@ -5,15 +5,19 @@
 (function () {
     angular.module('ngApptolia').factory('aptMenuTableRowMenu', fn);
 
-    fn.$inject = ['aptAuthorizationService', 'aptAuthEnumService', '$interpolate', '$routeSegment'];
-    function fn(authorization, enums, $interpolate, $routeSegment) {
-        var service = {
-                config : null,
-                menu   : null,
-                element: null,
-                build  : buildFn
-            },
-            ctr     = 0;
+    fn.$inject = ['$injector'];
+    function fn($injector) {
+        var aptAuthorizationService = $injector.get('aptAuthorizationService');
+        var aptIcon                 = $injector.get('aptIcon');
+        var $interpolate            = $injector.get('$interpolate');
+        var $routeSegment           = $injector.get('$routeSegment');
+        var service                 = {
+            config : null,
+            menu   : null,
+            element: null,
+            build  : buildFn
+        };
+        var ctr                     = 0;
 
         return service;
 
@@ -22,20 +26,11 @@
                 return;
             }
 
-            /*if (angular.isUndefined(service.config)) {
-             service.config = {
-             ulIsSubMenuClass     : null,
-             liHasSubMenuClass    : null,
-             aInLiWithSubMenuClass: null,
-             icon                 : 'icon-more'
-             };
-             }*/
-
             service.config = angular.merge({
                 ulIsSubMenuClass     : null,
                 liHasSubMenuClass    : null,
                 aInLiWithSubMenuClass: null,
-                icon                 : 'icon-more'
+                icon                 : aptIcon.get('item-menu')
             }, service.config);
 
             var $menuEl = $('<ul></ul>');
@@ -65,13 +60,10 @@
             }
 
             var elementScope = angular.element(service.element).scope();
-            var scope        = {
-                    itemData: elementScope.row || elementScope.item
-                },
-                $ul          = null;
+            var scope        = {itemData: elementScope.row || elementScope.item};
+            var $ul          = null;
 
             ctr++;
-
 
             if (parent.is('ul')) {
                 $ul = parent;
@@ -82,7 +74,6 @@
                 }
                 parent.append($ul);
             }
-
 
             _.forEach(menu.children, function (menuItem, key) {
                 if (menuItem.hasOwnProperty('show')) {
@@ -96,14 +87,15 @@
                     }
                 }
 
-                if (menuItem.hasOwnProperty('auth') && menuItem.auth) {
-                    //if (!authAccountModel.can(menuItem.auth.right, menuItem.auth.type, menuItem.auth.topic)) {
-                    //    return;
-                    //}
-                    if (authorization.authorize(true, menuItem.auth) == enums.authorised.notAuthorised) {
-                        return;
-                    }
+                ///
+
+                if (menuItem.hasOwnProperty('auth')
+                    && menuItem.auth
+                    && !aptAuthorizationService.isAuthorized(menuItem.auth)) {
+                    return;
                 }
+
+                ///
 
                 var $li         = angular.element('<li></li>');
                 var hasChildren = false;
@@ -114,7 +106,6 @@
                 if (hasChildren && service.config.liHasSubMenuClass !== null) {
                     $li.addClass(service.config.liHasSubMenuClass);
                 }
-                $li.attr('ui-sref-active-eq', 'active');
                 $ul.append($li);
 
                 var $a = angular.element('<a></a>');
@@ -153,7 +144,6 @@
                     $a.append('<i class="' + menuItem.icon + '"></i>');
                 }
 
-                // $a.append('<span>' + menuItem.text + '</span>');
                 if (service.config.translate) {
                     $a.append('<span translate>' + menuItem.text + '</span>');
                 } else {
@@ -166,18 +156,6 @@
                     buildMenu(menuItem, $li);
                 }
             });
-
-            /*if (parent.hasClass('icons-list')) {
-             parent.removeClass('icons-list');
-             }
-             var $holder = '<ul class="icons-list">' +
-             '<li>' +
-             '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu7"></i></a>' +
-             '</li>' +
-             '</ul>';
-             parent      = $holder.find('li').append(parent.clone());*/
         }
     }
-
-
 })();

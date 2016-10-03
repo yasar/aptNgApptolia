@@ -27,7 +27,7 @@
             controller  : controllerFn,
             controllerAs: 'vmField',
             compile     : compileFn,
-            require     : ['^^?form']
+            require     : ['^^?form', 'aptField']
         };
 
         /**
@@ -55,9 +55,8 @@
 
             function linkFn(scope, elem, attrs, ctrls) {
 
-                if (!scope.vmField) {
-                    scope.vmField = {};
-                }
+                var vm             = ctrls[1];
+                var gettextCatalog = vm.translate ? $injector.get('gettextCatalog') : null;
 
                 if (_.has(attrs, 'field')) {
                     attrs.field = $interpolate(attrs.field)(scope);
@@ -69,11 +68,11 @@
 
                 var bindTo = getBindTo(attrs, scope);
                 if (_.has(attrs, 'params')) {
-                    scope.vmField.params = $parse(attrs.params)(scope);
+                    vm.params = $parse(attrs.params)(scope);
                 }
                 var showLabel       = _.has(attrs, 'showLabel') && attrs.showLabel == 'false' ? false : true;
                 var label           = showLabel ? getLabel(attrs) : null;
-                var $tpl            = $(getTemplate(scope, attrs));
+                var $tpl            = $(getTemplate(scope, attrs, vm));
                 var isSelfContained = false;
 
                 if (!_.isNull(bindTo)) {
@@ -99,16 +98,16 @@
                 }
 
                 if (showLabel && label !== null) {
-                    if ((!_.has(attrs, 'translate') || (_.has(attrs, 'translate') && attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
-                        var gettextCatalog = $injector.get('gettextCatalog');
-                        label              = gettextCatalog.getString(label);
+                    // if ((!_.has(attrs, 'translate') || (_.has(attrs, 'translate') && attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
+                    if (vm.translate) {
+                        label = gettextCatalog.getString(label);
                         delete attrs.translate;
                     }
 
                     if (!isSelfContained) {
                         $tpl.attr('data-label', label);
                     } else {
-                        scope.vmField.label = label;
+                        vm.label = label;
                     }
                 }
 
@@ -120,22 +119,7 @@
 
                 elem.after($tpl);
                 elem.remove();
-                // $compile($tpl)(scope);
                 var compiledElement = $compile($tpl)(scope);
-
-                // if (ctrls && ctrls.length > 0 && ctrls[0]) {
-                // if (ctrls && ctrls.length > 0) {
-                //     if (!ctrls[0]) {
-                //         console.warn('FormController is expected, but got nothing.');
-                //     } else {
-                //         $timeout(function () {
-                //             var $formController = ctrls[0];
-                //             // $formController.$addControl($tpl.get(0));
-                //             // $formController.$addControl(angular.element($tpl.get(0)));
-                //             $formController.$addControl(compiledElement);
-                //         });
-                //     }
-                // }
 
                 /**
                  * this will fix the ui-switch directive to initialize itself twice.
@@ -206,7 +190,7 @@
 
         }
 
-        function getTemplate(scope, attrs) {
+        function getTemplate(scope, attrs, vm) {
             var tpl = undefined,
                 control,
                 attr;
@@ -220,7 +204,7 @@
             }
 
             if (_.isUndefined(tpl)) {
-                control = getControlObject(scope, attrs);
+                control = getControlObject(scope, attrs, vm);
 
                 tpl = '<' + control.tag;
                 for (attr in control.attrs) {
@@ -244,7 +228,7 @@
 
             return tpl;
 
-            function getControlObject(scope, attrs) {
+            function getControlObject(scope, attrs, vm) {
                 var control = {
                     tag      : 'input',
                     attrs    : {
@@ -331,7 +315,11 @@
                             };
 
                             if (scope.vmField.params && scope.vmField.params.options) {
-                                control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
+                                if (vm.translate) {
+                                    control.attrs['ng-options'] = 'item as $root.translate(item) for item in vmField.params.options';
+                                } else {
+                                    control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
+                                }
                             }
                             break;
                         case 'textarea':
@@ -548,11 +536,16 @@
 
     controllerFn.$inject = ['$injector', '$scope', '$attrs'];
     function controllerFn($injector, $scope, $attrs) {
-        var vm     = this;
-        var $parse = $injector.get('$parse');
+        var vm          = this;
+        var $parse      = $injector.get('$parse');
+        vm.translate = false;
 
         if (_.has($attrs, 'modelBase')) {
             vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
+        }
+
+        if ((!_.has($attrs, 'translate') || (_.has($attrs, 'translate') && $attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
+            vm.translate = true;
         }
 
         vm.reset = reset;

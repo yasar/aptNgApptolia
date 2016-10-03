@@ -35,7 +35,8 @@
                     reset              : self.reset,
                     setSlotRouteSegment: self.setSlotRouteSegment,
                     blurPage           : self.blurPage,
-                    resetWithBuilder   : self.resetWithBuilder
+                    resetWithBuilder   : self.resetWithBuilder,
+                    layoutWrappers     : self.layoutWrappers
                 };
             }];
 
@@ -149,7 +150,7 @@
                 },
                 icons  : {
                     icomoon: {
-                        add                : 'thumbs-up2',
+                        add                : 'plus22',
                         'add-new'          : 'plus3',
                         'add-to-list'      : 'folder-plus4',
                         calendar           : 'calendar52',
@@ -166,7 +167,8 @@
                         fullscreen         : 'screen-full',
                         'fullscreen-cancel': 'screen-normal',
                         images             : 'camera',
-                        'item-menu'        : 'more',
+                        'item-menu'        : 'more2',
+                        location           : 'map-marker',
                         notes              : 'notebook',
                         null               : 'circle',
                         option             : 'circle-o',
@@ -189,6 +191,16 @@
         this.defaults = {
             pageSize: 10
         };
+
+        this.layoutWrappers = [
+            /**
+             * place in html code that will wrap the layout (div)
+             * this is an array, it will be processed in array index order,
+             * last one in the array will be most outer wrapper
+             *
+             * ex: '<div card-read="vm.parseCard($card, $tracks, $readError)"></div>'
+             */
+        ];
 
         /**
          * we need to handle the login screen in a special way
