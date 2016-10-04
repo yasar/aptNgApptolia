@@ -208,7 +208,14 @@
 
             ///
 
-            var tpl = '<div data-' + _.kebabCase(directiveName);
+            var tpl   = '<div data-' + _.kebabCase(directiveName);
+            _.forOwn(conf, function (value, key) {
+                /**
+                 * note that key is going to be set as scope parameter
+                 * and its value will be available on the scope.
+                 */
+                tpl += ' ' + _.kebabCase(key) + '="' + key + '"';
+            });
             tpl += '></div>';
 
             ///
@@ -220,12 +227,13 @@
                 '$uibModalInstance',
                 'NotifyingService',
                 function ($scope, $uibModalInstance, NotifyingService) {
-                    if (conf.itemId) {
-                        $scope.itemId = conf.itemId;
-                    }
-                    if (conf.params) {
-                        $scope.params = conf.params;
-                    }
+                    // if (conf.itemId) {
+                    //     $scope.itemId = conf.itemId;
+                    // }
+                    // if (conf.params) {
+                    //     $scope.params = conf.params;
+                    // }
+                    _.merge($scope, conf);
 
                     // NotifyingService.subscribe($scope, builder.domain + '.formCanceled', function () {
                     //     $uibModalInstance.close();
