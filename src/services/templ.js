@@ -116,11 +116,11 @@
                         animation: true
                     },
                     deleteConfirm: {
-                        size         : 'sm',
-                        keyboard     : false,
-                        backdrop     : 'static',
-                        animation    : true,
-                        windowClass  : 'bg-warning text-default bg-opacity-50'
+                        size       : 'sm',
+                        keyboard   : false,
+                        backdrop   : 'static',
+                        animation  : true,
+                        windowClass: 'bg-warning text-default bg-opacity-50'
                     },
                     error        : {
                         size       : 'sm',
@@ -153,6 +153,7 @@
                         add                : 'plus22',
                         'add-new'          : 'plus3',
                         'add-to-list'      : 'folder-plus4',
+                        apply              : 'check',
                         calendar           : 'calendar52',
                         cancel             : 'x',
                         check              : 'checkmark2',

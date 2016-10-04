@@ -19,7 +19,7 @@ mini-calendar {
   width: 300px;
   border: solid 1px @border-colour;
   margin-bottom: 10px;
-  @secondary-colour: #2875C7;
+  @secondary-colour: @navbar-inverse-bg;
   @spacing: 10px;
 
   @icon-width: 40px;
@@ -30,7 +30,7 @@ mini-calendar {
     width: 100%;
     background: @secondary-colour;
     height: @header-height;
-    color: white;
+    color: @navbar-inverse-color;
     > * {
       .vertical-centre(@header-height);
     }
