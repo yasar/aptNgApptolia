@@ -14,6 +14,7 @@
         var $templateCache = $injector.get('$templateCache');
         var $compile       = $injector.get('$compile');
         var aptTempl       = $injector.get('aptTempl');
+        var ngAttrs        = {};
 
         return {
             scope       : true,
@@ -44,6 +45,14 @@
          */
 
         function compileFn(elem, attrs) {
+            _.forIn(attrs, function (value, key) {
+                if (!_.includes(['ngIf'], key) && _.startsWith(key, 'ng')) {
+                    ngAttrs[key] = value;
+                    delete attrs[key];
+                    delete attrs.$attr[key];
+                    elem.removeAttr(_.kebabCase(key));
+                }
+            });
 
             ///
 
@@ -112,7 +121,12 @@
                 }
 
                 if (!isSelfContained) {
+                    /**
+                     * note that we send attrs.$attr
+                     */
+                    // transferAttributes(attrs.$attr, $tpl);
                     transferAttributes(attrs, $tpl);
+                    transferAttributes(ngAttrs, $tpl);
 
                     $tpl = finalize(elem, attrs, $tpl);
                 }
@@ -469,24 +483,6 @@
             return bindTo;
         }
 
-        function transferAttributes(attrs, $tpl) {
-            /**
-             * transfer the attributes,
-             * note the usage of context in forEach, ie $tpl.
-             */
-            angular.forEach(attrs, function (value, key) {
-                if (['$$element', '$attr', '$scope'].indexOf(key) !== -1) {
-                    return;
-                }
-
-                if (['field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel'].indexOf(key) !== -1) {
-                    // if (['field', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel'].indexOf(key) !== -1) {
-                    return;
-                }
-
-                this.attr(attrs.$attr[key], value);
-            }, $tpl);
-        }
 
         function finalize(elem, attrs, $tpl) {
             if (['date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
@@ -536,8 +532,8 @@
 
     controllerFn.$inject = ['$injector', '$scope', '$attrs'];
     function controllerFn($injector, $scope, $attrs) {
-        var vm          = this;
-        var $parse      = $injector.get('$parse');
+        var vm       = this;
+        var $parse   = $injector.get('$parse');
         vm.translate = false;
 
         if (_.has($attrs, 'modelBase')) {
@@ -562,7 +558,38 @@
         function reset() {
             $scope.$broadcast('reset-model');
         }
-    };
+    }
+
+    function transferAttributes(attrs, $tpl) {
+        _.forOwn(attrs, function (value, key) {
+            if (_.includes([
+                    '$$element', '$attr', '$scope',
+                    'field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel',
+                ], key)) {
+                return;
+            }
+            $tpl.attr(_.kebabCase(key), value);
+        });
+    }
+
+    function transferAttributes2(attrs, $tpl) {
+        /**
+         * transfer the attributes,
+         * note the usage of context in forEach, ie $tpl.
+         */
+        angular.forEach(attrs, function (value, key) {
+            if (['$$element', '$attr', '$scope'].indexOf(key) !== -1) {
+                return;
+            }
+
+            if (['field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel'].indexOf(key) !== -1) {
+                // if (['field', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel'].indexOf(key) !== -1) {
+                return;
+            }
+
+            this.attr(attrs.$attr[key], value);
+        }, $tpl);
+    }
 
 })();
 
