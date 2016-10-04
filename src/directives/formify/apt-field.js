@@ -37,6 +37,7 @@
          *      field
          *      translate
          *      label
+         *      help-text
          *      model-base
          *      rows  // for textarea
          *      use-formify
@@ -79,8 +80,11 @@
                 if (_.has(attrs, 'params')) {
                     vm.params = $parse(attrs.params)(scope);
                 }
-                var showLabel       = _.has(attrs, 'showLabel') && attrs.showLabel == 'false' ? false : true;
-                var label           = showLabel ? getLabel(attrs) : null;
+                // var showLabel       = _.has(attrs, 'showLabel') && attrs.showLabel == 'false' ? false : true;
+                // var label           = showLabel ? getLabel(attrs) : null;
+
+                var label           = _.has(attrs, 'label') && attrs.label !== '' && attrs.label !== 'false' ? attrs.label : false;
+                var helpText        = _.has(attrs, 'helpText') && attrs.helpText !== '' && attrs.helpText !== 'false' ? attrs.helpText : false;
                 var $tpl            = $(getTemplate(scope, attrs, vm));
                 var isSelfContained = false;
 
@@ -106,8 +110,7 @@
                     }
                 }
 
-                if (showLabel && label !== null) {
-                    // if ((!_.has(attrs, 'translate') || (_.has(attrs, 'translate') && attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
+                if (!!label) {
                     if (vm.translate) {
                         label = gettextCatalog.getString(label);
                         delete attrs.translate;
@@ -117,6 +120,19 @@
                         $tpl.attr('data-label', label);
                     } else {
                         vm.label = label;
+                    }
+                }
+
+                if (!!helpText) {
+                    if (vm.translate) {
+                        helpText = gettextCatalog.getString(helpText);
+                        delete attrs.translate;
+                    }
+
+                    if (!isSelfContained) {
+                        $tpl.attr('data-help-text', helpText);
+                    } else {
+                        vm.helpText = helpText;
                     }
                 }
 
@@ -564,7 +580,7 @@
         _.forOwn(attrs, function (value, key) {
             if (_.includes([
                     '$$element', '$attr', '$scope',
-                    'field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel',
+                    'field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'helpText',
                 ], key)) {
                 return;
             }
@@ -572,24 +588,23 @@
         });
     }
 
-    function transferAttributes2(attrs, $tpl) {
-        /**
-         * transfer the attributes,
-         * note the usage of context in forEach, ie $tpl.
-         */
-        angular.forEach(attrs, function (value, key) {
-            if (['$$element', '$attr', '$scope'].indexOf(key) !== -1) {
-                return;
-            }
-
-            if (['field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel'].indexOf(key) !== -1) {
-                // if (['field', 'type', 'label', 'rows', 'translate', 'useFormify', 'showLabel'].indexOf(key) !== -1) {
-                return;
-            }
-
-            this.attr(attrs.$attr[key], value);
-        }, $tpl);
-    }
+    // function transferAttributes(attrs, $tpl) {
+    //     /**
+    //      * transfer the attributes,
+    //      * note the usage of context in forEach, ie $tpl.
+    //      */
+    //     angular.forEach(attrs, function (value, key) {
+    //         if (['$$element', '$attr', '$scope'].indexOf(key) !== -1) {
+    //             return;
+    //         }
+    //
+    //         if (['field', 'modelBase', 'type', 'label', 'rows', 'translate', 'useFormify', 'helpText'].indexOf(key) !== -1) {
+    //             return;
+    //         }
+    //
+    //         this.attr(attrs.$attr[key], value);
+    //     }, $tpl);
+    // }
 
 })();
 

@@ -21,6 +21,7 @@
                             var wrapper      = angular.element('<div class="' + wrapperClass + '"></div>');
                             // var label       = _.has(attrs, 'label') ? angular.element('<label>' + attrs.label + '</label>') : null;
                             var label        = null;
+                            var helpText     = null;
                             // var label        = _.has(attrs, 'label') ? angular.element('<label' + (_.has(attrs, 'translate') ? ' translate' : '') + '>' + attrs.label + '</label>') : null;
                             var _elem        = needsCompile ? elem.clone() : elem;
 
@@ -34,6 +35,18 @@
                                 }
 
                                 label = angular.element('<label>' + strLabel + '</label>');
+                            }
+
+                            if (attrs.helpText) {
+                                var strHelpText = attrs.helpText;
+
+                                // if ((!_.has(attrs, 'translate') || attrs.translate != 'false') && $injector.has('gettextCatalog')) {
+                                //     var gettextCatalog = $injector.get('gettextCatalog');
+                                //     strLabel           = gettextCatalog.getString(strLabel);
+                                //     delete attrs.translate;
+                                // }
+
+                                helpText = angular.element('<span class="help-block">' + strHelpText + '</span>');
                             }
 
                             if (!_.isNull(label)) {
@@ -90,9 +103,7 @@
                                     label.addClass('display-block');
                                     label.append('<span class="clickable pl-5 pull-right" ng-click="vmField.reset()" title="Clear"><i class="icon-cross"></i></span>');
                                 }
-
                             }
-
 
                             if (['input', 'select', 'textarea'].indexOf(_elem.prop('tagName').toLowerCase()) !== -1) {
                                 var className = 'form-control';
@@ -118,10 +129,16 @@
                                         wrapper.append(label);
                                     }
                                     wrapper.append(_elem);
+                                    if (helpText !== null) {
+                                        wrapper.append(helpText);
+                                    }
                                 } else {
                                     _elem.wrap(wrapper);
                                     if (!_.isNull(label)) {
                                         _elem.before(label);
+                                    }
+                                    if (!_.isNull(helpText)) {
+                                        _elem.after(helpText);
                                     }
                                 }
                             }
