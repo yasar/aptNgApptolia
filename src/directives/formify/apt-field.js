@@ -14,6 +14,7 @@
         var $templateCache = $injector.get('$templateCache');
         var $compile       = $injector.get('$compile');
         var aptTempl       = $injector.get('aptTempl');
+        var aptUtils       = $injector.get('aptUtils');
         var ngAttrs        = {};
 
         return {
@@ -111,9 +112,9 @@
                 if (label) {
                     if (isSelfContained) {
                         // vm.label = getLabel(attrs);
-                        vm.label = gettextCatalog.getString(getLabel(attrs), _.get(attrs, 'translateContext'));
+                        vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
                     } else {
-                        $tpl.attr('label', getLabel(attrs));
+                        $tpl.attr('label', aptUtils.grabLabelFromAttrs(attrs));
                     }
                 }
 
@@ -448,17 +449,17 @@
         }
 
 
-        function getLabel(attrs) {
-            var str = null;
-
-            if (_.has(attrs, 'label')) {
-                str = attrs.label;
-            } else if (_.has(attrs, 'field')) {
-                str = attrs.field;
-            }
-
-            return _(str).chain().trimEnd('_id').startCase().value();
-        }
+        // function getLabel(attrs) {
+        //     var str = null;
+        //
+        //     if (_.has(attrs, 'label')) {
+        //         str = attrs.label;
+        //     } else if (_.has(attrs, 'field')) {
+        //         str = attrs.field;
+        //     }
+        //
+        //     return _(str).chain().trimEnd('_id').startCase().value();
+        // }
 
         function getBindTo(attrs, scope) {
             var bindTo = null;

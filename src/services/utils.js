@@ -57,8 +57,25 @@
             showWarning                      : showWarning,
             showFormDirectiveInPopup         : showFormDirectiveInPopup,
             popupDirective                   : popupDirective,
-            formatAddressForPrint            : formatAddressForPrint
+            formatAddressForPrint            : formatAddressForPrint,
+            grabLabelFromAttrs               : grabLabelFromAttrs
         };
+
+        function grabLabelFromAttrs(attrs){
+            var str = null;
+
+            if (_.has(attrs, 'label')) {
+                str = attrs.label;
+            } else if (_.has(attrs, 'field')) {
+                str = attrs.field;
+            } else if (_.has(attrs, 'ngModel')) {
+                str = attrs.ngModel;
+                var arr = attrs.ngModel.split('.');
+                str = arr[arr.length-1];
+            }
+
+            return _(str).chain().trimEnd('_id').startCase().value();
+        }
 
         function convertObjectArrayToKeyValueArray(_data, keyField, valueField) {
             var data = [];
@@ -208,7 +225,7 @@
 
             ///
 
-            var tpl   = '<div data-' + _.kebabCase(directiveName);
+            var tpl = '<div data-' + _.kebabCase(directiveName);
             _.forOwn(conf, function (value, key) {
                 /**
                  * note that key is going to be set as scope parameter

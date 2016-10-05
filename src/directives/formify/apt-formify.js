@@ -19,17 +19,19 @@
                             var needsCompile   = _.has(elem.scope(), 'vmField');
                             var wrapperClass   = attrs.aptFormify !== '' ? attrs.aptFormify : 'form-group form-group-xs';
                             var wrapper        = angular.element('<div class="' + wrapperClass + '"></div>');
-                            var label          = attrs.label && attrs.label !== 'false';
+                            var label          = (!_.has(attrs.label) || attrs.label !== 'false');
+                            var translate      = (!_.has(attrs, 'translate') || attrs.translate != 'false');
                             var helpText       = attrs.helpText && attrs.helpText !== 'false';
                             var _elem          = needsCompile ? elem.clone() : elem;
-                            var translate      = (!_.has(attrs, 'translate') || attrs.translate != 'false');
                             var gettextCatalog = $injector.get('gettextCatalog');
+                            var aptUtils       = $injector.get('aptUtils');
 
                             if (!!label) {
-                                label = attrs.label;
+                                // label = attrs.label;
+                                label = aptUtils.grabLabelFromAttrs(attrs);
 
                                 if (translate) {
-                                    label = gettextCatalog.getString(label, _.get(attrs, 'translateContext'));
+                                    label = gettextCatalog.getString(label,null, _.get(attrs, 'translateContext'));
                                 }
 
                                 label = $('<label>' + label + '</label>');
