@@ -5,6 +5,7 @@
   "devDependencies": {},
   "dependencies": {
     "angular-screenfull": "*",
-    "angular-eonasdan-datetimepicker": "*"
+    "angular-eonasdan-datetimepicker": "*",
+    "angular-marked": "*"
   }
 }

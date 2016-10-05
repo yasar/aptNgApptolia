@@ -15,41 +15,37 @@
                 compile : function (elem, attrs) {
                     return {
                         pre: function (scope, elem, attrs, ctrls) {
-                            var holderCtrl   = ctrls[0];
-                            var needsCompile = _.has(elem.scope(), 'vmField');
-                            var wrapperClass = attrs.aptFormify !== '' ? attrs.aptFormify : 'form-group form-group-xs';
-                            var wrapper      = angular.element('<div class="' + wrapperClass + '"></div>');
-                            // var label       = _.has(attrs, 'label') ? angular.element('<label>' + attrs.label + '</label>') : null;
-                            var label        = null;
-                            var helpText     = null;
-                            // var label        = _.has(attrs, 'label') ? angular.element('<label' + (_.has(attrs, 'translate') ? ' translate' : '') + '>' + attrs.label + '</label>') : null;
-                            var _elem        = needsCompile ? elem.clone() : elem;
+                            var holderCtrl     = ctrls[0];
+                            var needsCompile   = _.has(elem.scope(), 'vmField');
+                            var wrapperClass   = attrs.aptFormify !== '' ? attrs.aptFormify : 'form-group form-group-xs';
+                            var wrapper        = angular.element('<div class="' + wrapperClass + '"></div>');
+                            var label          = attrs.label && attrs.label !== 'false';
+                            var helpText       = attrs.helpText && attrs.helpText !== 'false';
+                            var _elem          = needsCompile ? elem.clone() : elem;
+                            var translate      = (!_.has(attrs, 'translate') || attrs.translate != 'false');
+                            var gettextCatalog = $injector.get('gettextCatalog');
 
-                            if (attrs.label) {
-                                var strLabel = attrs.label;
+                            if (!!label) {
+                                label = attrs.label;
 
-                                if ((!_.has(attrs, 'translate') || attrs.translate != 'false') && $injector.has('gettextCatalog')) {
-                                    var gettextCatalog = $injector.get('gettextCatalog');
-                                    strLabel           = gettextCatalog.getString(strLabel);
-                                    delete attrs.translate;
+                                if (translate) {
+                                    label = gettextCatalog.getString(label, _.get(attrs, 'translateContext'));
                                 }
 
-                                label = angular.element('<label>' + strLabel + '</label>');
+                                label = $('<label>' + label + '</label>');
                             }
 
-                            if (attrs.helpText) {
-                                var strHelpText = attrs.helpText;
+                            if (!!helpText) {
+                                helpText = attrs.helpText;
 
-                                // if ((!_.has(attrs, 'translate') || attrs.translate != 'false') && $injector.has('gettextCatalog')) {
-                                //     var gettextCatalog = $injector.get('gettextCatalog');
-                                //     strLabel           = gettextCatalog.getString(strLabel);
-                                //     delete attrs.translate;
-                                // }
+                                if (translate) {
+                                    helpText = gettextCatalog.getString(helpText, _.get(attrs, 'translateContext'));
+                                }
 
-                                helpText = angular.element('<span class="help-block">' + strHelpText + '</span>');
+                                helpText = angular.element('<span class="help-block">' + helpText + '</span>');
                             }
 
-                            if (!_.isNull(label)) {
+                            if (!!label) {
                                 if (attrs.hasOwnProperty('controlEnableState')
                                     && attrs.controlEnableState == 'true') {
 
