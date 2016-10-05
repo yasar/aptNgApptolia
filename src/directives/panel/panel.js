@@ -36,46 +36,87 @@
             restrict    : 'E',
             replace     : true,
             transclude  : true,
-            templateUrl : path + '/panel.tpl.html',
-            link        : link,
+            templateUrl : function (elem, attrs) {
+                _.set(attrs, 'showHelp', (_.includes(['false', undefined], _.get(attrs, 'showHelp')) ? false : _.get(attrs, 'showHelp')));
+                return !attrs.showHelp ? path + '/panel.tpl.html' : path + '/panel-with-help.tpl.html';
+            },
+            compile     : Compile,
             controller  : aptPanelController,
             controllerAs: 'vmPanel'
         };
+        function Compile(element, attrs) {
 
-        function link(scope, element, attrs, panelCtrl, transclude) {
+            if (!!attrs.showHelp && element.closest('[uib-modal-window]').length) {
+                element.addClass('border-slate-800 border-xlg');
+                element.find('.panel-help-wrapper').addClass('bg-slate-800 no-margin');
+                element
+                    .find('.panel-help')
+                    .attr('marked', '')
+                    .attr('src', "'" + attrs.showHelp + "'");
 
-            var $timeout      = $injector.get('$timeout');
-            var $compile      = $injector.get('$compile');
-            var customContent = null;
-
-            transclude(scope.$new(), function (clone, newScope) {
-                if (clone.length > 0) {
-                    customContent = clone;
-                }
-            });
-
-            if (attrs.form) {
-                panelCtrl.form = attrs.form;
+                var contentWrapper = element.find('.panel-content-wrapper');
+                contentWrapper.addClass('bg-slate-800 no-padding');
+                contentWrapper.children('.panel-heading').addClass('bg-white no-margin');
+                contentWrapper.children('.panel-body').addClass('bg-white');
+                contentWrapper.children('.panel-footer').hide();
             }
 
-            if (attrs.class) {
-                panelCtrl.class = attrs.class;
-            }
+            return link;
 
-            panelCtrl.process(function () {
-                if (customContent) {
-                    if (element.find('.panel-footer').length) {
-                        $(customContent).insertBefore(element.find('.panel-footer'));
-                    } else {
-                        element.append(customContent);
+            function link(scope, element, attrs, panelCtrl, transclude) {
+
+                var $timeout      = $injector.get('$timeout');
+                var $compile      = $injector.get('$compile');
+                var customContent = null;
+
+                transclude(scope.$new(), function (clone, newScope) {
+                    if (clone.length > 0) {
+                        customContent = clone;
                     }
+                });
+
+                if (attrs.form) {
+                    panelCtrl.form = attrs.form;
                 }
-            });
+
+                if (attrs.class) {
+                    panelCtrl.class = attrs.class;
+                }
+
+                panelCtrl.process(function () {
+                    if (customContent) {
+                        if (element.find('.panel-footer').length) {
+                            $(customContent).insertBefore(element.find('.panel-footer'));
+                        } else {
+                            element.append(customContent);
+                        }
+                    }
+                });
+
+                $timeout(function () {
+                    /**
+                     * footer section must be in the timeout.
+                     * remember that we have form types of nested, in-form etc.
+                     * these forms will be parsed in after compilation has been completed.
+                     */
+                    var contentWrapper = element.find('.panel-content-wrapper');
+                    var panelFooter    = contentWrapper.children('.panel-footer');
+                    panelFooter.addClass('bg-slate-300 border-slate-400 border-lg');
+
+                    var btnSubmit = panelFooter.find(':submit');
+                    btnSubmit.removeClass().addClass('bg-slate-800 btn btn-labeled btn-xs');
+                    btnSubmit.find('i').wrap('<b></b>');
+
+                    panelFooter.slideDown();
+
+                },800);
+            }
         }
+
     }
 
-    aptPanelController.$inject = ['$element', '$scope', '$compile', 'aptTempl', '$injector'];
-    function aptPanelController(element, $scope, $compile, aptTempl, $injector) {
+    aptPanelController.$inject = ['$element', '$scope', '$compile', 'aptTempl', '$injector', '$attrs'];
+    function aptPanelController(element, $scope, $compile, aptTempl, $injector, $attrs) {
         var vm             = this;
         var $timeout       = $injector.get('$timeout');
         vm.tabs            = [];
@@ -131,7 +172,16 @@
             }
 
             function processTitle() {
-                var titleEl = element.children('.panel-heading').children('.panel-title');
+                var titleEl;
+                if (!$attrs.showHelp) {
+                    titleEl = element.children('.panel-heading').children('.panel-title');
+                } else {
+                    titleEl = element
+                        .children('.panel-help-wrapper')
+                        .children('.panel-content-wrapper')
+                        .children('.panel-heading')
+                        .children('.panel-title');
+                }
                 if (!vm.title) {
                     titleEl.remove();
                     return;

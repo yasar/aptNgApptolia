@@ -4,6 +4,7 @@
 			<apt-field type="locationChain"
 			           model-base="modelBase"
 			           field="country_id" parent-id="null"
+			           translate-context="addressTitle"
 			           label="{{'Country'|translate:'addressTitle'}}"></apt-field>
 		</div>
 
@@ -11,7 +12,8 @@
 			<apt-field type="locationChain"
 			           model-base="modelBase"
 			           field="state_id" parent-id="modelBase.country_id"
-			           label="{{'State'|translate:'addressTitle'}}"></apt-field>
+			           translate-context="addressTitle"
+			           label2="{{'State'|translate:'addressTitle'}}"></apt-field>
 		</div>
 	</div>
 

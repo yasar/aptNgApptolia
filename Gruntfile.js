@@ -44,6 +44,12 @@ module.exports = function (grunt) {
                  * see the patched version in patched folder
                  */
                 // 'vendor/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.js'
+
+                /**
+                 * markdown
+                 */
+                'vendor/marked/lib/marked.js',
+                'vendor/angular-marked/dist/angular-marked.js'
             ],
             css   : [],
             assets: []

@@ -36,6 +36,13 @@
 
     dependencies.push('NgSwitchery');
 
+    /**
+     * angular-marked
+     */
+    dependencies.push('hc.marked');
+
+
+
 
     ////////////////////////////////////////////////
 
