@@ -31,7 +31,7 @@
                                 label = aptUtils.grabLabelFromAttrs(attrs);
 
                                 if (translate) {
-                                    label = gettextCatalog.getString(label,null, _.get(attrs, 'translateContext'));
+                                    label = gettextCatalog.getString(label, null, _.get(attrs, 'translateContext'));
                                 }
 
                                 label = $('<label>' + label + '</label>');
@@ -112,58 +112,22 @@
                                 _elem.addClass(className);
                             }
 
-                            if (!attrs.layout) {
-                                if (holderCtrl && holderCtrl.layout) {
-                                    attrs.layout = holderCtrl.layout;
-                                } else {
-                                    attrs.layout = 'ver';
-                                }
-                            }
 
-
-                            if (attrs.layout == 'ver') {
-                                if (needsCompile) {
-                                    if (label !== null) {
-                                        wrapper.append(label);
-                                    }
-                                    wrapper.append(_elem);
-                                    if (helpText !== null) {
-                                        wrapper.append(helpText);
-                                    }
-                                } else {
-                                    _elem.wrap(wrapper);
-                                    if (!_.isNull(label)) {
-                                        _elem.before(label);
-                                    }
-                                    if (!_.isNull(helpText)) {
-                                        _elem.after(helpText);
-                                    }
-                                }
-                            }
-
-                            else if (attrs.layout == 'hor') {
-                                var labelWidth = [3];
-                                var sizeOrder  = ['lg', 'md', 'sm', 'xs'];
-
-                                if (holderCtrl && holderCtrl.labelWidth) {
-                                    labelWidth = holderCtrl.labelWidth;
-                                }
-
-                                var inner_wrapper = angular.element('<div class="col-lg-9"></div>');
-                                label.addClass('control-label');
-                                angular.forEach(labelWidth, function (size, ctr) {
-                                    label.addClass('col-' + sizeOrder[ctr] + '-' + size);
-                                    _elem.addClass('col-' + sizeOrder[ctr] + '-' + (12 - size));
-                                });
-
-                                if (needsCompile) {
+                            if (needsCompile) {
+                                if (label !== null) {
                                     wrapper.append(label);
-                                    wrapper.append(inner_wrapper);
-                                    inner_wrapper.append(_elem);
-                                } else {
-                                    _elem.wrap(inner_wrapper);
-                                    _elem.wrap(wrapper);
+                                }
+                                wrapper.append(_elem);
+                                if (helpText !== null) {
+                                    wrapper.append(helpText);
+                                }
+                            } else {
+                                _elem.wrap(wrapper);
+                                if (!_.isNull(label)) {
                                     _elem.before(label);
+                                }
+                                if (!_.isNull(helpText)) {
+                                    _elem.after(helpText);
                                 }
                             }
 
@@ -171,8 +135,6 @@
                             _elem.removeAttr('data-apt-formify');
                             _elem.removeAttr('label');
                             _elem.removeAttr('data-label');
-                            _elem.removeAttr('layout');
-                            _elem.removeAttr('data-layout');
                             _elem.removeAttr('translate');
 
                             if (needsCompile) {
@@ -183,9 +145,11 @@
                                  * it was causing ngForm to not detect dirty state of the form-controls.
                                  * doing it this way fixed that issue.
                                  */
-                                elem.after(wrapper);
-                                elem.remove();
-                                $compile(wrapper)(scope);
+                                $timeout(function () {
+                                    elem.after(wrapper);
+                                    elem.remove();
+                                    $compile(wrapper)(scope);
+                                });
                             }
                         }
                     };

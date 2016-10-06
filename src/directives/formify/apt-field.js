@@ -19,16 +19,12 @@
 
         return {
             scope       : true,
-            // scope       : {
-            //     modelBase: '='
-            // },
             replace     : true,
-            // scope       : false,
             restrict    : 'E',
             priority    : 9100,
-            controller  : controllerFn,
+            controller  : aptField_Controller,
             controllerAs: 'vmField',
-            compile     : compileFn,
+            compile     : aptField_Compile,
             require     : ['^^?form', 'aptField']
         };
 
@@ -47,7 +43,37 @@
          *      params
          */
 
-        function compileFn(elem, attrs) {
+        aptField_Controller.$inject = ['$injector', '$scope', '$attrs'];
+        function aptField_Controller($injector, $scope, $attrs) {
+            var vm       = this;
+            var $parse   = $injector.get('$parse');
+            vm.translate = false;
+
+            if (_.has($attrs, 'modelBase')) {
+                vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
+            }
+
+            if ((!_.has($attrs, 'translate') || (_.has($attrs, 'translate') && $attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
+                vm.translate = true;
+            }
+
+            vm.reset = reset;
+
+            vm.status = {
+                open: false
+            };
+
+            vm.open = function () {
+                vm.status.open = true;
+            };
+
+
+            function reset() {
+                $scope.$broadcast('reset-model');
+            }
+        }
+
+        function aptField_Compile(elem, attrs) {
             _.forIn(attrs, function (value, key) {
                 if (!_.includes(['ngIf'], key) && _.startsWith(key, 'ng')) {
                     ngAttrs[key] = value;
@@ -60,12 +86,12 @@
             ///
 
             return {
-                post: linkFn
+                post: aptField_Link
             };
 
             ///
 
-            function linkFn(scope, elem, attrs, ctrls) {
+            function aptField_Link(scope, elem, attrs, ctrls) {
 
                 var vm             = ctrls[1];
                 var gettextCatalog = vm.translate ? $injector.get('gettextCatalog') : null;
@@ -114,7 +140,7 @@
                         // vm.label = getLabel(attrs);
                         vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
                     } else {
-                        $tpl.attr('label', aptUtils.grabLabelFromAttrs(attrs));
+                        // $tpl.attr('label', aptUtils.grabLabelFromAttrs(attrs));
                     }
                 }
 
@@ -130,9 +156,11 @@
                     $tpl = finalize(elem, attrs, $tpl);
                 }
 
-                elem.after($tpl);
-                elem.remove();
+                // elem.after($tpl);
+                // elem.remove();
                 var compiledElement = $compile($tpl)(scope);
+                elem.replaceWith(compiledElement);
+
 
                 /**
                  * this will fix the ui-switch directive to initialize itself twice.
@@ -157,10 +185,10 @@
                 hasFormify = true;
             }
 
-            if ($tpl.attr('data-label') != undefined || $tpl.attr('label') != undefined) {
-                label    = $tpl.attr('data-label') || $tpl.attr('label');
-                hasLabel = true;
-            }
+            // if ($tpl.attr('data-label') != undefined || $tpl.attr('label') != undefined) {
+            //     label    = $tpl.attr('data-label') || $tpl.attr('label');
+            //     hasLabel = true;
+            // }
 
             {
                 var elHavingFormify = null;
@@ -174,16 +202,16 @@
                     hasFormify = true;
                 }
 
-                if (elHavingFormify.length > 0) {
-                    if (elHavingFormify.attr('label') != undefined) {
-                        hasLabel = true;
-                        label    = elHavingFormify.attr('label');
-                    }
-                    else if (elHavingFormify.attr('data-label') != undefined) {
-                        hasLabel = true;
-                        label    = elHavingFormify.attr('data-label');
-                    }
-                }
+                // if (elHavingFormify.length > 0) {
+                //     if (elHavingFormify.attr('label') != undefined) {
+                //         hasLabel = true;
+                //         label    = elHavingFormify.attr('label');
+                //     }
+                //     else if (elHavingFormify.attr('data-label') != undefined) {
+                //         hasLabel = true;
+                //         label    = elHavingFormify.attr('data-label');
+                //     }
+                // }
 
             }
 
@@ -194,12 +222,12 @@
                 attrs.$attr['aptFormify'] = '';
                 elem.attr('apt-formify', '');
             }
-            if (hasLabel) {
-                $tpl.attr('data-label', label);
-                attrs['label']       = label;
-                attrs.$attr['label'] = label;
-                elem.attr('label', label);
-            }
+            // if (hasLabel) {
+            //     $tpl.attr('data-label', label);
+            //     attrs['label']       = label;
+            //     attrs.$attr['label'] = label;
+            //     elem.attr('label', label);
+            // }
 
         }
 
@@ -526,41 +554,11 @@
         }
     };
 
-    controllerFn.$inject = ['$injector', '$scope', '$attrs'];
-    function controllerFn($injector, $scope, $attrs) {
-        var vm       = this;
-        var $parse   = $injector.get('$parse');
-        vm.translate = false;
-
-        if (_.has($attrs, 'modelBase')) {
-            vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
-        }
-
-        if ((!_.has($attrs, 'translate') || (_.has($attrs, 'translate') && $attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
-            vm.translate = true;
-        }
-
-        vm.reset = reset;
-
-        vm.status = {
-            open: false
-        };
-
-        vm.open = function () {
-            vm.status.open = true;
-        };
-
-
-        function reset() {
-            $scope.$broadcast('reset-model');
-        }
-    }
-
     function transferAttributes(attrs, $tpl) {
         _.forOwn(attrs, function (value, key) {
             if (_.includes([
                     '$$element', '$attr', '$scope',
-                    'field', 'modelBase', 'type', 'labelx', 'rows', 'translate', 'useFormify', 'helpTextx',
+                    'field', 'modelBase', 'type', 'rows', 'translate', 'useFormify',
                 ], key)) {
                 return;
             }
