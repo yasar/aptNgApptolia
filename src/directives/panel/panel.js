@@ -42,7 +42,8 @@
             },
             compile     : Compile,
             controller  : aptPanelController,
-            controllerAs: 'vmPanel'
+            controllerAs: 'vmPanel',
+            require     : ['aptPanel', '^^?form']
         };
         function Compile(element, attrs) {
 
@@ -63,11 +64,13 @@
 
             return link;
 
-            function link(scope, element, attrs, panelCtrl, transclude) {
+            function link(scope, element, attrs, ctrls, transclude) {
 
-                var $timeout      = $injector.get('$timeout');
-                var $compile      = $injector.get('$compile');
-                var customContent = null;
+                var $timeout        = $injector.get('$timeout');
+                var $compile        = $injector.get('$compile');
+                var customContent   = null;
+                var panelCtrl       = ctrls[0];
+                var $formController = ctrls[1];
 
                 transclude(scope.$new(), function (clone, newScope) {
                     if (clone.length > 0) {
@@ -83,7 +86,7 @@
                     panelCtrl.class = attrs.class;
                 }
 
-                panelCtrl.process(function () {
+                panelCtrl.process($formController, function () {
                     if (customContent) {
                         if (element.find('.panel-footer').length) {
                             $(customContent).insertBefore(element.find('.panel-footer'));
@@ -109,7 +112,7 @@
 
                     panelFooter.slideDown();
 
-                },800);
+                }, 800);
             }
         }
 
@@ -133,7 +136,7 @@
             return tab;
         };
 
-        vm.process = function (callback) {
+        vm.process = function ($formController, callback) {
 
             /**
              * we may have <apt-panel-heading-elements /> defined in the body,
@@ -195,23 +198,37 @@
             }
 
             function processHeadingElements() {
-                // element.find('.heading-elements').append(vm.headingElements);
+                if (!vm.headingElements) {
+                    return;
+                }
 
-                /**
-                 * above code did not work for save button on /access_write/manager page
-                 * so keep an attention on if anything breaks due to this change.
-                 */
-                var compiled = $compile(vm.headingElements)($scope);
-                element.find('.heading-elements').append(compiled);
+                element.find('.heading-elements').append(vm.headingElements);
+
+                if ($formController) {
+                    if (vm.headingElements.is('ng-model')) {
+                        addControl(vm.headingElements);
+                    } else {
+                        _.map(vm.headingElements.find('[ng-model]'), addControl);
+                    }
+
+                    function addControl(formElement) {
+                        try {
+                            var $ngModelController = $(formElement).data().$ngModelController;
+                            $formController.$addControl($ngModelController);
+                        } catch (e) {
+                        }
+                    }
+                }
             }
 
             function processBody() {
                 var elBody = element.find('.panel-body');
+
                 if (!vm.body) {
                     elBody.remove();
                     return;
                 }
-                // elBody.append(vm.body);
+
                 elBody.append(vm.body.contents());
                 var bodyClasses = vm.body.prop("classList");
                 if (bodyClasses.length) {
