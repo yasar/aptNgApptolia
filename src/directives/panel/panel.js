@@ -204,6 +204,11 @@
 
                 element.find('.heading-elements').append(vm.headingElements);
 
+                /**
+                 * when the headingElements are first compiled within the directive,
+                 * they were not bound to any form and were not added into formController.
+                 * now, we have to manually add them into formController.
+                 */
                 if ($formController) {
                     if (vm.headingElements.is('ng-model')) {
                         addControl(vm.headingElements);
