@@ -29,6 +29,7 @@
                     config             : self.config,
                     //breadcrumbs        : self.breadcrumbs,
                     data               : self.data,
+                    getIcon            : self.getIcon,
                     setSlotItem        : self.setSlotItem,
                     getSlot            : self.getSlot,
                     loadSlotsInto      : self.loadSlotsInto,
@@ -165,11 +166,13 @@
                         delete             : 'trash',
                         edit               : 'pencil',
                         entity             : 'office',
+                        featured           : 'star-full2',
                         fullscreen         : 'screen-full',
                         'fullscreen-cancel': 'screen-normal',
                         images             : 'camera',
                         'item-menu'        : 'more2',
                         location           : 'map-marker',
+                        'not-featured'     : 'star-empty3',
                         notes              : 'notebook',
                         null               : 'circle',
                         option             : 'circle-o',
@@ -179,7 +182,8 @@
                         reload             : 'database-refresh',
                         reset              : 'x',
                         save               : 'floppy-disk',
-                        'select-item'      : 'eye8',
+                        select             : 'select2',
+                        'select-item'      : 'select2',
                         unlocked           : 'unlocked',
                         upload             : 'cloud-upload',
                         update             : 'floppy-disk',
@@ -236,6 +240,11 @@
                         self.appConfig.showInlineHelp = !self.appConfig.showInlineHelp;
                     }
                 });
+        };
+
+        this.getIcon = function (icon) {
+            var aptIcon = self.$injector.get('aptIcon');
+            return aptIcon.get(icon);
         };
 
         this.resetWithBuilder = function (builder) {
