@@ -15,7 +15,7 @@
         var $compile       = $injector.get('$compile');
         var aptTempl       = $injector.get('aptTempl');
         var aptUtils       = $injector.get('aptUtils');
-        var ngAttrs        = {};
+        // var ngAttrs        = {};
 
         return {
             scope       : true,
@@ -74,6 +74,7 @@
         }
 
         function aptField_Compile(elem, attrs) {
+            var ngAttrs = {};
             _.forIn(attrs, function (value, key) {
                 if (!_.includes(['ngIf'], key) && _.startsWith(key, 'ng')) {
                     ngAttrs[key] = value;
@@ -82,6 +83,8 @@
                     elem.removeAttr(_.kebabCase(key));
                 }
             });
+
+            elem.data('ngAttrs', ngAttrs);
 
             ///
 
@@ -109,8 +112,11 @@
                     vm.params = $parse(attrs.params)(scope);
                 }
 
-                var label           = _.has(attrs, 'label') && _.includes(['', 'false', 'null'], attrs.label) ? false : true;
-                var $tpl            = $(getTemplate(scope, attrs, vm));
+                var label = _.has(attrs, 'label') && _.includes(['', 'false', 'null'], attrs.label) ? false : true;
+                var $tpl  = $(getTemplate(scope, attrs, vm));
+                if (!label && ($tpl.attr('data-label') || $tpl.attr('label'))) {
+                    $tpl.removeAttr('data-label label');
+                }
                 var isSelfContained = false;
 
                 if (!_.isNull(bindTo)) {
@@ -151,7 +157,7 @@
                      */
                     // transferAttributes(attrs.$attr, $tpl);
                     transferAttributes(attrs, $tpl);
-                    transferAttributes(ngAttrs, $tpl);
+                    transferAttributes(elem.data('ngAttrs'), $tpl);
 
                     $tpl = finalize(elem, attrs, $tpl);
                 }
@@ -180,41 +186,15 @@
             var label      = null;
 
             if ($tpl.attr('data-apt-formify') != undefined || $tpl.attr('apt-formify') != undefined) {
-                $tpl.removeAttr('data-apt-formify');
-                $tpl.removeAttr('apt-formify');
+                $tpl.removeAttr('data-apt-formify apt-formify');
                 hasFormify = true;
             }
 
-            // if ($tpl.attr('data-label') != undefined || $tpl.attr('label') != undefined) {
-            //     label    = $tpl.attr('data-label') || $tpl.attr('label');
-            //     hasLabel = true;
-            // }
-
-            {
-                var elHavingFormify = null;
-
-                if ((elHavingFormify = $tpl.find('[apt-formify]')).length) {
-                    elHavingFormify.removeAttr('apt-formify');
-                    hasFormify = true;
-                }
-                else if ((elHavingFormify = $tpl.find('[data-apt-formify]')).length) {
-                    elHavingFormify.removeAttr('data-apt-formify');
-                    hasFormify = true;
-                }
-
-                // if (elHavingFormify.length > 0) {
-                //     if (elHavingFormify.attr('label') != undefined) {
-                //         hasLabel = true;
-                //         label    = elHavingFormify.attr('label');
-                //     }
-                //     else if (elHavingFormify.attr('data-label') != undefined) {
-                //         hasLabel = true;
-                //         label    = elHavingFormify.attr('data-label');
-                //     }
-                // }
-
+            var elHavingFormify = $tpl.find('[apt-formify],[data-apt-formify]');
+            if (elHavingFormify.length) {
+                elHavingFormify.removeAttr('apt-formify data-apt-formify');
+                hasFormify = true;
             }
-
 
             if (hasFormify) {
                 $tpl.attr('data-apt-formify', '');
@@ -222,12 +202,6 @@
                 attrs.$attr['aptFormify'] = '';
                 elem.attr('apt-formify', '');
             }
-            // if (hasLabel) {
-            //     $tpl.attr('data-label', label);
-            //     attrs['label']       = label;
-            //     attrs.$attr['label'] = label;
-            //     elem.attr('label', label);
-            // }
 
         }
 
@@ -476,19 +450,6 @@
             }
         }
 
-
-        // function getLabel(attrs) {
-        //     var str = null;
-        //
-        //     if (_.has(attrs, 'label')) {
-        //         str = attrs.label;
-        //     } else if (_.has(attrs, 'field')) {
-        //         str = attrs.field;
-        //     }
-        //
-        //     return _(str).chain().trimEnd('_id').startCase().value();
-        // }
-
         function getBindTo(attrs, scope) {
             var bindTo = null;
 
@@ -510,32 +471,23 @@
 
         function finalize(elem, attrs, $tpl) {
             if (['date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
-                // if (attrs.type === 'date-ui') {
+
+                /**
+                 * these are html attributes and kebab-case
+                 */
+                $tpl.removeAttr('[label help-text]');
+
                 $tpl = $('<div ' + (attrs.useFormify !== 'false' ? 'data-apt-formify ' : '') + 'class="input-group input-group-xs"></div>')
                     .append($tpl)
                     .append('<span class="input-group-addon no-border no-padding"> ' +
                             '<button type="button" data-ng-click="vmField.open()" class="btn btn-default btn-xs">' +
                             '<i class="icon-calendar"></i></button> </span>');
+
+                /**
+                 * these are angular attributes and camelCase
+                 */
+                transferAttributes(_.pick(attrs, ['label', 'helpText']), $tpl);
             }
-
-            /*if (['datetime'].indexOf(attrs.type) !== -1) {
-             // if (attrs.type === 'date-ui') {
-             $tpl = $('<div ' + (attrs.useFormify !== 'false' ? 'data-apt-formify ' : '') + 'class="input-group input-group-xs"></div>')
-             .append($tpl)
-             .append('<span class="input-group-addon no-border no-padding"> ' +
-             '<button type="button" class="btn btn-default btn-xs">' +
-             '<i class="icon-calendar"></i></button> </span>');
-             }*/
-
-            // else if(attrs.type === 'date-moment'){
-            //     /**
-            //      * ng-model is not used for moment-picker,
-            //      * rather it should be as
-            //      * <span moment-picker="model" ... ></span>
-            //      */
-            //     $tpl.removeAttr('data-ng-model');
-            // }
-
 
             else if (attrs.type == 'switch') {
                 $tpl = $('<div class="checkbox checkbox-switchery checkbox-right switchery-xs"></div>')

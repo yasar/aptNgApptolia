@@ -64,19 +64,25 @@
 
             return link;
 
-            function link(scope, element, attrs, ctrls, transclude) {
+            function link(scope, element, attrs, ctrls, transcludeFn) {
 
                 var $timeout        = $injector.get('$timeout');
                 var $compile        = $injector.get('$compile');
-                var customContent   = null;
+                var customContent   = angular.element('<div></div>');
                 var panelCtrl       = ctrls[0];
                 var $formController = ctrls[1];
 
-                transclude(scope.$new(), function (clone, newScope) {
+                /**
+                 * handle any leftovers and put them in customContent
+                 * anything within apt-panel but not wrapped with any of apt-panel-*
+                 */
+                transcludeFn(scope.$new(), function (clone, _scope) {
                     if (clone.length > 0) {
-                        customContent = clone;
+                        customContent.append($compile(clone)(_scope));
                     }
                 });
+
+                ///
 
                 if (attrs.form) {
                     panelCtrl.form = attrs.form;
@@ -87,7 +93,7 @@
                 }
 
                 panelCtrl.process($formController, function () {
-                    if (customContent) {
+                    if (customContent.children().length) {
                         if (element.find('.panel-footer').length) {
                             $(customContent).insertBefore(element.find('.panel-footer'));
                         } else {
@@ -112,7 +118,7 @@
 
                     panelFooter.slideDown();
 
-                }, 800);
+                }, 1000);
             }
         }
 
@@ -207,7 +213,7 @@
                 /**
                  * when the headingElements are first compiled within the directive,
                  * they were not bound to any form and were not added into formController.
-                 * now, we have to manually add them into formController.
+                 *
                  */
                 if ($formController) {
                     if (vm.headingElements.is('ng-model')) {
