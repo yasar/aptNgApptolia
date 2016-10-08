@@ -176,6 +176,7 @@
                         notes              : 'notebook',
                         null               : 'circle',
                         option             : 'circle-o',
+                        pay            : 'wallet',
                         preview            : 'eye',
                         remove             : 'minus2',
                         refresh            : 'database-refresh',
