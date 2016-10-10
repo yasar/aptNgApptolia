@@ -509,7 +509,7 @@
     function transferAttributes(attrs, $tpl) {
         _.forOwn(attrs, function (value, key) {
             if (_.includes([
-                    '$$element', '$attr', '$scope',
+                    '$$element','$$observers', '$attr', '$scope',
                     'field', 'modelBase', 'type', 'rows', 'translate', 'useFormify',
                 ], key)) {
                 return;

@@ -229,7 +229,7 @@
                 }], undefined, aptTempl.appConfig.defaults.dialogs.large);
         }
 
-        function popupDirective(builder, name, conf) {
+        function popupDirective_bak1(builder, name, conf) {
 
             conf = _.defaults(conf, {});
 
@@ -271,6 +271,40 @@
                     //     $uibModalInstance.close();
                     // });
                 }], undefined, aptTempl.appConfig.defaults.dialogs.large);
+        }
+
+        function popupDirective(builder, name, conf) {
+
+            conf = _.defaults(conf, {
+                controller: function () {
+                },
+                attrs     : {},
+                size      : 'large'
+            });
+
+            var $templateCache = $injector.get('$templateCache');
+            var dialogs        = $injector.get('dialogs');
+            var aptTempl       = $injector.get('aptTempl');
+            var directiveName  = builder.getDirectiveName(name);
+
+            ///
+
+            var tpl = '<div data-' + _.kebabCase(directiveName);
+            _.forOwn(conf.attrs, function (value, key) {
+                tpl += ' ' + _.kebabCase(key) + '="' + value + '"';
+            });
+            tpl += '></div>';
+
+            ///
+
+            var popupConf =
+                    _.has(aptTempl.appConfig.defaults.dialogs, conf.size)
+                        ? _.get(aptTempl.appConfig.defaults.dialogs, conf.size)
+                        : {};
+
+            var path = builder.getPath('cache') + '/popup' + directiveName + '.html';
+            $templateCache.put(path, tpl);
+            dialogs.create(path, ['$scope', '$injector', '$uibModalInstance', conf.controller], undefined, popupConf);
         }
 
         function goto(conf) {
