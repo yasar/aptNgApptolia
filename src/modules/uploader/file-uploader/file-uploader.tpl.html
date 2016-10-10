@@ -12,8 +12,8 @@
               ng-if="state.is_modified && ! state.is_uploaded && uploadFile"><i icon="upload"></i></span>
         <span class="btn btn-icon btn-danger" ng-click="delete()" ng-if="uploadFile"><i icon="delete"></i></span>
     </div>
-    <div class="caption">
-        <!--<h5 ng-if="!readonly">{{model.title}}</h5>-->
+    <div class="caption" ng-if="model.name">
+        <h5>{{model.name}}</h5>
     </div>
     <div class="description" data-ng-dblclick="editDescription()">
         <div ng-if="!readonly">{{model.title}}</div>

@@ -36,8 +36,25 @@
             restrict    : 'E',
             replace     : true,
             transclude  : true,
-            templateUrl : function (elem, attrs) {
-                _.set(attrs, 'showHelp', (_.includes(['false', undefined], _.get(attrs, 'showHelp')) ? false : _.get(attrs, 'showHelp')));
+            templateUrl : function (element, attrs) {
+                /**
+                 * when replace=true is set,
+                 * the provided class gets merged with the template class.
+                 * to distinguish
+                 */
+                if (attrs.class) {
+                    attrs.customClass = attrs.class;
+                    // element.data('customClass', attrs.class);
+                    // element.removeClass();
+                    // delete attrs.class;
+                    // delete attrs.$attr.class;
+                }
+
+                _.set(attrs, 'showHelp', (
+                    _.includes(['false', undefined], _.get(attrs, 'showHelp'))
+                        ? false
+                        : _.get(attrs, 'showHelp')
+                ));
                 return !attrs.showHelp ? path + '/panel.tpl.html' : path + '/panel-with-help.tpl.html';
             },
             compile     : Compile,
@@ -49,13 +66,15 @@
 
             if (!!attrs.showHelp && element.closest('[uib-modal-window]').length) {
                 element.addClass('border-slate-800 border-xlg');
-                element.find('.panel-help-wrapper').addClass('bg-slate-800 no-margin');
+                element.find('.apt-panel-help-wrapper').addClass('bg-slate-800 no-margin');
                 element
-                    .find('.panel-help')
+                    .find('.apt-panel-help')
                     .attr('marked', '')
                     .attr('src', "'" + attrs.showHelp + "'");
 
-                var contentWrapper = element.find('.panel-content-wrapper');
+                var contentWrapper = element.is('.apt-panel-content-wrapper')
+                    ? element
+                    : element.find('.apt-panel-content-wrapper');
                 contentWrapper.addClass('bg-slate-800 no-padding');
                 contentWrapper.children('.panel-heading').addClass('bg-white no-margin');
                 contentWrapper.children('.panel-body').addClass('bg-white');
@@ -69,7 +88,7 @@
                 var $timeout        = $injector.get('$timeout');
                 var $compile        = $injector.get('$compile');
                 var customContent   = angular.element('<div></div>');
-                var panelCtrl       = ctrls[0];
+                var vm              = ctrls[0]; // panelController
                 var $formController = ctrls[1];
 
                 /**
@@ -85,14 +104,14 @@
                 ///
 
                 if (attrs.form) {
-                    panelCtrl.form = attrs.form;
+                    vm.form = attrs.form;
                 }
 
                 if (attrs.class) {
-                    panelCtrl.class = attrs.class;
+                    vm.class = attrs.class;
                 }
 
-                panelCtrl.process($formController, function () {
+                vm.process($formController, function () {
                     if (customContent.children().length) {
                         if (element.find('.panel-footer').length) {
                             $(customContent).insertBefore(element.find('.panel-footer'));
@@ -108,7 +127,7 @@
                      * remember that we have form types of nested, in-form etc.
                      * these forms will be parsed in after compilation has been completed.
                      */
-                    var contentWrapper = element.find('.panel-content-wrapper');
+                    var contentWrapper = element.find('.apt-panel-content-wrapper');
                     var panelFooter    = contentWrapper.children('.panel-footer');
                     panelFooter.addClass('bg-slate-300 border-slate-400 border-lg');
 
@@ -165,10 +184,13 @@
             }
 
             function applyFixes() {
-                if (vm.class) {
-                    element
-                    // .removeClass()
-                        .addClass(vm.class);
+                if (element.attr('custom-class')) {
+                    var customClass = element.attr('custom-class');
+                    if (_.includes(element.get(0).classList.value, 'panel-') && _.includes(customClass, 'panel-')) {
+                        element.alterClass('panel-*', customClass);
+                    } else {
+                        element.addClass(customClass);
+                    }
                 }
 
                 if (!vm.title && !vm.headingElements && vm.tabs.length == 0) {
@@ -186,8 +208,8 @@
                     titleEl = element.children('.panel-heading').children('.panel-title');
                 } else {
                     titleEl = element
-                        .children('.panel-help-wrapper')
-                        .children('.panel-content-wrapper')
+                        .children('.apt-panel-help-wrapper')
+                        .children('.apt-panel-content-wrapper')
                         .children('.panel-heading')
                         .children('.panel-title');
                 }

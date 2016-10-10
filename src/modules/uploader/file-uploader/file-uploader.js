@@ -55,6 +55,8 @@
                                 $scope.state.is_modified = false;
                             }
 
+                            $scope.model.name = _.startCase($scope.model.name);
+
                             $scope.editDescription = function () {
                                 var modalInstance = $modal.open({
                                     templateUrl: 'modules/uploader/file-uploader/file-uploader-desc.tpl.html',
