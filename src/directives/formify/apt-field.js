@@ -373,6 +373,7 @@
                                 showTodayButton : true,
                                 keepOpen        : false,
                                 allowInputToggle: true,
+                                keepInvalid     : true,
                                 debug           : false
                             };
                             control                          = {
@@ -395,6 +396,7 @@
                                 showTodayButton : true,
                                 keepOpen        : false,
                                 allowInputToggle: true,
+                                keepInvalid     : true,
                                 debug           : false
                             };
                             control                              = {
@@ -509,7 +511,7 @@
     function transferAttributes(attrs, $tpl) {
         _.forOwn(attrs, function (value, key) {
             if (_.includes([
-                    '$$element','$$observers', '$attr', '$scope',
+                    '$$element', '$$observers', '$attr', '$scope',
                     'field', 'modelBase', 'type', 'rows', 'translate', 'useFormify',
                 ], key)) {
                 return;
