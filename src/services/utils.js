@@ -432,6 +432,15 @@
             }
         }
 
+        /**
+         *
+         * set param=false to reset internal cache!
+         *
+         * @param param
+         * @param value
+         * @param timer
+         * @returns {*}
+         */
         function setUrlSearchParamValue(param, value, timer) {
             var _this    = this;
             var $timeout = $injector.get('$timeout');
@@ -441,6 +450,11 @@
 
             if (!this.searchArr) {
                 this.searchArr = [];
+            }
+
+            if(param === false){
+                this.searchArr = [];
+                return;
             }
 
             var searchObj = {

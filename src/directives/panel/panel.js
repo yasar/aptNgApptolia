@@ -91,14 +91,25 @@
                 var vm              = ctrls[0]; // panelController
                 var $formController = ctrls[1];
 
-                /**
-                 * handle any leftovers and put them in customContent
-                 * anything within apt-panel but not wrapped with any of apt-panel-*
-                 */
+
                 transcludeFn(scope.$new(), function (clone, _scope) {
+                    /**
+                     * handle any leftovers and put them in customContent
+                     * anything within apt-panel but not wrapped with any of apt-panel-*
+                     */
                     if (clone.length > 0) {
-                        var compiled = $compile(clone)(_scope);
-                        customContent.append(compiled);
+                        _.forEach(clone, function (node) {
+                            if (node.nodeType == 8) { // comment
+                                return;
+                            }
+
+                            if (node.nodeType == 3 && _.trim(node.nodeValue) == '') { // text
+                                return;
+                            }
+                            // var compiled = $compile(node)(_scope);
+                            // customContent.append(compiled);
+                            customContent.append(node);
+                        });
                     }
                 });
 
@@ -467,18 +478,21 @@
             restrict  : 'E',
             transclude: 'element',
             link      : link,
+            // require   : ['aptPanelTitle', '^aptPanel'],
             controller: function () {
                 // Empty controller is needed for child directives to require this directive
             }
         };
 
-        function link(scope, element, attrs, panelTitleCtrl, transclude) {
+        function link(scope, element, attrs, ctrls, transclude) {
             if (!_.has(scope, '$parent.vmPanel')) {
                 return;
             }
 
             var panelCtrl = scope.$parent.vmPanel;
-            transclude(scope, function (clone) {
+            // var panelCtrl = ctrls[1];
+            // transclude(scope, function (clone) {
+            transclude(scope.$new(), function (clone, _scope) {
                 panelCtrl.title = clone;
             });
 
