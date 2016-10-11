@@ -97,7 +97,8 @@
                  */
                 transcludeFn(scope.$new(), function (clone, _scope) {
                     if (clone.length > 0) {
-                        customContent.append($compile(clone)(_scope));
+                        var compiled = $compile(clone)(_scope);
+                        customContent.append(compiled);
                     }
                 });
 
@@ -171,7 +172,17 @@
              * so, first process the body, and do the rest in the next cycle (timeout!).
              */
             processBody();
-            $timeout(proceed);
+
+            /**
+             * Calling the proceed() withing $timeout causing a serious bug on rare occasions.
+             * The occasion is as described: Consider adding a directive into apt-panel-tab, and this directive
+             * asks for parent controller through require property. In such case, DI can not provide the asked
+             * controllers if we are in $timeout. Putting it out solves the problem.
+             *
+             * In the first place, we added the $timeout for a reason (!), but since it was not properly documented,
+             * we are not sure why it was there. So, extra caution should be paid to see the outcome of this change.
+             */
+            proceed(); //$timeout(proceed);
 
             function proceed() {
                 processTitle();
