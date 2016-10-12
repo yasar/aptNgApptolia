@@ -50,7 +50,8 @@
                     $timeout(function () {
                         ngModel.$render = function () {
                             if (!!ngModel.$viewValue) {
-                                dpElement.data('DateTimePicker').date(ngModel.$viewValue);
+                                // dpElement.data('DateTimePicker').date(ngModel.$viewValue);
+                                dpElement.data('DateTimePicker').date(ngModel.$modelValue);
                             } else {
                                 dpElement.data('DateTimePicker').date(null);
                             }
