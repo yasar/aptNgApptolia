@@ -259,14 +259,17 @@
                     }
 
                     function showSearchBox() {
-                        var searchBox = $template.find('input[apt-search-box]');
+                        var searchBoxHolder = $template.find('[apt-search-box-holder]');
+                        var searchBox       = $template.find('input[apt-search-box]');
 
                         if (!options.showSearchBox) {
+                            searchBoxHolder.remove();
                             searchBox.remove();
                             return;
                         }
 
                         if (searchBox.length) {
+                            searchBoxHolder.removeAttr('apt-search-box-holder');
                             searchBox.removeAttr('apt-search-box')
                                 .attr('st-search', '')
                                 .attr('placeholder', gettextCatalog.getString('search in the list'));
