@@ -3,7 +3,7 @@
  */
 
 
-(function () {
+;(function () {
     angular.module('chrisharrington.miniCalendar', [])
         .directive("miniCalendar", function () {
             return {

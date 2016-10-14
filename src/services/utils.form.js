@@ -178,23 +178,26 @@ function aptUtilsForm($injector) {
                     return options.$scope[vm][watchFor];
                 },
                 function (newVal, oldVal) {
+                    /**
+                     * watch ile takip edilin herhangi bir formun id si form yuklenirken undefined veya null oldugundan
+                     * dolayı formu submit ederken form mode new olarak atama yapıyor ve normalde update islemi yapmamız
+                     * gerekirken add işlemi yapıyorduk.watch ile izlenen id tanımlı olarak geldiginde form submit edilirken
+                     * update yapmak için form mode 'edit' olarak atandı.
+                     */
+
+
                     if (_.isEqual(_.omit(newVal, ['$$hashKey']), oldVal) || angular.isUndefined(newVal)) {
+                        formObj.mode = 'edit';
                         return;
                     }
 
                     if (watchFor == 'itemId') {
                         loadData(newVal);
-                        /**
-                         * watch ile takip edilin herhangi bir formun id si form yuklenirken undefined veya null oldugundan
-                         * dolayı formu submit ederken form mode new olarak atama yapıyor ve normalde update islemi yapmamız
-                         * gerekirken add işlemi yapıyorduk.watch ile izlenen id tanımlı olarak geldiginde form submit edilirken
-                         * update yapmak için form mode 'edit' olarak atandı.
-                         * @type {string}
-                         */
-                        formObj.mode = 'edit';
                     } else {
                         loadDataFromData(newVal);
                     }
+
+                    formObj.mode = 'edit';
                 },
                 watchFor == 'item'
             );

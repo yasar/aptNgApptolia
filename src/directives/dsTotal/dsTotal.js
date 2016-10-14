@@ -3,7 +3,7 @@
  */
 
 
-(function () {
+;(function () {
 
     var path = 'apt/dsTotal';
 

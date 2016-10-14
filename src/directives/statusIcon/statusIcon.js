@@ -3,7 +3,7 @@
  */
 
 /*global window */
-(function (angular) {
+;(function (angular) {
     'use strict';
     var path = 'directives/statusIcon';
     angular.module('ngApptolia')

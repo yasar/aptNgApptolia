@@ -2,7 +2,7 @@
  * Created by yasar on 12.08.2016.
  */
 
-(function (angular) {
+;(function (angular) {
     'use strict';
     angular
         .module('ngApptolia')

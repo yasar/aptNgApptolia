@@ -3,7 +3,7 @@
  */
 
 
-(function () {
+;(function () {
 
     angular.module('ngApptolia').directive('aptField', fn);
 
@@ -368,6 +368,7 @@
                         case 'date-ui':
                             aptTempl.appConfig.aeDateOptions = {
                                 format          : aptTempl.appConfig.defaults.formats.screenDate,
+                                locale          : 'tr',
                                 showClear       : true,
                                 showClose       : true,
                                 showTodayButton : true,
@@ -385,7 +386,7 @@
                                     'datetimepicker': '',
                                     options         : '$root.apt.Templ.appConfig.aeDateOptions'
                                 },
-                                formify  : true
+                                formify  : false
                             };
                             break;
                         case 'datetime':

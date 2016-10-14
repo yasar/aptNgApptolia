@@ -3,7 +3,7 @@
  */
 
 
-(function () {
+;(function () {
     angular.module('ngApptolia').factory('aptMenuBreadcrumbMenu', fn);
 
     fn.$inject = ['aptAuthorizationService', 'aptAuthEnumService', '$routeSegment', 'aptUtils', '$compile'];

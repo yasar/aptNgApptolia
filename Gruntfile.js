@@ -36,20 +36,80 @@ module.exports = function (grunt) {
 
         vendor_files: {
             js    : [
+                /**
+                 * load at top section before most others
+                 */
+                'vendor/jquery/dist/jquery.js',
+                'vendor/lodash/lodash.js',
+                'vendor/moment/moment.js',
+                'vendor/moment/locale/tr.js',
+                'vendor/angular/angular.js',
+                'vendor/angular-i18n/angular-locale_en-us.js',
+                'vendor/angular-i18n/angular-locale_tr-tr.js',
+                'vendor/angular-animate/angular-animate.js',
+                'vendor/angular-sanitize/angular-sanitize.js',
+                'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+
+                ////////////////////////////////
+
+
+                'vendor/angular-route/angular-route.js',
+                'vendor/angular-route-segment/build/angular-route-segment.js',
+
+
                 'vendor/screenfull/dist/screenfull.js',
                 'vendor/angular-screenfull/dist/angular-screenfull.js',
                 'vendor/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
 
+                // this module has dependency on angular-translate and does not comply with angular-gettext
+                // basically, the `translate` filter of gettext is overriden by this module.
+                // so, in common folder, we have a modified version of this module.
+                // it will be automatically included in the project, and we comment out the following line.
+                //'vendor/angular-dialog-service/dist/dialogs.js',
+
                 /**
                  * see the patched version in patched folder
+                 * note: not using the patched one now.
                  */
-                // 'vendor/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.js'
+                // 'vendor/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.js',
 
                 /**
                  * markdown
                  */
                 'vendor/marked/lib/marked.js',
-                'vendor/angular-marked/dist/angular-marked.js'
+                'vendor/angular-marked/dist/angular-marked.js',
+
+
+                ///
+
+                'vendor/angular-hotkeys/build/hotkeys.js',
+                'vendor/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js',
+
+                'vendor/d3/d3.js',
+                'vendor/nvd3/build/nv.d3.js',
+                'vendor/angular-nvd3/dist/angular-nvd3.js',
+
+                'vendor/iso-currency/dist/isoCurrency.js',
+                'vendor/switchery/dist/switchery.js',
+                'vendor/sotos.crop-image/dist/sotos.crop-image.js',
+
+                'vendor/angular-ui-calendar/src/calendar.js',
+                'vendor/fullcalendar/dist/fullcalendar.js',
+                'vendor/fullcalendar/dist/gcal.js',
+
+                'vendor/angular-summernote/dist/angular-summernote.js',
+                'vendor/summernote/dist/summernote.min.js',
+                'vendor/angular-loading-overlay/dist/angular-loading-overlay.js',
+                'vendor/angular-loading-bar/build/loading-bar.js',
+                'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
+                'vendor/angular-ui-select/dist/select.js',
+                'vendor/ng-mfb/src/mfb-directive.js',
+                'vendor/angular-smart-table/dist/smart-table.js',
+                'vendor/restangular/dist/restangular.js',
+                'vendor/ngstorage/ngStorage.js',
+                'vendor/angular-moment/angular-moment.js',
+                'vendor/angular-gravatar/build/angular-gravatar.js',
+
             ],
             css   : [],
             assets: []

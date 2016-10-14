@@ -1,5 +1,5 @@
 /*global window */
-(function (angular) {
+;(function (angular) {
     'use strict';
     // angular.module('ngApptolia').factory('aptUtils', fn);
     angular.module('ngApptolia').provider('aptUtils', [

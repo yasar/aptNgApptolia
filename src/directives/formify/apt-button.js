@@ -3,7 +3,7 @@
  */
 
 
-(function () {
+;(function () {
 
     angular.module('ngApptolia').directive('aptButton', fn);
 

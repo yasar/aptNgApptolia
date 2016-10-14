@@ -1,5 +1,5 @@
 /*global window */
-(function (angular) {
+;(function (angular) {
     'use strict';
     var dependencies = [];
 
@@ -42,6 +42,48 @@
     dependencies.push('hc.marked');
 
 
+    dependencies.push('cfp.hotkeys');
+    dependencies.push('isoCurrency');
+    dependencies.push('sotos.crop-image');
+
+    /**
+     * uiCalendar and fullCalendar
+     */
+    dependencies.push('ui.calendar');
+
+
+    dependencies.push('summernote');
+    dependencies.push('gettext');
+
+    /**
+     * aptBuilder uses this for table overlay when loading
+     */
+    dependencies.push('bsLoadingOverlay');
+
+    /**
+     * the service to show the youtube-loader-alike bar on top of the page
+     */
+    dependencies.push('angular-loading-bar');
+
+    dependencies.push('colorpicker.module');
+    dependencies.push('smart-table');
+    dependencies.push('restangular');
+    dependencies.push('ngStorage');
+    dependencies.push('angularMoment');
+    dependencies.push('ng-mfb');
+    dependencies.push('ui.select');
+
+    ///
+
+    dependencies.push('ngRoute');
+    dependencies.push('route-segment');
+    dependencies.push('view-segment');
+
+    ///
+
+    dependencies.push('http-auth-interceptor');
+    dependencies.push('ngAnimate');
+    dependencies.push('chrisharrington.miniCalendar');
 
 
     ////////////////////////////////////////////////
