@@ -3,7 +3,7 @@
  */
 
 /*global window */
-(function (angular) {
+;(function (angular) {
     'use strict';
     angular.module('ngApptolia')
         .directive('aptLoadingIndicator', [function(){

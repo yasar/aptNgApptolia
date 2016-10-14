@@ -4,7 +4,7 @@
  *
  */
 
-(function () {
+;(function () {
     angular
         .module('ngApptolia')
         .factory('restOperationService', fn);

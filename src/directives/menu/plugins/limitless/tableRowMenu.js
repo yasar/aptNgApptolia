@@ -2,7 +2,7 @@
  * Created by yasar on 24.01.2016.
  */
 
-(function () {
+;(function () {
     angular.module('ngApptolia').factory('aptMenuTableRowMenu', fn);
 
     fn.$inject = ['$injector'];

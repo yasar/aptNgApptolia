@@ -4,7 +4,7 @@
  * @author Michael Conroy, michael.e.conroy@gmail.com
  * @license MIT, http://www.opensource.org/licenses/MIT
  */
-(function () {
+;(function () {
     "use strict";
 //== Translate Substitute Module =============================================//
 

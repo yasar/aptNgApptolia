@@ -1,5 +1,5 @@
 /*global window */
-(function () {
+;(function () {
     'use strict';
     angular
         .module('apt.uploader')

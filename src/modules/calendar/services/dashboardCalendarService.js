@@ -2,7 +2,7 @@
  * Created by unal on 23.02.2016.
  */
 
-(function () {
+;(function () {
     angular.module('apt.calendar').factory('DashboardCalendarService', fn);
 
     fn.$inject = ['CalendarService'];

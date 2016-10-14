@@ -20,7 +20,7 @@
  * </apt-sidebar-slot>
  * </sample>
  */
-(function (angular) {
+;(function (angular) {
     'use strict';
     angular.module('ngApptolia')
         .directive('bindHtmlCompile', ['$compile', 'aptUtils',

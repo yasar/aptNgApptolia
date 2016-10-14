@@ -2,7 +2,7 @@
  * Created by yasar on 25.12.2015.
  */
 
-(function () {
+;(function () {
     angular.module('ngApptolia').directive('aptAddress', fn);
     function fn() {
         return {

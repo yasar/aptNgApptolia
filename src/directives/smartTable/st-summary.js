@@ -2,7 +2,7 @@
  * Created by yasar on 20.02.2016.
  */
 
-(function () {
+;(function () {
     /**
      * this is used within datatable to show the record counts in the header section.
      */

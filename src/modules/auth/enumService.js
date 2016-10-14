@@ -1,7 +1,7 @@
 /**
  * Created by yasar on 08.05.2015.
  */
-(function (angular) {
+;(function (angular) {
     'use strict';
 
     angular.module('aptAuth')

@@ -1,7 +1,7 @@
 /**
  * Created by yasar on 24.07.2016.
  */
-(function () {
+;(function () {
     // var builder = dashboardBuilder;
     // var name    = 'widget';
 
