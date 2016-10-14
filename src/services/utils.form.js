@@ -66,6 +66,7 @@ function aptUtilsForm($injector) {
         formObj.reset          = reset;
         formObj.isReadonly     = isReadonly;
         formObj.data           = {};
+        formObj.vars           = {}; // use as cache or storing dummy/internal variables
         formObj.name           = options.name || _.uniqueId('form_');
         /**
          * we need to construct the vm which the itemId is bound-to.

@@ -330,10 +330,14 @@
                             };
 
                             if (scope.vmField.params && scope.vmField.params.options) {
-                                if (vm.translate) {
-                                    control.attrs['ng-options'] = 'item as $root.translate(item) for item in vmField.params.options';
+                                if (_.isObject(scope.vmField.params.options)) {
+                                    if (vm.translate) {
+                                        control.attrs['ng-options'] = 'item as $root.translate(item) for item in vmField.params.options';
+                                    } else {
+                                        control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
+                                    }
                                 } else {
-                                    control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
+                                    control.attrs['ng-options'] = scope.vmField.params.options;
                                 }
                             }
                             break;
