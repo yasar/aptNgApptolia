@@ -1,16 +1,13 @@
-<div class="modal-header">
-    <h4 class="modal-title">Edit Image Description</h4>
-</div>
-
-<div class="modal-body">
-    <form role="form" class="has-padding">
-        <label translate>Title</label>
-        <apt-field field="title" label="Title" model-base="data"></apt-field>
-        <label translate>Description</label>
-        <textarea ng-model="data.description" class="form-control">{{data.title}}</textarea>
-    </form>
-</div>
-
-<div class="modal-footer">
-    <button class="btn btn-default" ng-click="done()">Done</button>
-</div>
+<apt-panel class="no-margin">
+	<apt-panel-title><span translate>Edit Image Description</span></apt-panel-title>
+	<apt-panel-body>
+		<apt-field field="title" model-base="data"></apt-field>
+		<apt-field field="description" type="textarea" rows="5" model-base="data"></apt-field>
+	</apt-panel-body>
+	<apt-panel-footer>
+		<apt-panel-footer-left></apt-panel-footer-left>
+		<apt-panel-footer-right>
+			<apt-button type="button" action-type="post" ng-click="done()" label="'Save'"></apt-button>
+		</apt-panel-footer-right>
+	</apt-panel-footer>
+</apt-panel>

@@ -29,7 +29,11 @@ module.exports = function (grunt) {
          * stylesheet, and 'unit' contains our app's unit tests.
          */
         app_files: {
-            js          : ['./src/**/*.module.js', './src/**/*.js'],
+            js          : [
+                './src/**/*.module.js',
+                './src/**/*.js',
+                '!src/**/*.spec.js',
+                '!src/assets/**/*.js'],
             appTemplates: ['src/**/*.tpl.html'],
             less        : ['src/less/main.less']
         },
@@ -159,6 +163,16 @@ module.exports = function (grunt) {
                         src   : ['<%= app_files.js %>'],
                         dest  : '<%= build_dir %>/',
                         cwd   : '.',
+                        expand: true
+                    }
+                ]
+            },
+            build_app_assets   : {
+                files: [
+                    {
+                        src   : ['**'],
+                        dest  : '<%= build_dir %>/assets/',
+                        cwd   : 'src/assets',
                         expand: true
                     }
                 ]
@@ -327,7 +341,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', ['build', 'compile']);
     grunt.registerTask('forDebug', ['build', 'compileReadable']);
-    grunt.registerTask('build', ['clean:all', 'html2js', 'less:build', 'concat:build_css', 'copy:build_appjs', 'copy:build_vendorjs', 'index:build']);
+    grunt.registerTask('build', ['clean:all', 'html2js', 'less:build', 'concat:build_css',
+        'copy:build_app_assets', 'copy:build_vendor_assets',
+        'copy:build_appjs', 'copy:build_vendorjs', 'index:build']);
     grunt.registerTask('compile', ['less:compile', 'copy:compile_assets', 'concat:compile_js', 'uglify', 'index:compile']);
     grunt.registerTask('compileReadable', ['less:compile', 'copy:compile_assets', 'concat:compile_js', 'index:compile']);
 
