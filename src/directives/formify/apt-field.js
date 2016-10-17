@@ -112,11 +112,16 @@
                     vm.params = $parse(attrs.params)(scope);
                 }
 
-                var label = _.has(attrs, 'label') && _.includes(['', 'false', 'null'], attrs.label) ? false : true;
                 var $tpl  = $(getTemplate(scope, attrs, vm));
+                var label = _.has(attrs, 'label') && _.includes(['', 'false', 'null'], attrs.label) ? false : true;
+                /**
+                 * if label==false then, we shouldnt show label, at all.
+                 * so remove the label attributes from the template.
+                 */
                 if (!label && ($tpl.attr('data-label') || $tpl.attr('label'))) {
                     $tpl.removeAttr('data-label label');
                 }
+
                 var isSelfContained = false;
 
                 if (!_.isNull(bindTo)) {
@@ -142,12 +147,13 @@
                 }
 
                 if (label) {
-                    if (isSelfContained) {
-                        // vm.label = getLabel(attrs);
-                        vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
-                    } else {
-                        // $tpl.attr('label', aptUtils.grabLabelFromAttrs(attrs));
-                    }
+                    vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
+                    // if (isSelfContained) {
+                    //     // vm.label = getLabel(attrs);
+                    //     vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
+                    // } else {
+                    //     // $tpl.attr('label', aptUtils.grabLabelFromAttrs(attrs));
+                    // }
                 }
 
 
@@ -177,6 +183,10 @@
                 //     elem.find('[ui-switch]').removeAttr('ui-switch');
                 // }
 
+                // if (_.has(attrs, 'required')) {
+                //     // compiledElement.find('[data-ng-model],[ng-model]').attr('required', 'required');
+                //     compiledElement.find('[data-ng-model],[ng-model]').prop('required', true);
+                // }
             }
         }
 
