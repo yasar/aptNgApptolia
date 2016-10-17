@@ -52,7 +52,10 @@
             menuConf = _.merge(menuConf, $scope.builder.selector.showMenu);
         }
 
-        if ($attrs.domain) {
+        if (_.has($scope, 'builder.domain')) {
+            vm.domain = $scope.builder.domain;
+            vm.Domain = $scope.builder.Domain;
+        } else if ($attrs.domain) {
             // vm.domain = _.snakeCase($attrs.domain);
             vm.domain = $attrs.domain;
 
