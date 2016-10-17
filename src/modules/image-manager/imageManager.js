@@ -8,8 +8,7 @@
         .module('apt.imageManager')
         .directive('aptImageManager', fn);
 
-    fn.$inject = ['Restangular'];
-    function fn(Restangular) {
+    function fn() {
         var directiveObj = {
             restrict        : 'EA', // ACME
             scope           : {},
@@ -35,12 +34,14 @@
 
     }
 
-    controllerFn.$inject = ['Restangular', '$scope'];
-    function controllerFn(Restangular, $scope) {
+    controllerFn.$inject = ['$scope', '$injector'];
+    function controllerFn($scope, $injector) {
 
-        var vm = this;
+        var vm          = this;
+        var aptUtils    = $injector.get('aptUtils');
+        var Restangular = $injector.get('Restangular');
 
-        if(_.isUndefined(vm.bindTo) && _.isUndefined(vm.images)){
+        if (_.isUndefined(vm.bindTo) && _.isUndefined(vm.images)) {
             console.error('You can not leave both `bindTo` and `images` empty. One of them is required to function properly.');
             return;
         }
@@ -95,14 +96,31 @@
         }
 
         function loadImages(id) {
+            if (_.isUndefined(id)) {
+                return;
+            }
+
             if (angular.isDefined(vm.prefix)) {
                 var restUrl = vm.prefix + '/' + vm.bindTo;
             } else {
                 restUrl = vm.bindTo;
             }
             Restangular.one(restUrl, id).getList('images', vm.imageData).then(function (data) {
-                angular.merge(vm.images, data.plain());
+                // angular.merge(vm.images, data.plain());
+                aptUtils.emptyAndMerge(vm.images, normalize(data.plain()));
             })
+        }
+
+        function normalize(data) {
+            if (_.isArray(data)) {
+                _.forEach(data, function (item) {
+                    normalize(item);
+                });
+            }
+
+            aptBuilder.utils.makeInt(data, ['image_id', 'type_id']);
+
+            return data;
         }
 
 
