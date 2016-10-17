@@ -100,7 +100,7 @@
                 var gettextCatalog = vm.translate ? $injector.get('gettextCatalog') : null;
 
                 if (_.has(attrs, 'field')) {
-                    attrs.field = $interpolate(attrs.field)(scope);
+                    vm.field = attrs.field = $interpolate(attrs.field)(scope);
                 }
 
                 if (_.has(attrs, 'type')) {
