@@ -308,24 +308,24 @@
         }
 
         function goto(conf) {
-            var url           = '',
-                $q            = $injector.get('$q'),
-                deferred      = $q.defer();
-            var $location     = $injector.get('$location');
-            var $routeSegment = $injector.get('$routeSegment');
-            var $timeout      = $injector.get('$timeout');
+            var url       = '';
+            var $q        = $injector.get('$q');
+            var deferred  = $q.defer();
+            var $location = $injector.get('$location');
+            var $state    = $injector.get('$state');
+            var $timeout  = $injector.get('$timeout');
 
 
             if (conf.hasOwnProperty('segment')) {
                 try {
                     if (angular.isObject(conf.segment)) {
-                        url = $routeSegment.getSegmentUrl(conf.segment.name, conf.segment.params);
+                        url = $state.href(conf.segment.name, conf.segment.params);
                     } else {
-                        url = $routeSegment.getSegmentUrl(conf.segment);
+                        url = $state.href(conf.segment);
                     }
                 } catch (e) {
                     console.error((conf.segment.name || conf.segment) + ' is not exist');
-                    url = $routeSegment.getSegmentUrl('main.page404');
+                    url = $state.url('main.page404');
                 }
             } else if (conf.hasOwnProperty('url')) {
                 url = conf.url;
@@ -452,7 +452,7 @@
                 this.searchArr = [];
             }
 
-            if(param === false){
+            if (param === false) {
                 this.searchArr = [];
                 return;
             }

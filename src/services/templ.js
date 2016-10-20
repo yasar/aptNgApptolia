@@ -176,7 +176,7 @@
                         notes              : 'notebook',
                         null               : 'circle',
                         option             : 'circle-o',
-                        pay            : 'wallet',
+                        pay                : 'wallet',
                         preview            : 'eye',
                         remove             : 'minus2',
                         refresh            : 'database-refresh',
@@ -217,19 +217,20 @@
 
         this.init = function () {
             var $rootScope     = self.$injector.get('$rootScope');
-            var $routeSegment  = self.$injector.get('$routeSegment');
+            // var $routeSegment  = self.$injector.get('$routeSegment');
             var hotkeys        = self.$injector.get('hotkeys');
             var gettextCatalog = self.$injector.get('gettextCatalog');
 
-            $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
-                if ($routeSegment.chain.length) {
-                    var segmentParams = $routeSegment.chain[$routeSegment.chain.length - 1].params;
-                    if (_.has(segmentParams, 'icon')) {
-                        self.page.icon = segmentParams.icon;
-                    }
-                    self.loadSlot(next.segment);
-                }
-            });
+            // todo: ui-router correction required
+            /*$rootScope.$on('$routeChangeSuccess', function (event, next, current) {
+             if ($routeSegment.chain.length) {
+             var segmentParams = $routeSegment.chain[$routeSegment.chain.length - 1].params;
+             if (_.has(segmentParams, 'icon')) {
+             self.page.icon = segmentParams.icon;
+             }
+             self.loadSlot(next.segment);
+             }
+             });*/
 
             self.initSlots();
 
@@ -314,16 +315,19 @@
             };
 
             this.reset = function (isSegmentAware) {
-                var aptUtils      = self.$injector.get('aptUtils');
-                var aptMenu       = self.$injector.get('aptMenu');
-                var $routeSegment = self.$injector.get('$routeSegment');
+                var aptUtils = self.$injector.get('aptUtils');
+                var aptMenu  = self.$injector.get('aptMenu');
+                // var $routeSegment = self.$injector.get('$routeSegment');
+                var $state   = self.$injector.get('$state');
 
                 if (isSegmentAware) {
-                    if ($routeSegment.name.indexOf(self.data.slotRouteSegment) != -1) {
+                    // if ($routeSegment.name.indexOf(self.data.slotRouteSegment) != -1) {
+                    if ($state.current.name.indexOf(self.data.slotRouteSegment) != -1) {
                         return;
                     }
 
-                    if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($routeSegment.name) != -1) {
+                    // if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($routeSegment.name) != -1) {
+                    if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($state.current.name) != -1) {
                         return;
                     }
                 }
@@ -343,8 +347,9 @@
 
 
         this.setSlotItem = function (slot, name, item, _segment) {
-            var $routeSegment = self.$injector.get('$routeSegment'),
-                segment       = _segment || $routeSegment.name;
+            // var $routeSegment = self.$injector.get('$routeSegment');
+            var $state  = self.$injector.get('$state');
+            var segment = _segment || $state.current.name;
             _.set(self.data
                 , '_route.' + segment + '._slots.' + slot + '.' + name
                 , _.merge({
@@ -372,15 +377,16 @@
         };
 
         this.loadSlot = function (segment) {
-            var $rootScope    = self.$injector.get('$rootScope'),
-                aptUtils      = self.$injector.get('aptUtils'),
-                $routeSegment = self.$injector.get('$routeSegment');
+            var $rootScope = self.$injector.get('$rootScope');
+            var aptUtils   = self.$injector.get('aptUtils');
+            // var $routeSegment = self.$injector.get('$routeSegment');
+            var $state     = self.$injector.get('$state');
 
             if (self.data._route.lastModifiedAt == null) {
                 return;
             }
 
-            segment      = segment || $routeSegment.name;
+            segment      = segment || $state.current.name;
             var segments = segment.split('.');
 
             var dataRoute    = self.data._route;
@@ -417,9 +423,10 @@
         }
 
         this.initSlots = function () {
-            var $rootScope    = self.$injector.get('$rootScope'),
-                aptUtils      = self.$injector.get('aptUtils'),
-                $routeSegment = self.$injector.get('$routeSegment');
+            var $rootScope = self.$injector.get('$rootScope');
+            var aptUtils   = self.$injector.get('aptUtils');
+            // var $routeSegment = self.$injector.get('$routeSegment');
+            var $state     = self.$injector.get('$state');
 
             if (self.data.isSlotsInitialized) {
                 return;
@@ -450,7 +457,8 @@
 
         this.setSlotRouteSegment = function (route) {
             if (!route) {
-                route = self.$injector.get('$routeSegment').name;
+                // route = self.$injector.get('$routeSegment').name;
+                route = self.$injector.get('$state').current.name;
             }
             self.data.slotRouteSegment = route;
         };

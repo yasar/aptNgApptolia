@@ -6,8 +6,8 @@
 ;(function () {
     angular.module('ngApptolia').factory('aptMenuBreadcrumbMenu', fn);
 
-    fn.$inject = ['aptAuthorizationService', 'aptAuthEnumService', '$routeSegment', 'aptUtils', '$compile'];
-    function fn(authorization, enums, $routeSegment, aptUtils, $compile) {
+    fn.$inject = ['aptAuthorizationService', 'aptAuthEnumService', /*'$routeSegment',*/ 'aptUtils', '$compile'];
+    function fn(authorization, enums, /*$routeSegment,*/ aptUtils, $compile) {
         var service = {
                 config : null,
                 menu   : null,
@@ -85,9 +85,9 @@
 
                 // var $a = angular.element('<a class="btn btn-default btn-icon" title="' + menuItem.text + '"></a>');
                 var $a;
-                if(service.config.translate){
+                if (service.config.translate) {
                     $a = angular.element('<a class="btn btn-default btn-icon" uib-tooltip="{{\'' + menuItem.text + '\'|translate}}"></a>');
-                }else {
+                } else {
                     $a = angular.element('<a class="btn btn-default btn-icon" uib-tooltip="' + menuItem.text + '"></a>');
                 }
                 if (menuItem.href) {
@@ -96,9 +96,11 @@
 
                 if (menuItem.segment) {
 
-                    $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
+                    $a.attr('ui-sref', menuItem.segment);
+                    // $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
                     //$a.attr('ng-class', '{active: (\'' + menuItem.segment + '\' | routeSegmentStartsWith)}');
-                    $a.attr('ng-class', '{active: $routeSegment.startsWith(\'' + menuItem.segment + '\')}');
+                    // $a.attr('ng-class', '{active: $routeSegment.startsWith(\'' + menuItem.segment + '\')}');
+                    $a.attr('ui-sref-active', 'active');
                 }
 
                 if (menuItem.click) {
