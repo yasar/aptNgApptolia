@@ -45,8 +45,9 @@
                 return;
             }
 
+            // itemData: angular.element(service.element).scope().row
             var scope       = {
-                    itemData: angular.element(service.element).scope().row
+                    itemData: service.element.scope.row
                 },
                 $menuHolder = null;
 

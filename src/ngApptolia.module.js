@@ -90,17 +90,18 @@
 
                 $stateProvider
                     .state({
-                        name      : 'main',
-                        url       : '',
-                        abstract  : true,
-                        template  : '<div data-apt-layout></div>',
-                        controller: ['$timeout', '$window', function ($timeout, $window) {
+                        name        : 'main',
+                        url         : '',
+                        abstract    : true,
+                        template    : '<div data-apt-layout></div>',
+                        controller  : ['$timeout', '$window', function ($timeout, $window) {
                             $window.loading_screen.updateLoadingHtml('<p style="color: #fff;">Yükleme tamamlandı / Loading completed</p>', true);
 
                             $timeout(function () {
                                 $window.loading_screen.finish();
-                            }, 2000);
-                        }]
+                            }, 100);
+                        }],
+                        defaultChild: 'dashboard'
                     })
                     .state({
                         name    : 'main.page401',

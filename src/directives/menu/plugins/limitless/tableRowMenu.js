@@ -58,7 +58,8 @@
                 return;
             }
 
-            var elementScope = angular.element(service.element).scope();
+            // var elementScope = angular.element(service.element).scope();
+            var elementScope = service.element.scope;
             var scope        = {itemData: elementScope.row || elementScope.item};
             var $ul          = null;
 
