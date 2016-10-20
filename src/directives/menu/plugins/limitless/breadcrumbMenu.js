@@ -42,13 +42,14 @@
             if (!menu.children.length) {
                 return;
             }
+            ctr++;
 
+
+            // itemData: angular.element(service.element).scope().row
             var scope = {
-                    itemData: angular.element(service.element).scope().row
+                    itemData: service.element.scope.row
                 },
                 $ul   = null;
-
-            ctr++;
 
 
             if (parent.is('div')) {
