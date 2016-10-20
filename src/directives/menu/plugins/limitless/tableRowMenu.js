@@ -124,7 +124,7 @@
                         });
 
                         // $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment[0], paramObj));
-                        $a.attr('ui-sref', menuItem.segment[0] + '(' + paramObj + ')');
+                        $a.attr('ui-sref', menuItem.segment[0] + '(' + angular.toJson(paramObj) + ')');
                     } else {
                         // $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
                         $a.attr('ng-href', menuItem.segment);
