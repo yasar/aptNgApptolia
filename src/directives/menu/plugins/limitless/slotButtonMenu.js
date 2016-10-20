@@ -6,8 +6,8 @@
 ;(function () {
     angular.module('ngApptolia').factory('aptMenuSlotButtonMenu', fn);
 
-    fn.$inject = ['aptAuthorizationService', 'aptAuthEnumService', '$routeSegment'];
-    function fn(authorization, enums, $routeSegment) {
+    fn.$inject = ['aptAuthorizationService', 'aptAuthEnumService'];
+    function fn(authorization, enums) {
         var service = {
                 config : null,
                 menu   : null,

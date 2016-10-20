@@ -10,7 +10,6 @@
         var aptAuthorizationService = $injector.get('aptAuthorizationService');
         var aptIcon                 = $injector.get('aptIcon');
         var $interpolate            = $injector.get('$interpolate');
-        var $routeSegment           = $injector.get('$routeSegment');
         var service                 = {
             config : null,
             menu   : null,
@@ -124,9 +123,11 @@
                             paramObj[key] = $interpolate(value)(scope.itemData);
                         });
 
-                        $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment[0], paramObj));
+                        // $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment[0], paramObj));
+                        $a.attr('ui-sref', menuItem.segment[0] + '(' + paramObj + ')');
                     } else {
-                        $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
+                        // $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
+                        $a.attr('ng-href', menuItem.segment);
                     }
                 }
 

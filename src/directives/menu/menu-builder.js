@@ -12,9 +12,9 @@
             'aptAuthEnumService',
             '$location',
             '$injector',
-            '$routeSegment',
+            // '$routeSegment',
             'aptUtils',
-            function ($compile, authorization, enums, $location, $injector, $routeSegment, aptUtils) {
+            function ($compile, authorization, enums, $location, $injector, /*$routeSegment,*/ aptUtils) {
                 //var getTemplate = function () {
                 //};
 
@@ -82,7 +82,7 @@
                             translate            : true
                         }, scope.config);
 
-                        scope.$routeSegment = $routeSegment;
+                        // scope.$routeSegment = $routeSegment;
 
                         var proceed = function (_menu) {
                             // console.log('menu proceed is executing..');
@@ -415,7 +415,8 @@
                                         if (hasChildren && config.liHasSubMenuClass !== null) {
                                             $li.addClass(config.liHasSubMenuClass);
                                         }
-                                        $li.attr('ng-class', '{active: (\'' + menuItem.segment + '\' | routeSegmentStartsWith)}');
+                                        // $li.attr('ng-class', '{active: (\'' + menuItem.segment + '\' | routeSegmentStartsWith)}');
+                                        $li.attr('ui-sref-active', 'active');
                                         $ul.append($li);
 
                                         var $a = angular.element('<a></a>');
@@ -426,7 +427,8 @@
 
                                         if (menuItem.segment) {
                                             try {
-                                                $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
+                                                // $a.attr('ng-href', $routeSegment.getSegmentUrl(menuItem.segment));
+                                                $a.attr('ui-sref', menuItem.segment);
                                             } catch (err) {
                                                 console.error(err);
                                             }

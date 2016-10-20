@@ -2,6 +2,15 @@
   "name": "aptNgApptolia",
   "version": "1.1.1",
   "author": "BYRWEB/Apptolia",
+  "contributers": [
+    {"name":"Yaşar Bayar", "email":"yasar@byrweb.com"},
+    {"name":"Ünal Delil", "email":"unal@byrweb.com"},
+    {"name":"Murat Demir", "email":"murat@byrweb.com"},
+    {"name":"Hayri Eser", "email":"hayri@byrweb.com"},
+    {"name":"Ayşe Kunan", "email":"ayse@byrweb.com"},
+    {"name":"Engin Aydoğan", "email":"engin@byrweb.com"},
+    {"name":"Burak Özdemir", "email":"burak@byrweb.com"}
+  ],
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "^0.5.0",

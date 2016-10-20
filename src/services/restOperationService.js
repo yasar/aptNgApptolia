@@ -11,7 +11,6 @@
 
     fn.$inject = [
         '$templateCache',
-        '$routeSegment',
         'dialogs',
         '$location',
         '$timeout',
@@ -22,7 +21,7 @@
         'aptUtils',
         'Restangular'
     ];
-    function fn($templateCache, $routeSegment, dialogs, $location, $timeout,
+    function fn($templateCache, dialogs, $location, $timeout,
                 $injector, gettextCatalog, NotifyingService, Templ, aptUtils, Restangular) {
 
         var options = null;
