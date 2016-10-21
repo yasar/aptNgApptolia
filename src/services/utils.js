@@ -396,24 +396,36 @@
                 returnValue = searchObj[paramName];
 
             } else {
-
-                _.each(_this.searchArr, function (item) {
-                    if (returnValue != null) {
-                        return;
-                    }
-                    if (item.param == paramName) {
-                        returnValue = item.value;
-                    } else if (_.isObject(item.param)) {
-                        _.forIn(item.param, function (value, key) {
-                            if (returnValue != null) {
-                                return;
-                            }
-                            if (key == paramName) {
-                                returnValue = value;
-                            }
-                        });
-                    }
-                });
+                /**
+                 * searchArr is causing a bug.
+                 * suppose you are at product page, and used the filter to filter our the list.
+                 * so in your url parameter you have a `status` param is set.
+                 * then, navigate to mast page, the filter is autloaded on page loaded,
+                 * then bum, the previous status is caught by the mast filter, which is not applicable and
+                 * causes server side 500 error.
+                 * so now, we are disabling this feature.
+                 * pay close attention to figure out which code utilize this feature and
+                 * provide a better solution thereafter.
+                 */
+                if(false) {
+                    _.each(_this.searchArr, function (item) {
+                        if (returnValue != null) {
+                            return;
+                        }
+                        if (item.param == paramName) {
+                            returnValue = item.value;
+                        } else if (_.isObject(item.param)) {
+                            _.forIn(item.param, function (value, key) {
+                                if (returnValue != null) {
+                                    return;
+                                }
+                                if (key == paramName) {
+                                    returnValue = value;
+                                }
+                            });
+                        }
+                    });
+                }
             }
 
             if (returnValue && varType) {
