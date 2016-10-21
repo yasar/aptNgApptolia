@@ -70,13 +70,11 @@
             } else if (_.has(attrs, 'field')) {
                 str = attrs.field;
             } else if (_.has(attrs, 'ngModel')) {
-                // str     = attrs.ngModel;
-                // var arr = attrs.ngModel.split('.');
-                // str     = arr[arr.length - 1];
                 str = parseModel(attrs.ngModel);
-                // } else if(_.has(attrs,'$$element')){
-            } else {
+            } else if (attrs.$$element.find('[data-ng-model]').length) {
                 str = parseModel(attrs.$$element.find('[data-ng-model]').attr('data-ng-model'));
+            } else if (_.has(attrs, 'type')) {
+                str = attrs.type;
             }
 
             if (str && _.endsWith(str, '_id')) {
@@ -84,7 +82,6 @@
             }
 
             return _.startCase(str);
-            // return _(str).chain().trimEnd('_id').startCase().value();
 
             function parseModel(model) {
                 var arr = model.split('.');

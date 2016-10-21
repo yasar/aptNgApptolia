@@ -16,10 +16,11 @@
                     return {
                         pre: function (scope, elem, attrs, ctrls) {
                             var holderCtrl     = ctrls[0];
-                            var needsCompile   = _.has(elem.scope(), 'vmField');
+                            // var needsCompile   = _.has(elem.scope(), 'vmField');
+                            var needsCompile   = _.has(scope, 'vmField');
                             var wrapperClass   = attrs.aptFormify !== '' ? attrs.aptFormify : 'form-group form-group-xs';
                             var wrapper        = angular.element('<div class="' + wrapperClass + '"></div>');
-                            var label          = (!_.has(attrs,'label') || attrs.label !== 'false');
+                            var label          = (!_.has(attrs, 'label') || attrs.label !== 'false');
                             var translate      = (!_.has(attrs, 'translate') || attrs.translate != 'false');
                             var helpText       = attrs.helpText && attrs.helpText !== 'false';
                             var _elem          = needsCompile ? elem.clone() : elem;
