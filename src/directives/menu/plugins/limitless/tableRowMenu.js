@@ -9,11 +9,13 @@
     function fn($injector) {
         var aptAuthorizationService = $injector.get('aptAuthorizationService');
         var aptIcon                 = $injector.get('aptIcon');
+        var aptUtils                = $injector.get('aptUtils');
         var $interpolate            = $injector.get('$interpolate');
         var service                 = {
             config : null,
             menu   : null,
             element: null,
+            scopeId: null,
             build  : buildFn
         };
         var ctr                     = 0;
@@ -59,8 +61,9 @@
             }
 
             // var elementScope = angular.element(service.element).scope();
-            var elementScope = service.element.scope;
-            var scope        = {itemData: elementScope.row || elementScope.item};
+            // var elementScope = service.element.scope;
+            var elementScope = aptUtils.getScopeById(service.scopeId);
+            var scope        = {itemData: elementScope.row || elementScope.item || elementScope.itemData};
             var $ul          = null;
 
             ctr++;

@@ -53,7 +53,7 @@
                             return;
                         }
 
-                        debugger;
+                        // debugger;
 
                         toState.access = _.defaults(toState.access, {
                             loginRequired      : true,

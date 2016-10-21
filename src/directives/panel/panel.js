@@ -380,6 +380,7 @@
                                          'action-type="post" ' +
                                          'label="' + vm.form + '.submitLabel" ' +
                                          'ng-disabled="{{' + vm.form + '.name}}.$invalid || !{{' + vm.form + '.name}}.$dirty" ' +
+                                         // 'ng-disabled="' + vm.form + '.$invalid || !' + vm.form + '.$dirty" ' +
                                          'is-busy="' + vm.form + '.isSaving"  ' +
                                          'is-failed="' + vm.form + '.isSavingFailed"></apt-button>';
 

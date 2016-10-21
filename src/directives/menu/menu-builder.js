@@ -68,7 +68,9 @@
 
                         btnSize: '@',
 
-                        config: '<'
+                        config: '<',
+
+                        scopeId: '@'
                     },
                     require: 'ngModel',
                     replace: true,
@@ -613,6 +615,7 @@
                                 plugin.menu    = menu;
                                 plugin.element = element;
                                 plugin.config  = scope.config;
+                                plugin.scopeId = scope.$id;
                                 buildFn        = plugin.build;
                             } else {
 

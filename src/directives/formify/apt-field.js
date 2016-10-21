@@ -118,9 +118,22 @@
                  * if label==false then, we shouldnt show label, at all.
                  * so remove the label attributes from the template.
                  */
-                if (!label && ($tpl.attr('data-label') || $tpl.attr('label'))) {
+                if (!label && ($tpl.is('[data-label],[label]'))) {
                     $tpl.removeAttr('data-label label');
                 }
+
+                if (label) {
+                    /**
+                     * if outer element (apt-field) does not have label but the inner (template) element does
+                     * then take it from the inner element.
+                     */
+                    if (!_.has(attrs, 'label') && $tpl.is('[data-label],[label]')) {
+                        vm.label = $tpl.attr('data-label') ? $tpl.attr('data-label') : $tpl.attr('label');
+                    } else {
+                        vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
+                    }
+                }
+
 
                 var isSelfContained = false;
 
@@ -145,17 +158,6 @@
                         isSelfContained = true;
                     }
                 }
-
-                if (label) {
-                    vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
-                    // if (isSelfContained) {
-                    //     // vm.label = getLabel(attrs);
-                    //     vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
-                    // } else {
-                    //     // $tpl.attr('label', aptUtils.grabLabelFromAttrs(attrs));
-                    // }
-                }
-
 
                 if (!isSelfContained) {
                     /**
