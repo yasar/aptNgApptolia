@@ -71,6 +71,8 @@
             bgImage       : '',
             isStrict      : false,
             showInlineHelp: true,
+            html5Mode     : true,
+            hashPrefix    : '!',
             defaults      : {
                 formats: {
                     screenDateTime   : 'DD.MM.YYYY HH:mm',

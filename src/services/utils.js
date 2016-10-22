@@ -312,6 +312,7 @@
             var $location = $injector.get('$location');
             var $state    = $injector.get('$state');
             var $timeout  = $injector.get('$timeout');
+            var aptTempl  = $injector.get('aptTempl');
 
 
             if (conf.hasOwnProperty('segment')) {
@@ -320,6 +321,15 @@
                         url = $state.href(conf.segment.name, conf.segment.params);
                     } else {
                         url = $state.href(conf.segment);
+                    }
+
+                    /**
+                     * $state.href will return relative url containing hashPrefix
+                     * and location.path() does not comply with hashed url.
+                     * so we have to clean that portion up, if there is any.
+                     */
+                    if (aptTempl.appConfig.html5Mode) {
+                        url = _.replace(url, '#' + aptTempl.appConfig.hashPrefix, '');
                     }
                 } catch (e) {
                     console.warn((conf.segment.name || conf.segment) + ' is not exist');
@@ -407,7 +417,7 @@
                  * pay close attention to figure out which code utilize this feature and
                  * provide a better solution thereafter.
                  */
-                if(false) {
+                if (false) {
                     _.each(_this.searchArr, function (item) {
                         if (returnValue != null) {
                             return;
