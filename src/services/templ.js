@@ -105,9 +105,9 @@
                         animation: true
                     },
                     login        : {
-                        size     : 'md',
+                        size     : 'sm',
                         keyboard : false,
-                        backdrop : true,
+                        backdrop : false,
                         animation: true
                     },
                     confirm      : {
