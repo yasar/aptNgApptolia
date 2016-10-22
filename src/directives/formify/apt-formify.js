@@ -28,8 +28,11 @@
                             var aptUtils       = $injector.get('aptUtils');
 
                             if (!!label) {
-                                // label = attrs.label;
-                                label = aptUtils.grabLabelFromAttrs(attrs);
+                                if (_.has(scope, 'vmField.label')) {
+                                    label = scope.vmField.label;
+                                } else {
+                                    label = aptUtils.grabLabelFromAttrs(attrs);
+                                }
 
                                 if (translate) {
                                     label = gettextCatalog.getString(label, null, _.get(attrs, 'translateContext'));
