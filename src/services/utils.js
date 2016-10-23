@@ -537,6 +537,12 @@
 
                 });
                 $location.$$compose();
+
+                /**
+                 * once we are done, clear the cache
+                 * so that future operations will have a clean cache.
+                 */
+                _this.searchArr = [];
             }
         }
 
