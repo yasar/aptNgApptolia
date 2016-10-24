@@ -182,20 +182,31 @@
                                 settings.bytearrayObject = $scope.uploadFile;
                                 settings.return_ar       = true;
 
+                                var waitConf = {
+                                    progress: 0
+                                };
+                                aptUtils.showWait(waitConf);
+
                                 Restangular.all('/system/image/upload').post(settings).then(function (data) {
+                                    waitConf.progress = 100;
+
+                                    if (data == 'false') {
+                                        aptUtils.showError('Error', 'File could not be uploaded. Make sure folder permissions are properly set.');
+                                        return;
+                                    }
                                     $scope.model.filename    = data.filename;
                                     $scope.uploadFile        = data.upload_path + '/' + data.image_id + '/' + data.filename;
                                     $scope.state.is_uploaded = true;
                                     $scope.state.is_modified = false;
                                     console.log('file uploaded:' + data);
                                 }, function (error) {
+                                    waitConf.progress = 100;
                                     aptUtils.showError('Error', error);
                                 });
                             };
 
                             $scope.delete = function () {
-                                if (confirm('Are you sure that you want to delete this file?')) {
-
+                                aptUtils.showDeleteConfirm(function () {
                                     var settings             = angular.copy($scope.settings);
                                     settings.cmd             = 'delete';
                                     settings.data.uploadFile = $scope.uploadFile;
@@ -207,14 +218,19 @@
                                             $scope.state.is_modified = true;
                                             $scope.state.is_uploaded = false;
                                         }, function () {
-                                            if (confirm('Error occured while deleting the file file on the server side.\n\nYou can ignore the error and try uploading a new file file, or cancel the operation and create a support ticket regarding to resolve the issue. \n\n Do you want ignore the error and upload a new file?')) {
-                                                $scope.uploadFile        = null;
-                                                $scope.model.filename    = null;
-                                                $scope.state.is_modified = true;
-                                                $scope.state.is_uploaded = false;
-                                            }
+                                            aptUtils.showConfirm('Confirmation',
+                                                'Error occured while deleting the file on the server side.' +
+                                                '\n\nYou can ignore the error and try uploading a new file, ' +
+                                                'or cancel the operation and create a support ticket regarding to ' +
+                                                'resolve the issue. \n\n Do you want ignore the error and upload a new file?',
+                                                function () {
+                                                    $scope.uploadFile        = null;
+                                                    $scope.model.filename    = null;
+                                                    $scope.state.is_modified = true;
+                                                    $scope.state.is_uploaded = false;
+                                                });
                                         });
-                                }
+                                });
                             };
 
                             $scope.rotate = function (degree) {
