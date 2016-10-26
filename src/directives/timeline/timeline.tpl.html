@@ -1,0 +1,34 @@
+<div class="timeline timeline-center content-group">
+	<div class="timeline-container">
+		<div data-ng-repeat="row in vmTimeline.source">
+			<div class="timeline-row" data-ng-class="{true:'post-even'}[$even]">
+				<div class="timeline-icon">
+					<div class="alpha-default" ng-class="{
+						'Mast Installation':'bg-success-800',
+						'Tour':'bg-info-300',
+						'Maintenance':'bg-warning-300'
+						}[row.entry_type]">
+						<i class="{{row.icon}}"></i>
+					</div>
+				</div>
+				<div class="timeline-time">
+					{{row.entry_type|startCase}}
+					<span class="text-muted" am-time-ago="row.date"></span>
+				</div>
+				<div class="panel panel-flat timeline-content">
+					<div class="panel-heading">
+						<h6 class="panel-title">{{row.title}}</h6>
+						<div class="heading-elements">
+							<span class="heading-text"> <i class="icon-history position-left"></i>{{row.date}}</span>
+						</div>
+					</div>
+					<div class="panel-body">
+						<blockquote data-ng-if="row.description != ''">
+							<p>{{row.description}}</p>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
