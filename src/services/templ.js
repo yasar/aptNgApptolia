@@ -316,21 +316,33 @@
                 slotRouteSegment  : null
             };
 
-            this.reset = function (isSegmentAware) {
+            this.reset = function (isSegmentAware, builder) {
                 var aptUtils = self.$injector.get('aptUtils');
                 var aptMenu  = self.$injector.get('aptMenu');
                 // var $routeSegment = self.$injector.get('$routeSegment');
                 var $state   = self.$injector.get('$state');
 
                 if (isSegmentAware) {
-                    // if ($routeSegment.name.indexOf(self.data.slotRouteSegment) != -1) {
                     if ($state.current.name.indexOf(self.data.slotRouteSegment) != -1) {
                         return;
                     }
 
-                    // if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($routeSegment.name) != -1) {
                     if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($state.current.name) != -1) {
                         return;
+                    }
+
+                    if (builder && builder.segmentMatchLevel > 0 && self.data.slotRouteSegment) {
+                        var s1 = self.data.slotRouteSegment.split('.');
+                        var s2 = $state.current.name.split('.');
+
+                        var isMatch = true;
+                        for (var i = 0; i < builder.segmentMatchLevel; i++) {
+                            isMatch = isMatch && s1[i] && s2[i] && s1[i] == s2[i];
+                        }
+
+                        if (isMatch) {
+                            return;
+                        }
                     }
                 }
 
