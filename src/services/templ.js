@@ -74,6 +74,36 @@
             html5Mode     : true,
             hashPrefix    : '!',
             defaults      : {
+                mapObject:{
+                    center  : {
+                        lat     : 38.95940879245423,
+                        lng     : 36.6943359375,
+                        zoom    : 6,
+                        dragging: false
+                    },
+                    defaults: {
+                        zoomControl    : true,
+                        scrollWheelZoom: false,
+                        doubleClickZoom: true,
+                        layerControl   : true,
+                        tileLayer      : 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    },
+                    markers : {},
+                    events  : {
+                        markers: {
+                            enable: ['click']
+                        }
+                    },
+                    layers  : {
+                        baselayers: {
+                            osm: {
+                                name: 'OpenStreetMap',
+                                url : 'https://{s}.tiles.mapbox.com/v3/examples.map-i875mjb7/{z}/{x}/{y}.png',
+                                type: 'xyz'
+                            }
+                        }
+                    }
+                },
                 formats: {
                     screenDateTime   : 'DD.MM.YYYY HH:mm',
                     screenDateTimeUib: 'dd.MM.yyyy HH:mm',
