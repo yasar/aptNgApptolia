@@ -323,6 +323,11 @@
                         url = $state.href(conf.segment);
                     }
 
+                    if(! url){
+                        aptUtils.showError('Url can not be generated. Please check the console log.');
+                        console.log(conf);
+                    }
+
                     /**
                      * $state.href will return relative url containing hashPrefix
                      * and location.path() does not comply with hashed url.
