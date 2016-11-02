@@ -74,7 +74,7 @@
             html5Mode     : true,
             hashPrefix    : '!',
             defaults      : {
-                mapObject:{
+                mapObject: {
                     center  : {
                         lat     : 38.95940879245423,
                         lng     : 36.6943359375,
@@ -104,14 +104,14 @@
                         }
                     }
                 },
-                formats: {
+                formats  : {
                     screenDateTime   : 'DD.MM.YYYY HH:mm',
                     screenDateTimeUib: 'dd.MM.yyyy HH:mm',
                     screenDate       : 'DD.MM.YYYY',
                     screenDateUib    : 'dd.MM.yyyy',
                     screenTime       : 'HH:mm'
                 },
-                dialogs: {
+                dialogs  : {
                     edit         : {
                         size     : 'lg',
                         keyboard : true,
@@ -181,7 +181,7 @@
                         animation: true
                     }
                 },
-                icons  : {
+                icons    : {
                     icomoon: {
                         add                : 'plus22',
                         'add-new'          : 'plus3',
@@ -393,7 +393,7 @@
         this.setSlotItem = function (slot, name, item, _segment) {
             // var $routeSegment = self.$injector.get('$routeSegment');
             var $state  = self.$injector.get('$state');
-            var segment = _segment || $state.current.name;
+            var segment = _segment || self.data.slotRouteSegment || $state.current.name;
             _.set(self.data
                 , '_route.' + segment + '._slots.' + slot + '.' + name
                 , _.merge({
