@@ -113,6 +113,8 @@
                         var filterObj                             = {};
                         filterObj[_.snakeCase(conf.type) + '_id'] = conf.data[_.snakeCase(conf.type) + '_id'];
                         allData.splice(_.indexOf(allData, _.find(allData, filterObj)), 1);
+                    } else {
+                        aptUtils.showError('Failed','Item could not be deleted.');
                     }
                     Templ.blurPage(false);
                 });
