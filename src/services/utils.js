@@ -129,6 +129,13 @@
             return dialogs.notify(title, message, options);
         }
 
+        function showSuccess(options) {
+            var dialogs  = $injector.get('dialogs');
+            var aptTempl = $injector.get('aptTempl');
+            options      = _.defaults(options, aptTempl.appConfig.defaults.dialogs.info);
+            return dialogs.notify('Success', 'The operation completed, successfully.', options);
+        }
+
         function showConfirm(title, message, onAcceptFn, onRejectFn, options) {
             var dialogs  = $injector.get('dialogs');
             var aptTempl = $injector.get('aptTempl');
@@ -279,7 +286,7 @@
                         url = $state.href(conf.segment);
                     }
 
-                    if(! url){
+                    if (!url) {
                         aptUtils.showError('Url can not be generated. Please check the console log.');
                         console.log(conf);
                     }
