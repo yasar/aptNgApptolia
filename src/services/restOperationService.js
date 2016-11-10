@@ -107,14 +107,18 @@
                 animation: true
             });
             confirm.result.then(function () {
-                Restangular.copy(conf.data).remove().then(function (response) {
+                var clonedModel = Restangular.copy(conf.data);
+                if (_.get(conf, 'route')) {
+                    clonedModel.route = conf.route;
+                }
+                clonedModel.remove().then(function (response) {
                     if (response === 'true') {
                         var allData                               = conf.allData;
                         var filterObj                             = {};
                         filterObj[_.snakeCase(conf.type) + '_id'] = conf.data[_.snakeCase(conf.type) + '_id'];
                         allData.splice(_.indexOf(allData, _.find(allData, filterObj)), 1);
                     } else {
-                        aptUtils.showError('Failed','Item could not be deleted.');
+                        aptUtils.showError('Failed', 'Item could not be deleted.');
                     }
                     Templ.blurPage(false);
                 });
