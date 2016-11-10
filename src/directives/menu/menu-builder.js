@@ -86,6 +86,17 @@
 
                         // scope.$routeSegment = $routeSegment;
 
+                        var elementScope = null;
+                        if (scope.scopeId) {
+                            elementScope = aptUtils.getScopeById(scope.scopeId);
+                        } else {
+                            elementScope = scope;
+                        }
+
+                        if (!_.has(elementScope, 'itemData')) {
+                            elementScope.itemData = elementScope.row || elementScope.item;
+                        }
+
                         var proceed = function (_menu) {
                             // console.log('menu proceed is executing..');
 
@@ -116,7 +127,7 @@
                                             if (menuItem.show === false) {
                                                 return;
                                             } else if (angular.isFunction(menuItem.show)) {
-                                                var cont = menuItem.show.call(undefined, scope.itemData);
+                                                var cont = menuItem.show.call(undefined, elementScope.itemData);
                                                 if (!cont) {
                                                     return;
                                                 }
@@ -154,7 +165,7 @@
 
                                         if (menuItem.click) {
                                             $a.click(function () {
-                                                menuItem.click(scope.itemData);
+                                                menuItem.click(elementScope.itemData);
                                             });
                                         }
 
@@ -205,7 +216,7 @@
                                             if (menuItem.show === false) {
                                                 return;
                                             } else if (angular.isFunction(menuItem.show)) {
-                                                var cont = menuItem.show.call(undefined, scope.itemData);
+                                                var cont = menuItem.show.call(undefined, elementScope.itemData);
                                                 if (!cont) {
                                                     return;
                                                 }
@@ -228,13 +239,13 @@
                                         }
                                         if (menuItem.click) {
                                             $a.click(function () {
-                                                menuItem.click(scope.itemData);
+                                                menuItem.click(elementScope.itemData);
                                             });
                                         }
                                         $a.addClass('btn');
 
                                         //$a.addClass(menuItem.class ? menuItem.class : 'btn-default');
-                                        var itemClass = !menuItem.class ? 'btn-default' : (angular.isFunction(menuItem.class) ? menuItem.class.call(undefined, scope.itemData) : menuItem.class);
+                                        var itemClass = !menuItem.class ? 'btn-default' : (angular.isFunction(menuItem.class) ? menuItem.class.call(undefined, elementScope.itemData) : menuItem.class);
                                         $a.addClass(itemClass);
 
 
@@ -295,7 +306,7 @@
                                             if (menuItem.show === false) {
                                                 return;
                                             } else if (angular.isFunction(menuItem.show)) {
-                                                var cont = menuItem.show.call(undefined, scope.itemData);
+                                                var cont = menuItem.show.call(undefined, elementScope.itemData);
                                                 if (!cont) {
                                                     return;
                                                 }
@@ -318,13 +329,13 @@
                                         }
                                         if (menuItem.click) {
                                             $a.click(function () {
-                                                menuItem.click(scope.itemData);
+                                                menuItem.click(elementScope.itemData);
                                             });
                                         }
                                         $a.addClass('btn');
 
                                         //$a.addClass(menuItem.class ? menuItem.class : 'btn-default');
-                                        var itemClass = !menuItem.class ? 'btn-default' : (angular.isFunction(menuItem.class) ? menuItem.class.call(undefined, scope.itemData) : menuItem.class);
+                                        var itemClass = !menuItem.class ? 'btn-default' : (angular.isFunction(menuItem.class) ? menuItem.class.call(undefined, elementScope.itemData) : menuItem.class);
                                         $a.addClass(itemClass);
 
 
@@ -394,7 +405,7 @@
                                             if (menuItem.show === false) {
                                                 return;
                                             } else if (angular.isFunction(menuItem.show)) {
-                                                var cont = menuItem.show.call(undefined, scope.itemData);
+                                                var cont = menuItem.show.call(undefined, elementScope.itemData);
                                                 if (!cont) {
                                                     return;
                                                 }
@@ -444,7 +455,7 @@
 
                                         if (menuItem.click) {
                                             $a.click(function () {
-                                                menuItem.click(scope.itemData);
+                                                menuItem.click(elementScope.itemData);
                                             });
                                         }
 
@@ -541,7 +552,7 @@
                                             if (menuItem.show === false) {
                                                 return;
                                             } else if (angular.isFunction(menuItem.show)) {
-                                                var cont = menuItem.show.call(undefined, scope.itemData);
+                                                var cont = menuItem.show.call(undefined, elementScope.itemData);
                                                 if (!cont) {
                                                     return;
                                                 }
@@ -664,7 +675,7 @@
 
                         if (scope.watchItemData) {
                             scope.$watch(function () {
-                                return scope.itemData;
+                                return elementScope.itemData;
                             }, function (newVal, oldVal) {
                                 if (!angular.isDefined(newVal)) {
                                     return;
