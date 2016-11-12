@@ -74,25 +74,21 @@
         }
 
         function aptField_Compile(elem, attrs) {
-            var ngAttrs = {};
-            _.forIn(attrs, function (value, key) {
-                if (!_.includes(['ngIf'], key) && _.startsWith(key, 'ng')) {
-                    ngAttrs[key] = value;
-                    delete attrs[key];
-                    delete attrs.$attr[key];
-                    elem.removeAttr(_.kebabCase(key));
-                }
-            });
 
-            elem.data('ngAttrs', ngAttrs);
+
+            preserveNgAttrs(elem, attrs);
 
             ///
 
             return {
+                // pre : function (scope, elem, attrs) {
+                //     preserveNgAttrs(elem, attrs);
+                // },
                 post: aptField_Link
             };
 
             ///
+
 
             function aptField_Link(scope, elem, attrs, ctrls) {
 
@@ -165,7 +161,9 @@
                      */
                     // transferAttributes(attrs.$attr, $tpl);
                     transferAttributes(attrs, $tpl);
-                    transferAttributes(elem.data('ngAttrs'), $tpl);
+                    // transferAttributes(elem.data('ngAttrs'), $tpl);
+                    var _ngAttrs = elem.data('ngAttrs');
+                    transferAttributes(_ngAttrs, $tpl);
 
                     $tpl = finalize(elem, attrs, $tpl);
                 }
@@ -535,6 +533,20 @@
             }
             $tpl.attr(_.kebabCase(key), value);
         });
+    }
+
+    function preserveNgAttrs(elem, attrs) {
+        var ngAttrs = {};
+        _.forIn(attrs, function (value, key) {
+            if (!_.includes(['ngIf'], key) && _.startsWith(key, 'ng')) {
+                ngAttrs[key] = value;
+                delete attrs[key];
+                delete attrs.$attr[key];
+                elem.removeAttr(_.kebabCase(key));
+            }
+        });
+
+        elem.data('ngAttrs', ngAttrs);
     }
 })();
 
