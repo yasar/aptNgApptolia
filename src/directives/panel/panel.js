@@ -184,16 +184,31 @@
              */
             processBody();
 
+            ///
+
             /**
-             * Calling the proceed() withing $timeout causing a serious bug on rare occasions.
+             * Calling the proceed() within $timeout causing a serious bug on rare occasions.
              * The occasion is as described: Consider adding a directive into apt-panel-tab, and this directive
              * asks for parent controller through require property. In such case, DI can not provide the asked
              * controllers if we are in $timeout. Putting it out solves the problem.
              *
              * In the first place, we added the $timeout for a reason (!), but since it was not properly documented,
              * we are not sure why it was there. So, extra caution should be paid to see the outcome of this change.
+             * UPDATE: $timeout is required for any apt-panel-heading-elements tag placed within apt-panel-body tag.
              */
-            proceed(); //$timeout(proceed);
+            // proceed(); //$timeout(proceed);
+
+            /**
+             * if any tab is assigned then, we can not use headingElements consequently.
+             * so, lets check if tabs are available, and fix the above issue accordingly.
+             */
+            if (vm.tabs.length > 0) {
+                proceed();
+            } else {
+                $timeout(proceed, 1000);
+            }
+
+            ///
 
             function proceed() {
                 processTitle();
