@@ -487,7 +487,8 @@
                 var $location = $injector.get('$location');
                 _.each(_this.searchArr, function (item) {
                     if (_.has($location.$$search, item.param)
-                        && (_.isUndefined(item.value) || _.isNull(item.value))) {
+                        // && (_.isUndefined(item.value) || _.isNull(item.value))) {
+                        && (_.isUndefined(item.value))) { // we need null values
 
                         delete $location.$$search[item.param];
 
@@ -496,7 +497,8 @@
                         _.set($location.$$search, item.param, _.isObject(item.value) ? angular.toJson(item.value) : item.value);
                     } else {
                         _.forIn(item.param, function (value, key) {
-                            if (_.isUndefined(value) || _.isNull(value)) {
+                            // if (_.isUndefined(value) || _.isNull(value)) {
+                            if (_.isUndefined(value)) {
                                 delete item.param[key];
                             }
                         });
