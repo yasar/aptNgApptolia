@@ -487,7 +487,7 @@
 
 
         function finalize(elem, attrs, $tpl) {
-            if (['date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
+            if (['date','date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
 
                 /**
                  * these are html attributes and kebab-case
