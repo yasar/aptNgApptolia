@@ -47,7 +47,8 @@ function aptUtilsForm($injector) {
              */
             onBeforeSubmit: null,
             hasParent     : undefined,
-            name          : undefined
+            name          : undefined,
+            sendWithGet   : null
         }, _options);
 
         if (_.isUndefined(options.hasParent)) {
@@ -253,7 +254,7 @@ function aptUtilsForm($injector) {
             $timeout(function () {
                 formObj.isSaving       = true;
                 formObj.isSavingFailed = false;
-                service.add(formObj.data, mute).then(function () {
+                service.add(formObj.data, mute, _options.sendWithGet).then(function () {
                     formObj.isSaving       = false;
                     formObj.isSavingFailed = false;
                     //notify(formObj.data, 'formDataAdded');
@@ -272,7 +273,7 @@ function aptUtilsForm($injector) {
                 formObj.isSaving       = true;
                 formObj.isSavingFailed = false;
                 try {
-                    service.update(formObj.data, mute).then(function () {
+                    service.update(formObj.data, mute, _options.sendWithGet).then(function () {
                         formObj.isSaving       = false;
                         formObj.isSavingFailed = false;
                         formObj.data           = backupDataAndGetCopy(formObj.data);
