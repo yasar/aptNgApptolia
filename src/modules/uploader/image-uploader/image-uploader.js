@@ -207,7 +207,10 @@
 
                             $scope.delete = function () {
                                 aptUtils.showDeleteConfirm(function () {
-                                    var settings             = angular.copy($scope.settings);
+                                    var settings = angular.copy($scope.settings);
+                                    if (!_.has(settings, 'data')) {
+                                        settings.data = {};
+                                    }
                                     settings.cmd             = 'delete';
                                     settings.data.uploadFile = $scope.uploadFile;
 
@@ -219,10 +222,10 @@
                                             $scope.state.is_uploaded = false;
                                         }, function () {
                                             aptUtils.showConfirm('Confirmation',
-                                                'Error occured while deleting the file on the server side.' +
+                                                'Error occurred while deleting the file on the server side.' +
                                                 '\n\nYou can ignore the error and try uploading a new file, ' +
                                                 'or cancel the operation and create a support ticket regarding to ' +
-                                                'resolve the issue. \n\n Do you want ignore the error and upload a new file?',
+                                                'resolve the issue. \n\n Do you want to ignore the error and upload a new file?',
                                                 function () {
                                                     $scope.uploadFile        = null;
                                                     $scope.model.filename    = null;
