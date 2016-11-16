@@ -205,7 +205,7 @@
             if (vm.tabs.length > 0) {
                 proceed();
             } else {
-                $timeout(proceed, 1000);
+                $timeout(proceed, 100);
             }
 
             ///
