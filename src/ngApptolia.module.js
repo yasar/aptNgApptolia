@@ -93,16 +93,18 @@
                         name         : 'main',
                         url          : '',
                         abstract     : true,
-                        template     : '<!--aptLayout--><apt-layout />',
-                        controller   : ['$timeout', '$window', function ($timeout, $window) {
-                            $window.loading_screen.updateLoadingHtml('<p style="color: #fff;">Yükleme tamamlandı / Loading completed</p>', true);
+                        template     : '<apt-layout></apt-layout>',
+                        controller   : ['$timeout', '$window', '$scope', 'aptTempl',
+                            function ($timeout, $window, $scope, aptTempl) {
+                                $window.loading_screen.updateLoadingHtml('<p style="color: #fff;">Yükleme tamamlandı / Loading completed</p>', true);
 
-                            $timeout(function () {
-                                $window.loading_screen.finish();
-                            }, 100);
-                        }],
+                                $timeout(function () {
+                                    $window.loading_screen.finish();
+                                }, 100);
+
+                            }],
                         ncyBreadcrumb: {
-                            label: aptTemplProvider.appConfig.name || 'Apptolia'
+                            label: '{{$root.apt.Templ.appConfig.name}}'
                         },
                         defaultChild : 'dashboard'
                     })

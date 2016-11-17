@@ -37,7 +37,8 @@
                     setSlotRouteSegment: self.setSlotRouteSegment,
                     blurPage           : self.blurPage,
                     resetWithBuilder   : self.resetWithBuilder,
-                    layoutWrappers     : self.layoutWrappers
+                    layoutWrappers     : self.layoutWrappers,
+                    getAppName         : self.getAppName
                 };
             }];
 
@@ -50,11 +51,11 @@
         this.$injector = null;
 
 
-        this.copyright = 'BYRWEB';
-        this.version   = '0.0.1';
-        this.theme     = 'light';
-        this.name      = 'Apptolia';
-        this.page      = {
+        this.copyright  = 'BYRWEB';
+        this.version    = '0.0.1';
+        this.theme      = 'light';
+        this.name       = 'Apptolia';
+        this.page       = {
             title      : '',
             subTitle   : '',
             description: '',

@@ -66,28 +66,31 @@
             }
         });
 
-        var headingMenu = null;
-        if (_.isArray(vm.params.headingMenuItems) && vm.params.headingMenuItems.length > 0) {
-            headingMenu = aptMenu.Item({name: vm.params.builder.Domain + 'WidgetMenu'});
-            _.forEach(vm.params.headingMenuItems, function (menuItem) {
-                headingMenu.addChild(menuItem);
-            });
-        }
+        if (vm.params) {
 
-        vm.conf = {
-            bgColor          : vm.params.color ? 'bg-' + vm.params.color + '-400' : 'bg-default',
-            headingMenu      : headingMenu,
-            headingMenuConfig: {
-                icon    : 'icon-menu5',
-                // iconNext: 'fa fa-angle-down'
+            var headingMenu = null;
+            if (_.isArray(vm.params.headingMenuItems) && vm.params.headingMenuItems.length > 0) {
+                headingMenu = aptMenu.Item({name: vm.params.builder.Domain + 'WidgetMenu'});
+                _.forEach(vm.params.headingMenuItems, function (menuItem) {
+                    headingMenu.addChild(menuItem);
+                });
             }
-        };
+
+            vm.conf = {
+                bgColor          : vm.params.color ? 'bg-' + vm.params.color + '-400' : 'bg-default',
+                headingMenu      : headingMenu,
+                headingMenuConfig: {
+                    icon: 'icon-menu5',
+                    // iconNext: 'fa fa-angle-down'
+                }
+            };
 
 
-        if (vm.params.graph.type) {
-            vm.hasGraph = true;
-            vm.conf     = _.set(vm.conf, 'graph', vm.params.graph);
+            if (vm.params.graph.type) {
+                vm.hasGraph = true;
+                vm.conf     = _.set(vm.conf, 'graph', vm.params.graph);
+            }
+
         }
-
     }
 })();
