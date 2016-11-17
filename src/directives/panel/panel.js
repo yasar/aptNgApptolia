@@ -205,7 +205,7 @@
             if (vm.tabs.length > 0) {
                 proceed();
             } else {
-                $timeout(proceed, 100);
+                $timeout(proceed, 1000);
             }
 
             ///
@@ -522,7 +522,8 @@
     function aptPanelHeadingElements() {
         return {
             restrict  : 'E',
-            transclude: true,
+            // transclude: true, // didnt work for apt-access-right directive, save button.
+            transclude: 'element',
             link      : link
         };
 

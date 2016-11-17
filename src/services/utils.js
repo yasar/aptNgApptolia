@@ -318,7 +318,7 @@
                     $location.path(url);
                 }
                 deferred.resolve();
-            });
+            }, 1);
 
             return deferred.promise;
         }

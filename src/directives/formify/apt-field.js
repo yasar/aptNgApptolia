@@ -43,35 +43,7 @@
          *      params
          */
 
-        aptField_Controller.$inject = ['$injector', '$scope', '$attrs'];
-        function aptField_Controller($injector, $scope, $attrs) {
-            var vm       = this;
-            var $parse   = $injector.get('$parse');
-            vm.translate = false;
 
-            if (_.has($attrs, 'modelBase')) {
-                vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
-            }
-
-            if ((!_.has($attrs, 'translate') || (_.has($attrs, 'translate') && $attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
-                vm.translate = true;
-            }
-
-            vm.reset = reset;
-
-            vm.status = {
-                open: false
-            };
-
-            vm.open = function () {
-                vm.status.open = true;
-            };
-
-
-            function reset() {
-                $scope.$broadcast('reset-model');
-            }
-        }
 
         function aptField_Compile(elem, attrs) {
 
@@ -522,6 +494,36 @@
             return $tpl;
         }
     };
+
+    aptField_Controller.$inject = ['$injector', '$scope', '$attrs'];
+    function aptField_Controller($injector, $scope, $attrs) {
+        var vm       = this;
+        var $parse   = $injector.get('$parse');
+        vm.translate = false;
+
+        if (_.has($attrs, 'modelBase')) {
+            vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
+        }
+
+        if ((!_.has($attrs, 'translate') || (_.has($attrs, 'translate') && $attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
+            vm.translate = true;
+        }
+
+        vm.reset = reset;
+
+        vm.status = {
+            open: false
+        };
+
+        vm.open = function () {
+            vm.status.open = true;
+        };
+
+
+        function reset() {
+            $scope.$broadcast('reset-model');
+        }
+    }
 
     function transferAttributes(attrs, $tpl) {
         _.forOwn(attrs, function (value, key) {
