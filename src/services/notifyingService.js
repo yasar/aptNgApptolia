@@ -32,7 +32,7 @@
                      * here we manually change the listeners array of the angular's core.
                      *
                      */
-                    if (!_.isUndefined(lifo) && lifo) {
+                    if (!!lifo) {
                         var listener, listenersArray;
                         listenersArray = $rootScope.$$listeners[eventName];
                         listener       = listenersArray[listenersArray.length - 1];
