@@ -34,6 +34,7 @@
                     getSlot            : self.getSlot,
                     loadSlotsInto      : self.loadSlotsInto,
                     reset              : self.reset,
+                    resetDataRoute     : self.resetDataRoute,
                     setSlotRouteSegment: self.setSlotRouteSegment,
                     blurPage           : self.blurPage,
                     resetWithBuilder   : self.resetWithBuilder,
@@ -51,11 +52,11 @@
         this.$injector = null;
 
 
-        this.copyright  = 'BYRWEB';
-        this.version    = '0.0.1';
-        this.theme      = 'light';
-        this.name       = 'Apptolia';
-        this.page       = {
+        this.copyright = 'BYRWEB';
+        this.version   = '0.0.1';
+        this.theme     = 'light';
+        this.name      = 'Apptolia';
+        this.page      = {
             title      : '',
             subTitle   : '',
             description: '',
@@ -320,75 +321,75 @@
             }
         })();
 
-        {
-            var configDefault = {
-                miniSidebar        : true,
-                darkSidebar        : true,
-                sidebarNicescroll  : true,
-                showSidebarLeft    : false,
-                showSidebarRight   : false,
-                showBreadcrumb     : true,
-                showSecondaryNavbar: false,
-                showHeader         : true,
-                showFooter         : true,
-                fixedHeader        : true,
-                hideableHeader     : true,
-                transparentHeader  : false,
-                fillContent        : false
-            };
-            this.config       = {};
 
-            this.data = {
-                _route            : {
-                    lastModifiedAt: null,
-                },
-                slots             : {},
-                isSlotsInitialized: false,
-                slotRouteSegment  : null
-            };
+        var configDefault = {
+            miniSidebar        : true,
+            darkSidebar        : true,
+            sidebarNicescroll  : true,
+            showSidebarLeft    : false,
+            showSidebarRight   : false,
+            showBreadcrumb     : true,
+            showSecondaryNavbar: false,
+            showHeader         : true,
+            showFooter         : true,
+            fixedHeader        : true,
+            hideableHeader     : true,
+            transparentHeader  : false,
+            fillContent        : false
+        };
+        this.config       = {};
 
-            this.reset = function (isSegmentAware, builder) {
-                var aptUtils = self.$injector.get('aptUtils');
-                var aptMenu  = self.$injector.get('aptMenu');
-                // var $routeSegment = self.$injector.get('$routeSegment');
-                var $state   = self.$injector.get('$state');
+        this.data = {
+            _route            : {
+                lastModifiedAt: null,
+            },
+            slots             : {},
+            isSlotsInitialized: false,
+            slotRouteSegment  : null
+        };
 
-                if (isSegmentAware) {
-                    if ($state.current.name.indexOf(self.data.slotRouteSegment) != -1) {
-                        return;
-                    }
+        this.reset = function (isSegmentAware, builder) {
+            var aptUtils = self.$injector.get('aptUtils');
+            var aptMenu  = self.$injector.get('aptMenu');
+            // var $routeSegment = self.$injector.get('$routeSegment');
+            var $state   = self.$injector.get('$state');
 
-                    if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($state.current.name) != -1) {
-                        return;
-                    }
-
-                    if (builder && builder.segmentMatchLevel > 0 && self.data.slotRouteSegment) {
-                        var s1 = self.data.slotRouteSegment.split('.');
-                        var s2 = $state.current.name.split('.');
-
-                        var isMatch = true;
-                        for (var i = 0; i < builder.segmentMatchLevel; i++) {
-                            isMatch = isMatch && s1[i] && s2[i] && s1[i] == s2[i];
-                        }
-
-                        if (isMatch) {
-                            return;
-                        }
-                    }
+            if (isSegmentAware) {
+                if ($state.current.name.indexOf(self.data.slotRouteSegment) != -1) {
+                    return;
                 }
 
-                self.config = angular.merge({}, configDefault, self.config);
-                self.resetDataRoute();
-                aptMenu.get('moduleMenu').clear();
-            };
+                if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($state.current.name) != -1) {
+                    return;
+                }
 
-            this.resetDataRoute = function () {
-                var aptUtils = self.$injector.get('aptUtils');
-                _.forIn(self.data.slots, function (value) {
-                    aptUtils.removeObjectProperties(value);
-                });
-            };
-        }
+                if (builder && builder.segmentMatchLevel > 0 && self.data.slotRouteSegment) {
+                    var s1 = self.data.slotRouteSegment.split('.');
+                    var s2 = $state.current.name.split('.');
+
+                    var isMatch = true;
+                    for (var i = 0; i < builder.segmentMatchLevel; i++) {
+                        isMatch = isMatch && s1[i] && s2[i] && s1[i] == s2[i];
+                    }
+
+                    if (isMatch) {
+                        return;
+                    }
+                }
+            }
+
+            self.config = angular.merge({}, configDefault, self.config);
+            self.resetDataRoute();
+            aptMenu.get('moduleMenu').clear();
+        };
+
+        this.resetDataRoute = function () {
+            var aptUtils = self.$injector.get('aptUtils');
+            _.forIn(self.data.slots, function (value) {
+                aptUtils.removeObjectProperties(value);
+            });
+            self.data._route = {};
+        };
 
 
         this.setSlotItem = function (slot, name, item, _segment) {
