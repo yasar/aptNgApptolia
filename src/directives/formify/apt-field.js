@@ -18,7 +18,7 @@
         // var ngAttrs        = {};
 
         return {
-            scope       : true,
+            scope       : false,
             replace     : true,
             restrict    : 'E',
             priority    : 9100,
@@ -64,8 +64,21 @@
 
             function aptField_Link(scope, elem, attrs, ctrls) {
 
-                var vm             = ctrls[1];
-                var gettextCatalog = vm.translate ? $injector.get('gettextCatalog') : null;
+                var $formController = ctrls[0];
+                if(!$formController){
+                    /**
+                     * this is a ugly patch.
+                     *
+                     * sometimes the formController is not available in `ctrls`,
+                     * and we need to access it. following method, will look for it
+                     * in scopes starting from the current scope through root scope.
+                     * so, it can be a bit expensive, but until we find the cause of the
+                     * issue, this seems to be the only working patch!
+                     */
+                    $formController = aptUtils.getFormController(scope);
+                }
+                var vm              = ctrls[1];
+                var gettextCatalog  = vm.translate ? $injector.get('gettextCatalog') : null;
 
                 if (_.has(attrs, 'field')) {
                     vm.field = attrs.field = $interpolate(attrs.field)(scope);
@@ -142,6 +155,11 @@
 
                 // elem.after($tpl);
                 // elem.remove();
+
+                if ($formController) {
+                    vm.$formController = $formController;
+                }
+
                 var compiledElement = $compile($tpl)(scope);
                 elem.replaceWith(compiledElement);
 
@@ -459,7 +477,7 @@
 
 
         function finalize(elem, attrs, $tpl) {
-            if (['date','date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
+            if (['date', 'date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
 
                 /**
                  * these are html attributes and kebab-case
