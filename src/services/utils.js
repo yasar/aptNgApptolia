@@ -46,6 +46,7 @@
             getUrlSearchParamValue           : getUrlSearchParamValue,
             setUrlSearchParamValue           : setUrlSearchParamValue,
             jsGetURLParameter                : jsGetURLParameter,
+            getFormController                : getFormController,
             getScopeById                     : getScopeById,
             goto                             : goto,
             handleException                  : handleException,
@@ -351,6 +352,26 @@
 
         }
 
+        function getFormController(scope) {
+            var controller = null;
+
+            function search(scope) {
+                _.forOwn(scope, function (fn) {
+                    if (!controller && _.isObject(fn) && fn.constructor && fn.constructor.name == 'FormController') {
+                        controller = fn;
+                    }
+                });
+
+                if (!controller && scope.$parent) {
+                    search(scope.$parent);
+                }
+            }
+
+            search(scope);
+
+            return controller;
+        }
+
         function getUrlSearchObject(paramObj) {
             var $location = $injector.get('$location');
             var searchObj = $location.search();
@@ -644,7 +665,9 @@
         function handlePromiseCatch(e) {
             var err = {
                 type   : 'rest-error',
-                message: _.get(e, 'data._.class') == 'AjaxReturn' ? e.data.error_message : e.statusText
+                message: !_.isObject(e) ? e
+                    : _.get(e, 'data._.class') == 'AjaxReturn' ? e.data.error_message
+                    : e.statusText
             };
             handleException(err);
         }

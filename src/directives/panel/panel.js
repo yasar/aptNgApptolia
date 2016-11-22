@@ -266,6 +266,7 @@
                 if (!vm.headingElements) {
                     return;
                 }
+                var findNgModelStr = '[data-ng-model],[ng-model]';
 
                 element.find('.heading-elements').append(vm.headingElements);
 
@@ -275,10 +276,12 @@
                  *
                  */
                 if ($formController) {
-                    if (vm.headingElements.is('ng-model')) {
+                    if (vm.headingElements.is('[ng-model]')) {
+                        addControl(vm.headingElements);
+                    } else if (vm.headingElements.is('ng-model')) {
                         addControl(vm.headingElements);
                     } else {
-                        _.map(vm.headingElements.find('[ng-model]'), addControl);
+                        _.map(vm.headingElements.find(findNgModelStr), addControl);
                     }
 
                     function addControl(formElement) {
