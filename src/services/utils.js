@@ -55,6 +55,7 @@
             showConfirm                      : showConfirm,
             showDeleteConfirm                : showDeleteConfirm,
             showInfo                         : showInfo,
+            showSuccess                      : showSuccess,
             showWait                         : showWait,
             showWarning                      : showWarning,
             showFormDirectiveInPopup         : showFormDirectiveInPopup,
