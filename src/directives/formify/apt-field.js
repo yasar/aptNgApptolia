@@ -65,7 +65,7 @@
             function aptField_Link(scope, elem, attrs, ctrls) {
 
                 var $formController = ctrls[0];
-                if(!$formController){
+                if (!$formController) {
                     /**
                      * this is a ugly patch.
                      *
@@ -77,8 +77,8 @@
                      */
                     $formController = aptUtils.getFormController(scope);
                 }
-                var vm              = ctrls[1];
-                var gettextCatalog  = vm.translate ? $injector.get('gettextCatalog') : null;
+                var vm             = ctrls[1];
+                var gettextCatalog = vm.translate ? $injector.get('gettextCatalog') : null;
 
                 if (_.has(attrs, 'field')) {
                     vm.field = attrs.field = $interpolate(attrs.field)(scope);
@@ -349,6 +349,18 @@
                                     class: 'form-control',
                                     rows : attrs.rows ? attrs.rows : '3',
                                     style: attrs.rows ? ('min-height:' + (attrs.rows * 24) + 'px') : ''
+                                },
+                                formify  : true
+                            };
+                            break;
+
+                        case 'htmleditor':
+                            control = {
+                                tag      : 'div',
+                                selfClose: false,
+                                attrs    : {
+                                    summernote: '',
+                                    height    : attrs.height ? attrs.height : '500',
                                 },
                                 formify  : true
                             };
