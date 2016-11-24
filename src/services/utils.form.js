@@ -55,24 +55,27 @@ function aptUtilsForm($injector) {
             options.hasParent = false;
         }
 
-        formObj.mode           = ((data && _.get(data, '__is_incomplete') !== true) || options.itemId) ? 'edit' : 'new';
         formObj.isBusy         = false;
         formObj.isSaving       = false;
         formObj.isSavingFailed = false;
-        formObj.submitLabel    = getSubmitLabel();
-        formObj.submit         = submit;
-        formObj.add            = add;
-        formObj.update         = update;
-        formObj.cancel         = cancel;
-        formObj.reset          = reset;
-        formObj.isReadonly     = isReadonly;
-        formObj.data           = {};
-        formObj.vars           = {}; // use as cache or storing dummy/internal variables
-        formObj.name           = options.name || _.uniqueId('form_');
+        ///
+        formObj.mode           = null;
+        formObj.submitLabel    = null;
+        updateFormMode();
+        ///
+        formObj.submit     = submit;
+        formObj.add        = add;
+        formObj.update     = update;
+        formObj.cancel     = cancel;
+        formObj.reset      = reset;
+        formObj.isReadonly = isReadonly;
+        formObj.data       = {};
+        formObj.vars       = {}; // use as cache or storing dummy/internal variables
+        formObj.name       = options.name || _.uniqueId('form_');
         /**
          * we need to construct the vm which the itemId is bound-to.
          */
-        var vm                 = 'vm' + _.upperFirst(domain) + 'Form';
+        var vm             = 'vm' + _.upperFirst(domain) + 'Form';
 
         if (_options.integrate) {
             if (angular.isObject(data)) {
@@ -141,7 +144,8 @@ function aptUtilsForm($injector) {
              */
             if (angular.isUndefined(itemId) || !_.isNumber(+itemId)) {
                 _.merge(formObj.data, backupDataAndGetCopy(model.one()));
-                formObj.submitLabel = getSubmitLabel();
+                // formObj.submitLabel = getSubmitLabel();
+                updateFormMode();
                 notify(formObj.data, 'formDataLoaded');
                 return;
             }
@@ -160,9 +164,10 @@ function aptUtilsForm($injector) {
             formObj.isBusy = true;
             model.one(itemId).get().then(function (remoteData) {
                 loadDataFromData(remoteData);
-                formObj.isBusy      = false;
-                formObj.submitLabel = getSubmitLabel(remoteData);
-                waitConf.progress   = 100;
+                formObj.isBusy = false;
+                // formObj.submitLabel = getSubmitLabel(remoteData);
+                updateFormMode();
+                waitConf.progress = 100;
             });
         }
 
@@ -254,10 +259,11 @@ function aptUtilsForm($injector) {
             $timeout(function () {
                 formObj.isSaving       = true;
                 formObj.isSavingFailed = false;
-                service.add(formObj.data, mute, _options.sendWithGet).then(function () {
+                service.add(formObj.data, mute, _options.sendWithGet).then(function (data) {
                     formObj.isSaving       = false;
                     formObj.isSavingFailed = false;
                     //notify(formObj.data, 'formDataAdded');
+                    updateFormMode(data);
                     reset();
                 }).catch(function (error) {
                     formObj.isSaving       = false;
@@ -273,11 +279,13 @@ function aptUtilsForm($injector) {
                 formObj.isSaving       = true;
                 formObj.isSavingFailed = false;
                 try {
-                    service.update(formObj.data, mute, _options.sendWithGet).then(function () {
+                    service.update(formObj.data, mute, _options.sendWithGet).then(function (data) {
                         formObj.isSaving       = false;
                         formObj.isSavingFailed = false;
-                        formObj.data           = backupDataAndGetCopy(formObj.data);
+                        _.merge(formObj.data, data);
+                        formObj.data = backupDataAndGetCopy(formObj.data);
                         //notify(formObj.data, 'formDataUpdated');
+                        updateFormMode(data);
 
                         var $formController = angular.element('[name=' + formObj.name + ']').data('$formController');
                         if ($formController && $formController.$setPristine) {
@@ -338,8 +346,17 @@ function aptUtilsForm($injector) {
             return true;
         }
 
-        function getSubmitLabel(_data) {
-            return formObj.mode == 'edit' ? (_.get(_data, '__is_incomplete') ? 'Complete' : 'Update') : 'Add'
+        // function getSubmitLabel(_data) {
+        //     return formObj.mode == 'edit' ? (_.get(_data, '__is_incomplete') ? 'Complete' : 'Update') : 'Add'
+        // }
+
+        function updateSubmitLabel(data) {
+            formObj.submitLabel = formObj.mode == 'edit' ? (_.get(data, '__is_incomplete') ? 'Complete' : 'Update') : 'Add'
+        }
+
+        function updateFormMode(data) {
+            formObj.mode = ((data && _.get(data, '__is_incomplete') !== true) || options.itemId) ? 'edit' : 'new';
+            updateSubmitLabel(data);
         }
     }
 }
