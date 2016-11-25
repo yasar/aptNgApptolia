@@ -5,7 +5,8 @@
  * (c) 2012 Witold Szczerba
  * License: MIT
  */
-;(function () {
+
+(function () {
     'use strict';
 
     angular.module('http-auth-interceptor', ['http-auth-interceptor-buffer'])
@@ -133,3 +134,8 @@
             };
         }]);
 })();
+
+/* commonjs package manager support (eg componentjs) */
+if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
+  module.exports = 'http-auth-interceptor';
+}

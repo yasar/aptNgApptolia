@@ -80,6 +80,11 @@
     dependencies.push('ngAnimate');
     dependencies.push('chrisharrington.miniCalendar');
 
+    /**
+     * for tri-state toggle/switch
+     */
+    dependencies.push('nzToggle');
+
 
     ////////////////////////////////////////////////
 

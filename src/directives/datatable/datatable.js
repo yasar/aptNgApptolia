@@ -55,7 +55,7 @@
                 addRowMenu          : true,
                 enableSorting       : true,
                 showAddNewButton    : true,
-                showFullscreenButton: true,
+                showFullscreenButton: false,
                 showHeader          : true,
                 showPageSizeSelector: true,
                 showPaginator       : true,

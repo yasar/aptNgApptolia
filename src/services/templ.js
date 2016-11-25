@@ -201,6 +201,7 @@
                         edit               : 'pencil',
                         entity             : 'office',
                         featured           : 'star-full2',
+                        filter             : 'filter4',
                         fullscreen         : 'screen-full',
                         'fullscreen-cancel': 'screen-normal',
                         images             : 'camera',
