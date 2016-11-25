@@ -18,7 +18,12 @@
         // var ngAttrs        = {};
 
         return {
-            scope       : false,
+            /**
+             * scope=true is required
+             * when scope is false and isSelfContained is true then label is not kept private.
+             * i.e. the last label value is copied over every instance of apt-field on the screen!!
+             */
+            scope       : true,
             replace     : true,
             restrict    : 'E',
             priority    : 9100,

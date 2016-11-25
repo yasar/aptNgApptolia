@@ -34,6 +34,7 @@
     "angular-route": "*",
     "angular-ui-router": "*",
     "angular-gravatar": "*",
-    "iso-currency": "*"
+    "iso-currency": "*",
+    "nz-toggle": "*"
   }
 }
