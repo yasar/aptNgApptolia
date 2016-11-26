@@ -135,7 +135,12 @@
                      * otherwise, set the ng-model at the found element (tplModel) and also
                      * set the isSelfContained flag to true.
                      */
-                    var tplModel = $tpl.find('[ng-model],[data-ng-model]');
+                    var tplModel = null;
+                    if ($tpl.is('[ng-model],[data-ng-model]')) {
+                        tplModel = $tpl;
+                    } else {
+                        tplModel = $tpl.find('[ng-model],[data-ng-model]');
+                    }
                     if (tplModel.length == 0) {
                         $tpl.attr('data-ng-model', bindTo);
                     } else {
@@ -156,6 +161,11 @@
                     transferAttributes(_ngAttrs, $tpl);
 
                     $tpl = finalize(elem, attrs, $tpl);
+                } else {
+                    /**
+                     * mastSideFilter didnt work properly.
+                     */
+                    transferAttributes(attrs, $tpl);
                 }
 
                 // elem.after($tpl);
@@ -165,8 +175,12 @@
                     vm.$formController = $formController;
                 }
 
-                var compiledElement = $compile($tpl)(scope);
-                elem.replaceWith(compiledElement);
+                // if ($tpl.is('[apt-formify],[data-apt-formify]')) {
+                //     elem.replaceWith($tpl);
+                // } else {
+                    var compiledElement = $compile($tpl)(scope);
+                    elem.replaceWith(compiledElement);
+                // }
 
 
                 /**
