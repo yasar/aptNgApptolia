@@ -505,7 +505,11 @@
         };
 
         function link(scope, element, attrs, ctrls, transclude) {
-            if (!_.has(scope, '$parent.vmPanel')) {
+            // if (!_.has(scope, '$parent.vmPanel')) {
+            //     return;
+            // }
+
+            if (!scope.$parent || !scope.$parent.vmPanel) {
                 return;
             }
 

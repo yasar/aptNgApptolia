@@ -9,15 +9,16 @@
     app.directive('aptFormify', ['$compile', '$timeout', '$injector',
         function ($compile, $timeout, $injector) {
             var directiveObject = {
-                restrict: 'A',
+                restrict: 'EA',
                 require : ['?^aptFormifyHolder'],
                 terminal: true,
                 compile : function (elem, attrs) {
                     return {
-                        pre: function (scope, elem, attrs, ctrls) {
-                            var holderCtrl     = ctrls[0];
+                        post: function (scope, elem, attrs, ctrls) {
+                            var holderCtrl = ctrls[0];
                             // var needsCompile   = _.has(elem.scope(), 'vmField');
-                            var needsCompile   = _.has(scope, 'vmField');
+                            // var needsCompile   = _.has(scope, 'vmField');
+                            var needsCompile   = !!scope.vmField;
                             var wrapperClass   = attrs.aptFormify !== '' ? attrs.aptFormify : 'form-group form-group-xs';
                             var wrapper        = angular.element('<div class="' + wrapperClass + '"></div>');
                             var label          = (!_.has(attrs, 'label') || attrs.label !== 'false');
@@ -28,7 +29,7 @@
                             var aptUtils       = $injector.get('aptUtils');
 
                             if (!!label) {
-                                if (_.has(scope, 'vmField.label')) {
+                                if (scope.vmField && scope.vmField.label) {
                                     label = scope.vmField.label;
                                 } else {
                                     label = aptUtils.grabLabelFromAttrs(attrs);
@@ -125,7 +126,8 @@
                                 if (helpText !== null) {
                                     wrapper.append(helpText);
                                 }
-                            } else {
+                            }
+                            else {
                                 _elem.wrap(wrapper);
                                 if (!_.isNull(label)) {
                                     _elem.before(label);
