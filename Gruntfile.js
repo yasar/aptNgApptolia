@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                 ////////////////////////////////
 
 
-                'vendor/angular-route/angular-route.js',
+                // 'vendor/angular-route/angular-route.js',
                 // 'vendor/angular-route-segment/build/angular-route-segment.js',
                 'vendor/angular-ui-router/release/angular-ui-router.js',
 
