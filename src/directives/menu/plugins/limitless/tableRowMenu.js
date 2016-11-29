@@ -48,9 +48,17 @@
                          '</li>' +
                          '</ul>';
             var $holder = $(holderTpl);
-            service.element
-                .append($holder.find('li')
-                    .append($menuEl.addClass('dropdown-menu dropdown-menu-xs dropdown-menu-right bg-slate-300')).end());
+            $holder
+                .find('li')
+                .append($menuEl.addClass('dropdown-menu dropdown-menu-xs dropdown-menu-right bg-slate-300'));
+            // service
+            //     .element
+            //     .append(
+            //         $holder
+            //             .find('li')
+            //             .append($menuEl.addClass('dropdown-menu dropdown-menu-xs dropdown-menu-right bg-slate-300')).end()
+            //     );
+            service.element.append(service.element.is('ul') ? $holder.contents() : $holder);
         }
 
         function buildMenu(menu, parent) {

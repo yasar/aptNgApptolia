@@ -47,12 +47,14 @@
             setUrlSearchParamValue           : setUrlSearchParamValue,
             jsGetURLParameter                : jsGetURLParameter,
             getFormController                : getFormController,
+            findController                   : findController,
             getScopeById                     : getScopeById,
             goto                             : goto,
             handleException                  : handleException,
             handlePromiseCatch               : handlePromiseCatch,
             showError                        : showError,
             showConfirm                      : showConfirm,
+            showContinueConfirm              : showContinueConfirm,
             showDeleteConfirm                : showDeleteConfirm,
             showInfo                         : showInfo,
             showSuccess                      : showSuccess,
@@ -144,6 +146,13 @@
             options      = _.defaults(options, aptTempl.appConfig.defaults.dialogs.confirm);
             var dlg      = dialogs.confirm(title, message, options);
             dlg.result.then(onAcceptFn, onRejectFn);
+        }
+
+        function showContinueConfirm(onAcceptFn, onRejectFn, options) {
+            var title   = 'Continue?';
+            var message = 'Are you sure you want to continue';
+
+            showConfirm(title, message, onAcceptFn, onRejectFn, options);
         }
 
         function showDeleteConfirm(onAcceptFn, onRejectFn) {
@@ -360,6 +369,26 @@
                 _.forOwn(scope, function (fn) {
                     if (!controller && _.isObject(fn) && fn.constructor && fn.constructor.name == 'FormController') {
                         controller = fn;
+                    }
+                });
+
+                if (!controller && scope.$parent) {
+                    search(scope.$parent);
+                }
+            }
+
+            search(scope);
+
+            return controller;
+        }
+
+        function findController(controllerAs, scope) {
+            var controller = null;
+
+            function search(scope) {
+                _.forOwn(scope, function (value, key) {
+                    if (!controller && key == controllerAs && _.isObject(value)) {
+                        controller = value;
                     }
                 });
 
