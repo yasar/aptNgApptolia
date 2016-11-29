@@ -9,8 +9,8 @@
 
     var path = 'directives/datatable';
 
-    fn.$inject = ['$templateRequest', '$compile', '$parse', '$interpolate', 'gettextCatalog', '$rootScope', '$injector'];
-    function fn($templateRequest, $compile, $parse, $interpolate, gettextCatalog, $rootScope, $injector) {
+    fn.$inject = ['$templateRequest', '$compile', '$parse', '$interpolate', 'gettextCatalog', '$rootScope', '$injector', '$filter'];
+    function fn($templateRequest, $compile, $parse, $interpolate, gettextCatalog, $rootScope, $injector, $filter) {
         return {
             restrict: 'EA',
             compile : compileFn,
@@ -93,16 +93,20 @@
             return link;
 
             function link(scope, element, attrs) {
+                if (attrs.modelBase) {
+                    modelBase = attrs.modelBase;
+                }
+
                 if (attrs.datasource) {
                     datasource = attrs.datasource;
                 }
 
                 if (attrs.datasourceFilter) {
-                    datasourceFilter = $parse(attrs.datasourceFilter)(scope)
-                }
-
-                if (attrs.modelBase) {
-                    modelBase = attrs.modelBase;
+                    datasourceFilter = $parse(attrs.datasourceFilter)(scope);
+                    if (_.isObject(datasourceFilter)) {
+                        // datasourceFilter = $interpolate(attrs.datasourceFilter);
+                        initCustomFilter(scope, attrs);
+                    }
                 }
 
                 if (attrs.options) {
@@ -176,7 +180,8 @@
                             rowSpan = $tr.length;
 
                             // var ngRepeatStr = itemData + ' in ' + $template.attr('st-table') + ' track by $index';
-                            var ngRepeatStr = itemData + ' in ' + $template.attr('st-table') + (datasourceFilter ? ' | filter:' + datasourceFilter : '') + ' track by $index';
+                            // var ngRepeatStr = itemData + ' in ' + $template.attr('st-table') + (datasourceFilter ? ' | filter:' + datasourceFilter : '') + ' track by $index';
+                            var ngRepeatStr = itemData + ' in ' + $template.attr('st-table') + (_.isString(datasourceFilter) ? ' | filter:' + datasourceFilter : '') + ' track by $index';
 
                             if ($tr.length == 1) {
                                 $tr.attr('ng-repeat', ngRepeatStr);
@@ -498,6 +503,31 @@
 
             function vm(prop) {
                 return modelBase ? modelBase + '.' + prop : prop;
+            }
+
+            function initCustomFilter(scope, attrs) {
+
+                var _datasource = undefined;
+
+                scope.$watch(function () {
+                    // return attrs.datasourceFilter;
+                    return $parse(attrs.datasourceFilter)(scope);
+                }, function (newVal) {
+                    if (_.isEmpty(newVal)) {
+                        return;
+                    }
+                    // if (_.isUndefined(_datasource) || _datasource.length == 0) {
+                    if (_.isUndefined(_datasource)) {
+                        _datasource = _.clone(_.get(scope, vm(datasource)));
+                    }
+
+                    if (_.has(newVal, '$$hashKey')) {
+                        delete newVal.$$hashKey;
+                    }
+                    // _.set(scope, vm(datasource) + '_Virtual', $filter('filter')(_datasource, newVal));
+                    _.set(scope, vm(datasource), $filter('filter')(_datasource, newVal));
+                });
+                // vm.datasource = $filter('filter')(_datasource, filterApply);
             }
 
         }

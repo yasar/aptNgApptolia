@@ -178,8 +178,8 @@
                 // if ($tpl.is('[apt-formify],[data-apt-formify]')) {
                 //     elem.replaceWith($tpl);
                 // } else {
-                    var compiledElement = $compile($tpl)(scope);
-                    elem.replaceWith(compiledElement);
+                var compiledElement = $compile($tpl)(scope);
+                elem.replaceWith(compiledElement);
                 // }
 
 
@@ -350,10 +350,14 @@
 
                             if (scope.vmField.params && scope.vmField.params.options) {
                                 if (_.isObject(scope.vmField.params.options)) {
-                                    if (vm.translate) {
-                                        control.attrs['ng-options'] = 'item as $root.translate(item) for item in vmField.params.options';
+                                    if (_.isObject(scope.vmField.params.options[0])) {
+                                        control.attrs['ng-options'] = 'item.value as $root.translate(item.key) for item in vmField.params.options';
                                     } else {
-                                        control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
+                                        if (vm.translate) {
+                                            control.attrs['ng-options'] = 'item as $root.translate(item) for item in vmField.params.options';
+                                        } else {
+                                            control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
+                                        }
                                     }
                                 } else {
                                     control.attrs['ng-options'] = scope.vmField.params.options;
