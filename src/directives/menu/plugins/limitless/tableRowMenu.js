@@ -86,6 +86,10 @@
                 parent.append($ul);
             }
 
+            if (service.config.showPKeyId) {
+                $ul.append('<li class="dropdown-header">ID: ' + scope.itemData[service.config.pkey] + '</li>');
+            }
+
             _.forEach(menu.children, function (menuItem, key) {
                 if (menuItem.hasOwnProperty('show')) {
                     if (menuItem.show === false) {
