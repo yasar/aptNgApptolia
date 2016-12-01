@@ -211,6 +211,7 @@
                         notes              : 'notebook',
                         null               : 'circle',
                         option             : 'circle-o',
+                        'panel-menu'       : 'menu7',
                         pay                : 'wallet',
                         preview            : 'eye',
                         remove             : 'minus2',
