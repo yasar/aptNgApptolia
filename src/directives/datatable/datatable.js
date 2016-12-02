@@ -526,7 +526,7 @@
                     }
                     // _.set(scope, vm(datasource) + '_Virtual', $filter('filter')(_datasource, newVal));
                     _.set(scope, vm(datasource), $filter('filter')(_datasource, newVal));
-                });
+                }, true);
                 // vm.datasource = $filter('filter')(_datasource, filterApply);
             }
 
