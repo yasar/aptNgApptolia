@@ -466,6 +466,32 @@
                             };
                             break;
 
+                        case 'inline-year-month':
+                            aptTempl.appConfig.aeYearMonthOptions = {
+                                // format  : aptTempl.appConfig.defaults.formats.screenDateTime,
+                                // showClear       : true,
+                                // showClose       : true,
+                                // showTodayButton : true,
+                                keepOpen: true,
+                                // allowInputToggle: true,
+                                keepInvalid     : true,
+                                // debug           : false,
+                                inline  : true,
+                                viewMode: 'months',
+                                format  : 'MM/YYYY'
+                            };
+                            control                               = {
+                                tag      : 'div',
+                                selfClose: false,
+                                attrs    : {
+                                    class           : 'inline-year-month-selector',
+                                    'datetimepicker': '',
+                                    options         : '$root.apt.Templ.appConfig.aeYearMonthOptions'
+                                },
+                                formify  : false
+                            };
+                            break;
+
                         // case 'date':
                         //     control = {
                         //         tag      : 'input',

@@ -17,11 +17,13 @@
         };
         function compileFn(element, attrs) {
             var $q                      = $injector.get('$q');
+            var NotifyingService        = $injector.get('NotifyingService');
             var clone                   = element.clone();
             var placeholder             = angular.element('<!-- placeholder -->');
             var datasource              = null;
             // var datasourcePipe          = null;
             var datasourceFilter        = null;
+            var builder                 = null;
             var modelBase               = null;
             var aptAuthorizationService = null;
             var itemData                = 'row';
@@ -101,14 +103,6 @@
                     datasource = attrs.datasource;
                 }
 
-                if (attrs.datasourceFilter) {
-                    datasourceFilter = $parse(attrs.datasourceFilter)(scope);
-                    if (_.isObject(datasourceFilter)) {
-                        // datasourceFilter = $interpolate(attrs.datasourceFilter);
-                        initCustomFilter(scope, attrs);
-                    }
-                }
-
                 if (attrs.options) {
                     var _options = $parse(attrs.options)(scope);
 
@@ -134,8 +128,8 @@
                      * then we assume it is the module domain.
                      */
                     if (_.isString(options.authorize)) {
-                        var domain  = options.authorize;
-                        var builder = _.has(window, domain + 'Builder') ? _.get(window, domain + 'Builder') : null;
+                        var domain = options.authorize;
+                        builder    = _.has(window, domain + 'Builder') ? _.get(window, domain + 'Builder') : null;
                         if (builder) {
                             options.authorize = {
                                 create: [builder.permission('create', 'module')],
@@ -160,6 +154,18 @@
                         var unauthorizedMessage = aptBuilder.directiveObject.notAuthorized;
                         element.replaceWith($compile($(unauthorizedMessage))(scope));
                         return;
+                    }
+                }
+
+                /**
+                 * this should be after authorize block, because `builder` is computed in that block
+                 * and we need the `builder` for custom filter.
+                 */
+                if (attrs.datasourceFilter) {
+                    datasourceFilter = $parse(attrs.datasourceFilter)(scope);
+                    if (_.isObject(datasourceFilter)) {
+                        // datasourceFilter = $interpolate(attrs.datasourceFilter);
+                        initCustomFilter(scope, attrs);
                     }
                 }
 
@@ -507,27 +513,65 @@
 
             function initCustomFilter(scope, attrs) {
 
-                var _datasource = undefined;
+                /**
+                 * in case refresh button is clicked, we should run the filter.
+                 * however, since filter params won't change in such a case,
+                 * below $watch will not run the filter.
+                 * so we have to manually do it when data is loaded on the service.
+                 */
+                NotifyingService.subscribe(scope, builder.getEventName('loaded'), function (event, data) {
+                    runCustomFilter(scope, $parse(attrs.datasourceFilter)(scope), data.data);
+                });
 
+                /**
+                 * watch for any changes on the filter params.
+                 */
                 scope.$watch(function () {
-                    // return attrs.datasourceFilter;
                     return $parse(attrs.datasourceFilter)(scope);
-                }, function (newVal) {
-                    if (_.isEmpty(newVal)) {
+                }, function (newVal, oldVal) {
+                    // if (_.isEmpty(newVal)) {
+                    if (_.isEqual(newVal, oldVal)) {
                         return;
                     }
-                    // if (_.isUndefined(_datasource) || _datasource.length == 0) {
-                    if (_.isUndefined(_datasource)) {
-                        _datasource = _.clone(_.get(scope, vm(datasource)));
+
+                    runCustomFilter(scope, newVal);
+                }, true);
+            }
+
+            function runCustomFilter(scope, filter, fresh_datasource) {
+
+                if (!_.isUndefined(fresh_datasource)) {
+                    this._datasource = _.clone(fresh_datasource);
+                }
+
+                else if (_.isUndefined(this._datasource)) {
+
+                    /**
+                     * in case autoload is false,
+                     * and before data is loaded from server, if we use the filter,
+                     * the _datasource (below) will be set as empty array and will never get populated again,
+                     * to prevent this situation, we first check if there is actual data from the service.
+                     */
+                    if (_.isEmpty(_.get(scope, vm(datasource)))) {
+                        return;
                     }
 
-                    if (_.has(newVal, '$$hashKey')) {
-                        delete newVal.$$hashKey;
-                    }
-                    // _.set(scope, vm(datasource) + '_Virtual', $filter('filter')(_datasource, newVal));
-                    _.set(scope, vm(datasource), $filter('filter')(_datasource, newVal));
-                }, true);
-                // vm.datasource = $filter('filter')(_datasource, filterApply);
+                    ///
+
+                    this._datasource = _.clone(_.get(scope, vm(datasource)));
+                }
+
+                if (_.has(filter, '$$hashKey')) {
+                    delete filter.$$hashKey;
+                }
+                _.set(
+                    scope,
+                    vm(datasource),
+                    /**
+                     * third parameter (true) is for strict comparision
+                     */
+                    $filter('filter')(this._datasource, filter, true)
+                );
             }
 
         }
