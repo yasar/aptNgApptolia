@@ -18,6 +18,7 @@
         function compileFn(element, attrs) {
             var $q                      = $injector.get('$q');
             var NotifyingService        = $injector.get('NotifyingService');
+            var aptUtils                = $injector.get('aptUtils');
             var clone                   = element.clone();
             var placeholder             = angular.element('<!-- placeholder -->');
             var datasource              = null;
@@ -572,6 +573,7 @@
                      */
                     $filter('filter')(this._datasource, filter, true)
                 );
+                // aptUtils.removeAndMerge(scope[vm(datasource)], $filter('filter')(this._datasource, filter, true));
             }
 
         }

@@ -53,14 +53,14 @@
         function aptField_Compile(elem, attrs) {
 
 
-            preserveNgAttrs(elem, attrs);
+            // preserveNgAttrs(elem, attrs);
 
             ///
 
             return {
-                // pre : function (scope, elem, attrs) {
-                //     preserveNgAttrs(elem, attrs);
-                // },
+                pre : function (scope, elem, attrs) {
+                    preserveNgAttrs(elem, attrs);
+                },
                 post: aptField_Link
             };
 
