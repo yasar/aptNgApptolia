@@ -54,7 +54,7 @@
                 }
             });
 
-            service.setRepo($filter('filter')(_datasource, filterApply));
+            service.setRepo($filter('filter')(_datasource, filterApply, true));
         }
     }
 })();
