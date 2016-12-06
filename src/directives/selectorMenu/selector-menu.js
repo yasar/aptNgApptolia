@@ -27,8 +27,8 @@
     }
 
 
-    controllerFn.$inject = ['$attrs', '$scope', '$element'];
-    function controllerFn($attrs, $scope, $element) {
+    controllerFn.$inject = ['$attrs', '$scope', '$element', '$interpolate'];
+    function controllerFn($attrs, $scope, $element, $interpolate) {
         var vm        = this;
         var modelBase = null;
         var fnNameReload;
@@ -52,7 +52,8 @@
             menuConf = _.merge(menuConf, $scope.builder.selector.showMenu);
         }
 
-        if (_.has($scope, 'builder.domain')) {
+        // if (_.has($scope, 'builder.domain')) {
+        if ($scope.builder && $scope.builder.domain) {
             vm.domain = $scope.builder.domain;
             vm.Domain = $scope.builder.Domain;
         } else if ($attrs.domain) {
@@ -74,7 +75,8 @@
         }
 
         if ($attrs.modelBase) {
-            modelBase = $attrs.modelBase;
+            // modelBase = $attrs.modelBase;
+            modelBase = $interpolate($attrs.modelBase)($scope);
         }
 
         if (menuConf.reload) {

@@ -61,7 +61,7 @@ function aptUtilsForm($injector) {
         ///
         formObj.mode           = null;
         formObj.submitLabel    = null;
-        updateFormMode();
+        updateFormMode(data);
         ///
         formObj.submit     = submit;
         formObj.add        = add;
@@ -166,7 +166,7 @@ function aptUtilsForm($injector) {
                 loadDataFromData(remoteData);
                 formObj.isBusy = false;
                 // formObj.submitLabel = getSubmitLabel(remoteData);
-                updateFormMode();
+                updateFormMode(remoteData);
                 waitConf.progress = 100;
             });
         }
@@ -355,7 +355,7 @@ function aptUtilsForm($injector) {
         }
 
         function updateFormMode(data) {
-            formObj.mode = ((data && _.get(data, '__is_incomplete') !== true) || options.itemId) ? 'edit' : 'new';
+            formObj.mode = ((data && _.get(data, '__is_incomplete') !== true) || !!options.itemId) ? 'edit' : 'new';
             updateSubmitLabel(data);
         }
     }
