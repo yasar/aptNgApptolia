@@ -9,7 +9,7 @@
 			<a href ng-click="vmSelectorMenu.unlock()"><i icon="unlock"></i> <span translate>Unlock</span></a>
 		</li>
 		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasResetSelect">
-			<a href access="{{builder.permission('create','module')}}"
+			<a href access="{{builder.permission('read','module')}}"
 			   ng-click="vmSelectorMenu.resetSelect()"><i icon="reset"></i> <span translate>Reset Selection</span></a>
 		</li>
 		<li ng-if="!vmSelectorMenu.locked && vmSelectorMenu.hasResetSelect" class="divider"></li>

@@ -170,10 +170,16 @@
                  */
                 var _obj = modelService.one();
                 _.merge(_obj, _.get(conf, 'initialData'), {__is_incomplete: 1});
-                _obj.save().then(function (data) {
+                // _obj.save().then(function (data) {
+                Restangular.copy(_obj).post().then(function (data) {
 
                     if (!data || data == 'false') {
-                        console.error('server returned false. make sure database table has __is_incomplete column configured properly.');
+                        try {
+                            throw new Error('server returned false. make sure database table has __is_incomplete column configured properly.');
+                        } catch (error) {
+                            waitConf.progress = 100;
+                            aptUtils.handleException(_.defaults(error, {type: 'rest-error'}));
+                        }
                         return;
                     }
                     $timeout(function () {
@@ -203,8 +209,9 @@
                         editFn(conf);
                     });
                 }, function (error) {
-                    waitConf.progress = 99;
-                    aptUtils.showError('Error', error);
+                    waitConf.progress = 100;
+                    // aptUtils.showError('Error', error);
+                    aptUtils.handleException(_.defaults(error, {type: 'rest-error'}));
                 });
 
 
