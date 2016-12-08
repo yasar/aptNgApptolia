@@ -312,7 +312,7 @@
                     }
                 } catch (e) {
                     console.warn((conf.segment.name || conf.segment) + ' is not exist');
-                    url = $state.url('main.page404');
+                    url = $state.href('main.page404');
                 }
             } else if (conf.hasOwnProperty('url')) {
                 url = conf.url;

@@ -13,6 +13,7 @@
         var $parse         = $injector.get('$parse');
         var $templateCache = $injector.get('$templateCache');
         var $compile       = $injector.get('$compile');
+        var $timeout       = $injector.get('$timeout');
         var aptTempl       = $injector.get('aptTempl');
         var aptUtils       = $injector.get('aptUtils');
         // var ngAttrs        = {};
@@ -151,12 +152,8 @@
                 }
 
                 if (!isSelfContained) {
-                    /**
-                     * note that we send attrs.$attr
-                     */
-                    // transferAttributes(attrs.$attr, $tpl);
                     transferAttributes(attrs, $tpl);
-                    // transferAttributes(elem.data('ngAttrs'), $tpl);
+
                     var _ngAttrs = elem.data('ngAttrs');
                     transferAttributes(_ngAttrs, $tpl);
 
@@ -168,34 +165,23 @@
                     transferAttributes(attrs, $tpl);
                 }
 
-                // elem.after($tpl);
-                // elem.remove();
-
                 if ($formController) {
                     vm.$formController = $formController;
                 }
 
-                // if ($tpl.is('[apt-formify],[data-apt-formify]')) {
-                //     elem.replaceWith($tpl);
-                // } else {
-                var compiledElement = $compile($tpl)(scope);
-                elem.replaceWith(compiledElement);
-                // }
-
-
                 /**
-                 * this will fix the ui-switch directive to initialize itself twice.
-                 * first will be due to above compilation, second will be due to apt-formify.
-                 * once is enough, so we should remove the directive attribute from the element to prevent double init.
+                 * when using apt-field for other apt elements, such as:
+                 * <apt-field field="type_id" model-base="..."></apt-field>
+                 *
+                 * it happened in aptTechnicCreateReportMastSelector directive that
+                 * although the mast selector retrieve the data from server,
+                 * it failed to populate in the selector list.
+                 * putting compile within timeout, resolved this issue!
                  */
-                // if (true || attrs.type == 'switch') {
-                //     elem.find('[ui-switch]').removeAttr('ui-switch');
-                // }
-
-                // if (_.has(attrs, 'required')) {
-                //     // compiledElement.find('[data-ng-model],[ng-model]').attr('required', 'required');
-                //     compiledElement.find('[data-ng-model],[ng-model]').prop('required', true);
-                // }
+                $timeout(function () {
+                    var compiledElement = $compile($tpl)(scope);
+                    elem.replaceWith(compiledElement);
+                },100);
             }
         }
 
@@ -543,6 +529,11 @@
 
             if (attrs.holderClass) {
                 $tpl.addClass(attrs.holderClass);
+            }
+
+            if(attrs.onChange){
+                $tpl.attr('ng-change', attrs.onChange);
+                delete attrs.onChange;
             }
 
             return $tpl;
