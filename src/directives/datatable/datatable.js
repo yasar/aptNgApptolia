@@ -24,6 +24,7 @@
             var datasource              = null;
             // var datasourcePipe          = null;
             var datasourceFilter        = null;
+            var datasourceFilterMerge   = false; // is good when we have multiple inputs that are setting the filter
             var builder                 = null;
             var modelBase               = null;
             var aptAuthorizationService = null;
@@ -158,15 +159,21 @@
                     }
                 }
 
-                /**
-                 * this should be after authorize block, because `builder` is computed in that block
-                 * and we need the `builder` for custom filter.
-                 */
-                if (attrs.datasourceFilter) {
-                    datasourceFilter = $parse(attrs.datasourceFilter)(scope);
-                    if (_.isObject(datasourceFilter)) {
-                        // datasourceFilter = $interpolate(attrs.datasourceFilter);
-                        initCustomFilter(scope, attrs);
+                if (true) {
+                    /**
+                     * this should be after authorize block, because `builder` is computed in that block
+                     * and we need the `builder` for custom filter.
+                     */
+                    if (attrs.datasourceFilterMerge) {
+                        datasourceFilterMerge = $parse(attrs.datasourceFilterMerge)(scope);
+                    }
+
+                    if (attrs.datasourceFilter) {
+                        datasourceFilter = $parse(attrs.datasourceFilter)(scope);
+                        if (_.isObject(datasourceFilter)) {
+                            // datasourceFilter = $interpolate(attrs.datasourceFilter);
+                            initCustomFilter(scope, attrs);
+                        }
                     }
                 }
 
@@ -530,12 +537,34 @@
                 scope.$watch(function () {
                     return $parse(attrs.datasourceFilter)(scope);
                 }, function (newVal, oldVal) {
-                    // if (_.isEmpty(newVal)) {
                     if (_.isEqual(newVal, oldVal)) {
                         return;
                     }
 
-                    runCustomFilter(scope, newVal);
+                    var filter = newVal;
+                    if (_.has(filter, '$$hashKey')) {
+                        delete filter.$$hashKey;
+                    }
+                    if (datasourceFilterMerge) {
+                        var diff = _.difference(_.keys(oldVal), _.keys(newVal));
+                        if (diff.length > 0) {
+                            _.forEach(diff, function (prop) {
+                                if (_.indexOf(datasourceFilterMerge, prop) !== -1) {
+                                    _.set(filter, prop, _.get(oldVal, prop));
+                                }
+                            });
+                        }
+                        else {
+                            var intersection = _.intersection(_.keys(oldVal), _.keys(newVal));
+                            _.forEach(intersection, function (prop) {
+                                if (_.indexOf(datasourceFilterMerge, prop) !== -1) {
+                                    _.set(filter, prop, _.get(oldVal, prop));
+                                }
+                            });
+                        }
+                    }
+
+                    runCustomFilter(scope, filter);
                 }, true);
             }
 
