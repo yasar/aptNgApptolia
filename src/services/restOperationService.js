@@ -63,7 +63,8 @@
                 return;
             }
 
-            if (angular.isObject(conf.data) || conf.popup) {
+            // if (angular.isObject(conf.data) || conf.popup) {
+            if (angular.isObject(conf.data) && conf.popup || conf.popup) {
 
                 var size          = conf.size || 'lg';
                 var readonlyItems = conf.readonlyItems || [];
@@ -90,10 +91,21 @@
                     'main',
                     (conf._builder.package ? conf._builder.package : ''),
                     (conf._builder.domain ? conf._builder.domain : (conf.type ? conf.type : '')),
-                    'edit'
+                    (conf.suffix == 'form' ? 'edit' : conf.suffix)
                 ];
                 segment     = segment.join('.').replace(/\.\./g, '.');
-                aptUtils.goto({segment: {name: segment, params: {id: conf.data}}});
+                var id      = angular.isObject(conf.data) ? _.get(conf.data, conf._builder.getPrimaryKey()) : conf.data;
+                if (!id) {
+                    aptUtils.showError('App Error', 'Can not determine how to edit the record!');
+                    return;
+                }
+                aptUtils.goto({
+                    segment: {
+                        name  : segment,
+                        params: {id: id}
+                    },
+                    search : conf.search
+                });
             }
         }
 
