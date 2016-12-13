@@ -234,7 +234,7 @@
                 if (!vm.title && !vm.headingElements && vm.tabs.length == 0) {
                     element.find('.panel-heading').remove();
                 } else if (vm.headingElements && vm.tabs.length == 0) {
-                    element.find('.heading-elements').removeClass('panel-tabs');
+                    element.find('.heading-elements:first-child').removeClass('panel-tabs');
                 }
 
                 // element.find('apt-panel, apt-panel-title, apt-panel-body').remove();

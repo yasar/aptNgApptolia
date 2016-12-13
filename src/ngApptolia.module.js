@@ -95,11 +95,11 @@
 
                 $stateProvider
                     .state({
-                        name: 'main',
-                        url: '',
-                        abstract: true,
-                        template: '<apt-layout></apt-layout>',
-                        controller: ['$timeout', '$window', '$scope', 'aptTempl',
+                        name         : 'main',
+                        url          : '',
+                        abstract     : true,
+                        template     : '<apt-layout></apt-layout>',
+                        controller   : ['$timeout', '$window', '$scope', 'aptTempl',
                             function ($timeout, $window, $scope, aptTempl) {
                                 $window.loading_screen.updateLoadingHtml('<p style="color: #fff;">Yükleme tamamlandı / Loading completed</p>', true);
 
@@ -111,32 +111,50 @@
                         ncyBreadcrumb: {
                             label: '{{$root.apt.Templ.appConfig.name}}'
                         },
-                        defaultChild: 'dashboard'
+                        defaultChild : 'dashboard'
                     })
                     .state({
-                        name: 'main.page401',
-                        url: '/401',
+                        name    : 'main.page401',
+                        url     : '/401',
                         template: '<div data-apt-special-page type="401"></div>'
                     })
                     .state({
-                        name: 'main.page403',
-                        url: '/403',
+                        name    : 'main.page403',
+                        url     : '/403',
                         template: '<div data-apt-special-page type="403"></div>'
                     })
                     .state({
-                        name: 'main.page404',
-                        url: '/404',
+                        name    : 'main.page404',
+                        url     : '/404',
                         template: '<div data-apt-special-page type="404"></div>'
                     })
                 ;
 
                 $urlRouterProvider.when('', '/dashboard');
                 $urlRouterProvider.otherwise('/404');
+
+                ///
+
+                /**
+                 * this is required for form.$dirty controls
+                 * check utils.form.js and look for `toState.resolve.pauseStateChange`
+                 */
+                var $delegate        = $stateProvider.state;
+                $stateProvider.state = function (name, definition) {
+                    if (_.isUndefined(definition)) {
+                        definition = name;
+                    }
+                    if (!definition.resolve) {
+                        definition.resolve = {};
+                    }
+
+                    return $delegate.apply(this, arguments);
+                };
             }
         ])
-        .run(['$rootScope', '$state', function($rootScope, $state) {
+        .run(['$rootScope', '$state', function ($rootScope, $state) {
 
-            $rootScope.$on('$stateChangeStart', function(evt, to, params) {
+            $rootScope.$on('$stateChangeStart', function (evt, to, params) {
                 if (to.redirectTo) {
                     evt.preventDefault();
                     $state.go(to.redirectTo, params, {location: 'replace'})
