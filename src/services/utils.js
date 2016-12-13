@@ -280,13 +280,13 @@
         }
 
         function goto(conf) {
-            var url       = '';
-            var $q        = $injector.get('$q');
-            var deferred  = $q.defer();
-            var $location = $injector.get('$location');
-            var $state    = $injector.get('$state');
-            var $timeout  = $injector.get('$timeout');
-            var aptTempl  = $injector.get('aptTempl');
+            var url          = '';
+            var $q           = $injector.get('$q');
+            var deferred     = $q.defer();
+            var $location    = $injector.get('$location');
+            var $state       = $injector.get('$state');
+            var $timeout     = $injector.get('$timeout');
+            var aptTempl     = $injector.get('aptTempl');
 
 
             if (conf.hasOwnProperty('segment')) {
