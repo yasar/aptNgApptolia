@@ -7,6 +7,7 @@ function aptUtilsForm($injector) {
         var aptUtils         = $injector.get('aptUtils');
         var formObj          = this;
         var $timeout         = $injector.get('$timeout');
+        var $rootScope       = $injector.get('$rootScope');
         var gettextCatalog   = $injector.get('gettextCatalog');
         var NotifyingService = $injector.get('NotifyingService');
 
@@ -122,6 +123,28 @@ function aptUtilsForm($injector) {
          */
         NotifyingService.subscribe(options.$scope, domain + '.formCancelRequested', function () {
             cancel();
+        });
+
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+            toState.resolve.pauseStateChange = [
+                '$q',
+                function ($q) {
+                    var defer = $q.defer();
+                    $timeout(function () {
+                        var $formController = angular.element('[name=' + formObj.name + ']').data('$formController');
+
+                        if ($formController && $formController.$dirty) {
+                            var title   = gettextCatalog.getString('Confirmation');
+                            var message = gettextCatalog.getString('You have un-saved changes that will be lost if you continue.') + ' ' + gettextCatalog.getString('Are you sure that you want to continue?');
+                            aptUtils.showConfirm(title, message, defer.resolve, defer.reject);
+                        } else {
+                            defer.resolve();
+                        }
+                    });
+                    return defer.promise;
+                }
+            ]
         });
 
         function loadData(itemId) {
