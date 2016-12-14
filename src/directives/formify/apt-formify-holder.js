@@ -6,10 +6,23 @@
 
 (function (app) {
 
-
+    /**
+     * ex:
+     *
+     * <div apt-formify-holder data-layout="ver" data-label-width="3,6">
+     *  <div class="row">
+     *      <div class="col-md-5">
+     *          <apt-field field="first_name" model-base="vmPersonForm.form.data"></apt-field>
+     *      </div>
+     *      <div class="col-md-7">
+     *          <apt-field field="last_name" model-base="vmPersonForm.form.data"></apt-field>
+     *      </div>
+     *  </div>
+     * </div>
+     */
     app.directive('aptFormifyHolder', ['$compile', '$timeout', function ($compile, $timeout) {
         var directiveObject = {
-            scope: false,
+            scope     : false,
             controller: [
                 '$attrs',
                 '$element', '$scope',
