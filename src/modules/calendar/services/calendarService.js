@@ -25,12 +25,19 @@
 
                 addEventSource: function (calendar_name, event_source) {
 
-                    //event_sources.push(event_source);
-                    uiCalendarConfig.calendars[calendar_name] && uiCalendarConfig.calendars[calendar_name].fullCalendar('addEventSource', event_source);
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
+                    uiCalendarConfig.calendars[calendar_name].fullCalendar('addEventSource', event_source);
                 },
 
                 removeEventSource: function (calendar_name, event_source) {
-                    uiCalendarConfig.calendars[calendar_name] && uiCalendarConfig.calendars[calendar_name].fullCalendar('removeEventSource', event_source);
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
+                    uiCalendarConfig.calendars[calendar_name].fullCalendar('removeEventSource', event_source);
                 },
 
 
@@ -43,10 +50,18 @@
                 },
 
                 rerender: function (calendar_name) {
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
                     uiCalendarConfig.calendars[calendar_name].fullCalendar('rerenderEvents');
                 },
 
                 refetchEvents: function (calendar_name) {
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
                     uiCalendarConfig.calendars[calendar_name].fullCalendar('refetchEvents');
                 },
 
@@ -54,20 +69,36 @@
                     if (id == null || angular.isUndefined(id)) {
                         return;
                     }
+
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
                     uiCalendarConfig.calendars[calendar_name].fullCalendar('removeEvents', id);
                 },
 
-                removeAllEvents: function (calendarName) {
+                removeAllEvents: function (calendar_name) {
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
 
-                    uiCalendarConfig.calendars[calendarName].fullCalendar('removeEvents');
+                    uiCalendarConfig.calendars[calendar_name].fullCalendar('removeEvents');
                 },
 
-                updateEvent: function (calendarName, event) {
-                    uiCalendarConfig.calendars[calendarName].fullCalendar('updateEvent', event);
+                updateEvent: function (calendar_name, event) {
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
+                    uiCalendarConfig.calendars[calendar_name].fullCalendar('updateEvent', event);
                 },
 
-                addEventToEventSource: function (calendarName, event) {
-                    uiCalendarConfig.calendars[calendarName].fullCalendar('renderEvent', event, true);
+                addEventToEventSource: function (calendar_name, event) {
+                    if (!uiCalendarConfig.calendars[calendar_name]) {
+                        return;
+                    }
+
+                    uiCalendarConfig.calendars[calendar_name].fullCalendar('renderEvent', event, true);
                 }
 
 
