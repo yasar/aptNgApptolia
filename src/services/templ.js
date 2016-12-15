@@ -259,7 +259,7 @@
 
         this.init = function () {
             var $rootScope     = self.$injector.get('$rootScope');
-            // var $routeSegment  = self.$injector.get('$routeSegment');
+            var $window        = self.$injector.get('$window');
             var hotkeys        = self.$injector.get('hotkeys');
             var gettextCatalog = self.$injector.get('gettextCatalog');
 
@@ -282,6 +282,13 @@
                     description: gettextCatalog.getString('Toggle Inline Helps'),
                     callback   : function () {
                         self.appConfig.showInlineHelp = !self.appConfig.showInlineHelp;
+                    }
+                })
+                .add({
+                    combo      : 'ctrl+backspace',
+                    description: gettextCatalog.getString('Go to previous page'),
+                    callback   : function () {
+                        $window.history.back();
                     }
                 });
         };
