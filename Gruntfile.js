@@ -115,7 +115,10 @@ module.exports = function (grunt) {
                 'vendor/angular-moment/angular-moment.js',
                 'vendor/angular-gravatar/build/angular-gravatar.js',
 
-                'vendor/nz-toggle/dist/nz-toggle.js'
+                'vendor/nz-toggle/dist/nz-toggle.js',
+
+
+                'vendor/file-saver/FileSaver.js'
 
             ],
             css   : [],

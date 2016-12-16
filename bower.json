@@ -2,6 +2,7 @@
   "name": "apt-nexus.apptolia",
   "version": "0.0.1",
   "_comment": "Any dependencies added here require a manual edit to vendor_files in /Gruntfile.js and (??? verify the following) /build/karma-unit.js (e.g 'vendor/angular-resource/angular-resource.js')",
+  "_comment2": "file-saver is required by datatable.js for exporting to excel.",
   "devDependencies": {},
   "dependencies": {
     "angular": "1.5.9",
@@ -34,6 +35,7 @@
     "angular-ui-router": "*",
     "angular-gravatar": "*",
     "iso-currency": "*",
-    "nz-toggle": "*"
+    "nz-toggle": "*",
+    "file-saver": "*"
   }
 }

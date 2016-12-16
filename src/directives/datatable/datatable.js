@@ -64,6 +64,7 @@
                 showPageSizeSelector: true,
                 showPaginator       : true,
                 showReloadButton    : true,
+                showExportButton    : true,
                 showSearchBox       : true,
                 showTitle           : true,
                 showTotals          : true,
@@ -251,6 +252,7 @@
                         showSearchBox();
                         showPageSizeSelector();
                         showReloadButton();
+                        showExportButton();
                         showAddNewButton();
                         showTotals();
                     }
@@ -319,6 +321,19 @@
                         if (pageSize.length) {
                             pageSize.removeAttr('apt-page-size').attr('ng-model', vm('pageSize'));
                             $interpolate(vm('pageSize') + '=defaults.pageSize')($rootScope);
+                        }
+                    }
+
+                    function showExportButton() {
+                        var btn = $template.find('[apt-export-button]');
+
+                        if (!options.showExportButton) {
+                            btn.remove();
+                            return;
+                        }
+
+                        if (btn.length) {
+                            btn.removeAttr('apt-export-button').attr('ng-click', 'exportToExcel()');
                         }
                     }
 
@@ -512,6 +527,38 @@
                     // Put everything back to normal
                     element.replaceWith(clone);
                 });
+
+                //----------------------
+
+                scope.exportToExcel = function () {
+                    /**
+                     * http://corpus.hubwiz.com/2/angularjs/21680768.html
+                     */
+
+                    /**
+                     * take a clone, otherwise the table on the gets modified by proceeding processes.
+                     */
+                    var $table = $('.apt-datatable').clone();
+
+                    /**
+                     * keep only the last row, the column titles
+                     */
+                    $table.find('thead>tr').slice(0, -1).remove();
+
+                    /**
+                     * remove the rowMenu
+                     */
+                    $table.find('td.td-menu').html('');
+
+
+                    // var blob = new Blob([document.getElementById('exportable').innerHTML], {
+                    // var blob = new Blob(["\ufeff" + $('<p>').append($table).html()], {
+                    var blob = new Blob([$('<p>').append($table).html()], {
+                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                        // type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=ISO-8859-9"
+                    });
+                    saveAs(blob, moment().unix() + ".xls");
+                };
 
             }
 
