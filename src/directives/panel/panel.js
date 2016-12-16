@@ -269,7 +269,9 @@
                 }
                 var findNgModelStr = '[data-ng-model],[ng-model]';
 
-                element.find('.heading-elements').append(vm.headingElements);
+                // element.find('.heading-elements').append(vm.headingElements);
+                // element.find('.heading-elements:first-child').append(vm.headingElements);
+                element.find('.heading-elements').first().append(vm.headingElements);
 
                 /**
                  * when the headingElements are first compiled within the directive,
