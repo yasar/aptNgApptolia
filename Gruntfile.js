@@ -118,7 +118,10 @@ module.exports = function (grunt) {
                 'vendor/nz-toggle/dist/nz-toggle.js',
 
 
-                'vendor/file-saver/FileSaver.js'
+                'vendor/file-saver/FileSaver.js',
+
+                'vendor/pivottable/dist/pivot.js',
+                'vendor/jqueryui/jquery-ui.js',
 
             ],
             css   : [],
