@@ -36,6 +36,8 @@
     "angular-gravatar": "*",
     "iso-currency": "*",
     "nz-toggle": "*",
-    "file-saver": "*"
+    "file-saver": "*",
+    "pivottable": "*",
+    "jqueryui": "*"
   }
 }
