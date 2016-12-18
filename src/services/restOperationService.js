@@ -50,6 +50,8 @@
 
             checkBuilder(conf);
 
+            _.merge(conf, conf._builder.list.editConf);
+
             if (conf.discardPopup) {
                 var id      = conf._builder.getPrimaryKey();
                 var segment = [
