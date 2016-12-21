@@ -71,6 +71,7 @@
                 var size          = conf.size || 'lg';
                 var readonlyItems = conf.readonlyItems || [];
                 var popupOptions  = {
+                    _builder     : conf._builder,
                     type         : conf.type,
                     suffix       : conf.suffix,
                     data         : conf.data,
@@ -274,6 +275,60 @@
                     , undefined
                     , dialogsOptions);
             });
+
+            function dialogControllerFn($scope, $injector, $uibModalInstance) {
+                var NotifyingService     = $injector.get('NotifyingService');
+                var restOperationService = $injector.get('restOperationService');
+                var aptTempl             = $injector.get('aptTempl');
+                var options              = restOperationService.getOptions();
+
+                if (options.data) {
+                    $scope.item = options.data;
+                }
+
+                if (options.readonlyItems) {
+                    $scope.readonlyItems = options.readonlyItems;
+                }
+
+                aptTempl.blurPage(true);
+
+
+                NotifyingService.subscribe($scope, 'record.added', function (event, stay) {
+                    if (stay.stay) {
+                        return;
+                    }
+                    $uibModalInstance.close('apt:formCloseConfirmed');
+                    aptTempl.blurPage(false);
+                }, true);
+
+                // NotifyingService.subscribe($scope, _.camelCase(options.type) + ':updated', function (event, stay) {
+                NotifyingService.subscribe($scope, options._builder.getEventName('updated'), function (event, stay) {
+                    if (stay.stay) {
+                        return;
+                    }
+                    $uibModalInstance.close('apt:formCloseConfirmed');
+                    aptTempl.blurPage(false);
+                }, true);
+
+                // NotifyingService.subscribe($scope, _.camelCase(options.type) + '.formCanceled', function () {
+                NotifyingService.subscribe($scope, options._builder.getEventName('formCanceled'), function () {
+                    $uibModalInstance.close('apt:formCloseConfirmed');
+                    aptTempl.blurPage(false);
+                }, false);
+
+                $scope.$on('modal.closing', function (event, resultOrReason, closing) {
+
+                    if (resultOrReason == 'apt:formCloseConfirmed') {
+                        // aptTempl.blurPage(false);
+                        return;
+                    }
+
+                    // NotifyingService.notify(_.camelCase(options.type) + '.formCancelRequested');
+                    NotifyingService.notify(options._builder.getEventName('formCancelRequested'));
+                    return event.preventDefault();
+
+                });
+            }
         }
 
         function checkBuilder(conf) {
@@ -294,56 +349,9 @@
                 conf.type = conf._builder.domain;
             }
         }
+
+
     }
 
-    function dialogControllerFn($scope, $injector, $uibModalInstance) {
-        var NotifyingService     = $injector.get('NotifyingService');
-        var restOperationService = $injector.get('restOperationService');
-        var aptTempl             = $injector.get('aptTempl');
-        var options              = restOperationService.getOptions();
 
-        if (options.data) {
-            $scope.item = options.data;
-        }
-
-        if (options.readonlyItems) {
-            $scope.readonlyItems = options.readonlyItems;
-        }
-
-        aptTempl.blurPage(true);
-
-
-        NotifyingService.subscribe($scope, 'record.added', function (event, stay) {
-            if (stay.stay) {
-                return;
-            }
-            $uibModalInstance.close('apt:formCloseConfirmed');
-            aptTempl.blurPage(false);
-        }, true);
-
-        NotifyingService.subscribe($scope, _.camelCase(options.type) + ':updated', function (event, stay) {
-            if (stay.stay) {
-                return;
-            }
-            $uibModalInstance.close('apt:formCloseConfirmed');
-            aptTempl.blurPage(false);
-        }, true);
-
-        NotifyingService.subscribe($scope, _.camelCase(options.type) + '.formCanceled', function () {
-            $uibModalInstance.close('apt:formCloseConfirmed');
-            aptTempl.blurPage(false);
-        }, false);
-
-        $scope.$on('modal.closing', function (event, resultOrReason, closing) {
-
-            if (resultOrReason == 'apt:formCloseConfirmed') {
-                // aptTempl.blurPage(false);
-                return;
-            }
-
-            NotifyingService.notify(_.camelCase(options.type) + '.formCancelRequested');
-            return event.preventDefault();
-
-        });
-    }
 })();

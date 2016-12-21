@@ -3,7 +3,20 @@
  */
 
 function aptUtilsForm($injector) {
-    return function aptUtilsFormInner(domain, data, _options) {
+    return function aptUtilsFormInner(builder, data, _options) {
+        /**
+         * we have changed the first parameter to builder from domain.
+         * so, if in case we are provided with a domain, then we should find the builder object.
+         */
+        if (!_.isObject(builder)) {
+            var $window = $injector.get('$window');
+            builder     = $window[builder + 'Builder'];
+
+            if (!builder) {
+                throw 'Expecting a builder object or a domain name which has a valid builder in the global window scope';
+            }
+        }
+
         var aptUtils         = $injector.get('aptUtils');
         var formObj          = this;
         var $timeout         = $injector.get('$timeout');
@@ -20,8 +33,10 @@ function aptUtilsForm($injector) {
 
         if (_options.integrate) {
             var Restangular = $injector.get('Restangular');
-            var model       = $injector.get(_.upperFirst(domain) + 'Model');
-            var service     = $injector.get(_.upperFirst(domain) + 'Service');
+            // var model       = $injector.get(_.upperFirst(domain) + 'Model');
+            // var service     = $injector.get(_.upperFirst(domain) + 'Service');
+            var model   = $injector.get(builder.getServiceName('model'));
+            var service = $injector.get(builder.getServiceName('service'));
         }
         var _backupData = null;
 
@@ -76,7 +91,8 @@ function aptUtilsForm($injector) {
         /**
          * we need to construct the vm which the itemId is bound-to.
          */
-        var vm             = 'vm' + _.upperFirst(domain) + 'Form';
+            // var vm             = 'vm' + _.upperFirst(domain) + 'Form';
+        var vm             = builder.getControllerAsName('form');
 
         if (_options.integrate) {
             if (angular.isObject(data)) {
@@ -121,7 +137,8 @@ function aptUtilsForm($injector) {
          * Otherwise, show up a confirmation message.
          * all the checks will be done in cancel() method.
          */
-        NotifyingService.subscribe(options.$scope, domain + '.formCancelRequested', function () {
+        // NotifyingService.subscribe(options.$scope, domain + '.formCancelRequested', function () {
+        NotifyingService.subscribe(options.$scope, builder.getEventName('formCancelRequested'), function () {
             cancel();
         });
 
@@ -349,7 +366,8 @@ function aptUtilsForm($injector) {
         }
 
         function notify(_data, event) {
-            NotifyingService.notify(domain + '.' + event, _data);
+            // NotifyingService.notify(domain + '.' + event, _data);
+            NotifyingService.notify(builder.getEventName(event), _data);
             NotifyingService.notify('record.' + event);
         }
 
