@@ -22,7 +22,7 @@
                             };
 
                             $scope.settings = angular.extend({
-                                dbtbl         : "file",
+                                dbtbl         : "`app999.file`",
                                 dbfld_recid   : "file_id",
                                 dbval_recid   : null, //
                                 dbfld_filename: "filename",
