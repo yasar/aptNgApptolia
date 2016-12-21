@@ -280,36 +280,40 @@
         }
 
         function goto(conf) {
-            var url          = '';
-            var $q           = $injector.get('$q');
-            var deferred     = $q.defer();
-            var $location    = $injector.get('$location');
-            var $state       = $injector.get('$state');
-            var $timeout     = $injector.get('$timeout');
-            var aptTempl     = $injector.get('aptTempl');
-
+            var url       = '';
+            var $q        = $injector.get('$q');
+            var deferred  = $q.defer();
+            var $location = $injector.get('$location');
+            var $state    = $injector.get('$state');
+            var $timeout  = $injector.get('$timeout');
+            var aptTempl  = $injector.get('aptTempl');
 
             if (conf.hasOwnProperty('segment')) {
                 try {
                     if (angular.isObject(conf.segment)) {
-                        url = $state.href(conf.segment.name, conf.segment.params);
+                        var params = _.merge({},
+                            conf.segment.params,
+                            (conf.search ? conf.search : {})
+                        );
+                        return $state.go(conf.segment.name, params, {reload: false});
                     } else {
-                        url = $state.href(conf.segment);
+                        return $state.go(conf.segment);
                     }
-
-                    if (!url) {
-                        aptUtils.showError('Url can not be generated. Please check the console log.');
-                        console.log(conf);
-                    }
-
-                    /**
-                     * $state.href will return relative url containing hashPrefix
-                     * and location.path() does not comply with hashed url.
-                     * so we have to clean that portion up, if there is any.
-                     */
-                    if (aptTempl.appConfig.html5Mode) {
-                        url = _.replace(url, '#' + aptTempl.appConfig.hashPrefix, '');
-                    }
+                    // retuils.rn;
+                    //
+                    // if (!url) {
+                    //     aptUtils.showError('Url can not be generated. Please check the console log.');
+                    //     console.log(conf);
+                    // }
+                    //
+                    // /**
+                    //  * $state.href will return relative url containing hashPrefix
+                    //  * and location.path() does not comply with hashed url.
+                    //  * so we have to clean that portion up, if there is any.
+                    //  */
+                    // if (aptTempl.appConfig.html5Mode) {
+                    //     url = _.replace(url, '#' + aptTempl.appConfig.hashPrefix, '');
+                    // }
                 } catch (e) {
                     console.warn((conf.segment.name || conf.segment) + ' is not exist');
                     url = $state.href('main.page404');
@@ -333,6 +337,61 @@
 
             return deferred.promise;
         }
+
+        // function goto(conf) {
+        //     var url          = '';
+        //     var $q           = $injector.get('$q');
+        //     var deferred     = $q.defer();
+        //     var $location    = $injector.get('$location');
+        //     var $state       = $injector.get('$state');
+        //     var $timeout     = $injector.get('$timeout');
+        //     var aptTempl     = $injector.get('aptTempl');
+        //
+        //
+        //     if (conf.hasOwnProperty('segment')) {
+        //         try {
+        //             if (angular.isObject(conf.segment)) {
+        //                 url = $state.href(conf.segment.name, conf.segment.params);
+        //             } else {
+        //                 url = $state.href(conf.segment);
+        //             }
+        //
+        //             if (!url) {
+        //                 aptUtils.showError('Url can not be generated. Please check the console log.');
+        //                 console.log(conf);
+        //             }
+        //
+        //             /**
+        //              * $state.href will return relative url containing hashPrefix
+        //              * and location.path() does not comply with hashed url.
+        //              * so we have to clean that portion up, if there is any.
+        //              */
+        //             if (aptTempl.appConfig.html5Mode) {
+        //                 url = _.replace(url, '#' + aptTempl.appConfig.hashPrefix, '');
+        //             }
+        //         } catch (e) {
+        //             console.warn((conf.segment.name || conf.segment) + ' is not exist');
+        //             url = $state.href('main.page404');
+        //         }
+        //     } else if (conf.hasOwnProperty('url')) {
+        //         url = conf.url;
+        //     }
+        //
+        //     if (!conf.hasOwnProperty('search')) {
+        //         conf.search = null;
+        //     }
+        //
+        //     $timeout(function () {
+        //         if (conf.search) {
+        //             $location.path(url).search(conf.search);
+        //         } else {
+        //             $location.path(url);
+        //         }
+        //         deferred.resolve();
+        //     }, 1);
+        //
+        //     return deferred.promise;
+        // }
 
         function getScopeById(scopeId, baseScope) {
             if (!baseScope) {

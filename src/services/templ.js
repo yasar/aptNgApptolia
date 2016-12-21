@@ -73,7 +73,7 @@
             bgImage       : '',
             isStrict      : false,
             showInlineHelp: true,
-            html5Mode     : true,
+            html5Mode     : false,
             hashPrefix    : '!',
             defaults      : {
                 mapObject: {
