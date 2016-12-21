@@ -108,7 +108,7 @@
 
 
         vm.reload = function () {
-            _.get($scope, fnNameReload)();
+            _.get($scope, fnNameReload)({force: true});
         };
 
         vm.add = function () {
