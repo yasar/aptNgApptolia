@@ -29,7 +29,7 @@
                             };
 
                             $scope.settings = angular.extend({
-                                dbtbl         : "`image`",
+                                dbtbl         : "`app999.image`",
                                 dbfld_recid   : "image_id",
                                 dbval_recid   : null, //
                                 dbfld_filename: "filename",
