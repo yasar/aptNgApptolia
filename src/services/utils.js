@@ -263,7 +263,7 @@
 
             var tpl = '<div data-' + _.kebabCase(directiveName);
             _.forOwn(conf.attrs, function (value, key) {
-                tpl += ' ' + _.kebabCase(key) + '="' + value + '"';
+                tpl += ' data-' + _.kebabCase(key) + '="' + value + '"';
             });
             tpl += '></div>';
 
