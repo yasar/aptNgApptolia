@@ -2,12 +2,12 @@
 ;(function (angular) {
     'use strict';
     angular.module('ngApptolia')
-        .provider('aptTempl', aptTemplProvider);
-
+           .provider('aptTempl', aptTemplProvider);
+    
     function aptTemplProvider() {
-
+        
         var self = this;
-
+        
         this.$get = [
             '$window',
             '$injector',
@@ -15,7 +15,7 @@
                 self.$injector = $injector;
                 self.reset();
                 self.init();
-
+                
                 return {
                     appConfig          : self.appConfig,
                     menu               : self.menu,
@@ -41,17 +41,18 @@
                     layoutWrappers     : self.layoutWrappers,
                     getAppName         : self.getAppName
                 };
-            }];
-
+            }
+        ];
+        
         /**
          * Menu.js içerisinde oluşturulmuş apt-menu nesne atanmaktadır.
          * @type {null}
          */
         this.menu = null;
-
+        
         this.$injector = null;
-
-
+        
+        
         this.copyright = 'BYRWEB';
         this.version   = '0.0.1';
         this.theme     = 'light';
@@ -62,7 +63,7 @@
             description: '',
             icon       : ''
         };
-
+        
         this.appConfig = {
             name          : '',
             package       : '',
@@ -98,11 +99,27 @@
                     },
                     layers  : {
                         baselayers: {
-                            osm: {
-                                name: 'OpenStreetMap',
-                                url : 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                type: 'xyz'
-                            }
+                            osm          : {
+                                name        : 'OpenStreetMap',
+                                url         : 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                type        : 'xyz',
+                                detectRetina: true
+                            },
+//                            googleTerrain: {
+//                                name     : 'Google Terrain',
+//                                layerType: 'TERRAIN',
+//                                type     : 'google'
+//                            },
+//                            googleHybrid : {
+//                                name     : 'Google Hybrid',
+//                                layerType: 'HYBRID',
+//                                type     : 'google'
+//                            },
+//                            googleRoadmap: {
+//                                name     : 'Google Streets',
+//                                layerType: 'ROADMAP',
+//                                type     : 'google'
+//                            }
                         }
                     }
                 },
@@ -237,11 +254,11 @@
                 }
             }
         };
-
+        
         this.defaults = {
             pageSize: 10
         };
-
+        
         this.layoutWrappers = [
             /**
              * place in html code that will wrap the layout (div)
@@ -251,20 +268,20 @@
              * ex: '<div card-read="vm.parseCard($card, $tracks, $readError)"></div>'
              */
         ];
-
+        
         /**
          * we need to handle the login screen in a special way
          *
          * @type {boolean}
          */
         this.isLoginMode = false;
-
+        
         this.init = function () {
             var $rootScope     = self.$injector.get('$rootScope');
             var $window        = self.$injector.get('$window');
             var hotkeys        = self.$injector.get('hotkeys');
             var gettextCatalog = self.$injector.get('gettextCatalog');
-
+            
             // todo: ui-router correction required
             /*$rootScope.$on('$routeChangeSuccess', function (event, next, current) {
              if ($routeSegment.chain.length) {
@@ -275,31 +292,31 @@
              self.loadSlot(next.segment);
              }
              });*/
-
+            
             self.initSlots();
-
+            
             hotkeys.bindTo($rootScope)
-                .add({
-                    combo      : 'ctrl+i',
-                    description: gettextCatalog.getString('Toggle Inline Helps'),
-                    callback   : function () {
-                        self.appConfig.showInlineHelp = !self.appConfig.showInlineHelp;
-                    }
-                })
-                .add({
-                    combo      : 'ctrl+backspace',
-                    description: gettextCatalog.getString('Go to previous page'),
-                    callback   : function () {
-                        $window.history.back();
-                    }
-                });
+                   .add({
+                       combo      : 'ctrl+i',
+                       description: gettextCatalog.getString('Toggle Inline Helps'),
+                       callback   : function () {
+                           self.appConfig.showInlineHelp = !self.appConfig.showInlineHelp;
+                       }
+                   })
+                   .add({
+                       combo      : 'ctrl+backspace',
+                       description: gettextCatalog.getString('Go to previous page'),
+                       callback   : function () {
+                           $window.history.back();
+                       }
+                   });
         };
-
+        
         this.getIcon = function (icon) {
             var aptIcon = self.$injector.get('aptIcon');
             return aptIcon.get(icon);
         };
-
+        
         this.resetWithBuilder = function (builder) {
             var gettextCatalog    = self.$injector.get('gettextCatalog');
             self.page.title       = builder.title ? gettextCatalog.getString(builder.title) : gettextCatalog.getString(builder.domain);
@@ -307,24 +324,25 @@
             self.page.description = builder.description ? gettextCatalog.getString(builder.description) : '';
             self.page.icon        = builder.icon || '';
         };
-
+        
         this.blurPage = (function () {
             /**
              * dialogs, modal should be listened to open and close event.
              */
-
+            
             var ctr      = 0;
             var isBlured = false;
-
+            
             return function () {
                 if (arguments.length == 0) {
                     return isBlured;
                 }
-
+                
                 if (arguments[0] == true) {
                     ctr++;
                     isBlured = true;
-                } else {
+                }
+                else {
                     ctr--;
                     /**
                      * ctr might get to a negative number
@@ -337,8 +355,8 @@
                 }
             }
         })();
-
-
+        
+        
         var configDefault = {
             miniSidebar        : true,
             darkSidebar        : true,
@@ -355,7 +373,7 @@
             fillContent        : false
         };
         this.config       = {};
-
+        
         this.data = {
             _route            : {
                 lastModifiedAt: null,
@@ -364,42 +382,42 @@
             isSlotsInitialized: false,
             slotRouteSegment  : null
         };
-
+        
         this.reset = function (isSegmentAware, builder) {
             var aptUtils = self.$injector.get('aptUtils');
             var aptMenu  = self.$injector.get('aptMenu');
             // var $routeSegment = self.$injector.get('$routeSegment');
             var $state   = self.$injector.get('$state');
-
+            
             if (isSegmentAware) {
                 if ($state.current.name.indexOf(self.data.slotRouteSegment) != -1) {
                     return;
                 }
-
+                
                 if (self.data.slotRouteSegment && self.data.slotRouteSegment.indexOf($state.current.name) != -1) {
                     return;
                 }
-
+                
                 if (builder && builder.segmentMatchLevel > 0 && self.data.slotRouteSegment) {
                     var s1 = self.data.slotRouteSegment.split('.');
                     var s2 = $state.current.name.split('.');
-
+                    
                     var isMatch = true;
                     for (var i = 0; i < builder.segmentMatchLevel; i++) {
                         isMatch = isMatch && s1[i] && s2[i] && s1[i] == s2[i];
                     }
-
+                    
                     if (isMatch) {
                         return;
                     }
                 }
             }
-
+            
             self.config = angular.merge({}, configDefault, self.config);
             self.resetDataRoute();
             aptMenu.get('moduleMenu').clear();
         };
-
+        
         this.resetDataRoute = function () {
             var aptUtils = self.$injector.get('aptUtils');
             _.forIn(self.data.slots, function (value) {
@@ -407,8 +425,8 @@
             });
             self.data._route = {};
         };
-
-
+        
+        
         this.setSlotItem = function (slot, name, item, _segment) {
             // var $routeSegment = self.$injector.get('$routeSegment');
             var $state  = self.$injector.get('$state');
@@ -424,34 +442,34 @@
                     _scopeId     : null
                 }, item)
                 , Object);
-//console.log('slot:' + slot + ', name:' + name + ', item:' + item + ', segment:' + segment)
-//console.log(self.data._route);
+            //console.log('slot:' + slot + ', name:' + name + ', item:' + item + ', segment:' + segment)
+            //console.log(self.data._route);
             self.data._route.lastModifiedAt = new Date().getTime();
         };
-
+        
         this.getSlot = function (slot) {
-
+            
             if (self.data.slots.hasOwnProperty(slot)) {
                 return self.data.slots[slot];
             }
-
+            
             self.data.slots[slot] = {};
             return self.getSlot(slot);
         };
-
+        
         this.loadSlot = function (segment) {
             var $rootScope = self.$injector.get('$rootScope');
             var aptUtils   = self.$injector.get('aptUtils');
             // var $routeSegment = self.$injector.get('$routeSegment');
             var $state     = self.$injector.get('$state');
-
+            
             if (self.data._route.lastModifiedAt == null) {
                 return;
             }
-
+            
             segment      = segment || $state.current.name;
             var segments = segment.split('.');
-
+            
             var dataRoute    = self.data._route;
             var segmentChain = [];
             var slotRepo     = self.data.slots;
@@ -459,65 +477,65 @@
             _.forIn(segments, function (s) {
                 segmentChain.push(s);
                 if (_.has(dataRoute, segmentChain)) {
-
+                    
                     __slots = _.clone(segmentChain);
                     __slots.push('_slots');
-
+                    
                     var __slotsClone = _.clone(__slots);
                     var slotNames    = _.get(dataRoute, __slotsClone);
                     _.forIn(slotNames, function (slotObj, slotName) {
                         var oneSlot = _.clone(__slots);
                         oneSlot.push(slotName);
-
+                        
                         if (_.has(dataRoute, oneSlot)) {
-
+                            
                             if (!_.has(slotRepo, slotName)) {
                                 slotRepo[slotName] = {};
                             }
-
+                            
                             aptUtils.removeObjectProperties(slotRepo[slotName]);
                             angular.merge(slotRepo[slotName], slotObj);
                         }
                     });
-
+                    
                 }
             });
-
+            
         }
-
+        
         this.initSlots = function () {
             var $rootScope = self.$injector.get('$rootScope');
             var aptUtils   = self.$injector.get('aptUtils');
             // var $routeSegment = self.$injector.get('$routeSegment');
             var $state     = self.$injector.get('$state');
-
+            
             if (self.data.isSlotsInitialized) {
                 return;
             }
-
+            
             self.data.isSlotsInitialized = true;
             watch();
-
+            
             function watch() {
-
+                
                 $rootScope.$watch(
                     function () {
                         return self.data._route;
                     },
-
+                    
                     function (newVal, oldVal) {
                         if (angular.isUndefined(newVal) || newVal == oldVal) {
                             return;
                         }
-
+                        
                         self.loadSlot();
                     },
-
+                    
                     true);
             }
-
+            
         };
-
+        
         this.setSlotRouteSegment = function (route) {
             if (!route) {
                 // route = self.$injector.get('$routeSegment').name;
@@ -525,6 +543,6 @@
             }
             self.data.slotRouteSegment = route;
         };
-
+        
     }
 })(window.angular);
