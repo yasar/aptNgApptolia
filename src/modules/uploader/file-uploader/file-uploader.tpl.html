@@ -2,7 +2,7 @@
     <div class="thumb">
         <a ng-href="{{uploadFileOrig||uploadFile}}" rel="lightbox" target="_blank">
             <img alt=""
-                 ng-src="{{imageFile || 'http://placehold.it/300x40&text='+(model.filename ? model.filename : 'UPLOAD+FILE')}}">
+                 ng-src="{{imageFile || '//dummyimage.com/300x40&text='+(model.filename ? model.filename : 'UPLOAD+FILE')}}">
         </a>
     </div>
     <div class="button-group" ng-if="!readonly">
