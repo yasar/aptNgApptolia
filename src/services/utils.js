@@ -787,6 +787,10 @@
         
         function handlePromiseCatch(e) {
             
+            if (e.isHandled) {
+                return;
+            }
+            
             var errObj = {
                 type   : 'rest-error',
                 message: ''
@@ -822,6 +826,11 @@
         }
         
         function handleException(e) {
+            
+            if (e.isHandled) {
+                return;
+            }
+            
             var title          = null;
             var message        = null;
             var gettextCatalog = $injector.get('gettextCatalog');
