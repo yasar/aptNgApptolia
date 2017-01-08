@@ -628,6 +628,7 @@
                             // if (_.isUndefined(value) || _.isNull(value)) {
                             if (_.isUndefined(value)) {
                                 delete item.param[key];
+                                delete $location.$$search[key];
                             }
                         });
                         _.merge($location.$$search, item.param);
