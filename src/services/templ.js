@@ -99,27 +99,27 @@
                     },
                     layers  : {
                         baselayers: {
-                            osm          : {
+                            osm: {
                                 name        : 'OpenStreetMap',
                                 url         : 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 type        : 'xyz',
                                 detectRetina: true
                             },
-//                            googleTerrain: {
-//                                name     : 'Google Terrain',
-//                                layerType: 'TERRAIN',
-//                                type     : 'google'
-//                            },
-//                            googleHybrid : {
-//                                name     : 'Google Hybrid',
-//                                layerType: 'HYBRID',
-//                                type     : 'google'
-//                            },
-//                            googleRoadmap: {
-//                                name     : 'Google Streets',
-//                                layerType: 'ROADMAP',
-//                                type     : 'google'
-//                            }
+                            //                            googleTerrain: {
+                            //                                name     : 'Google Terrain',
+                            //                                layerType: 'TERRAIN',
+                            //                                type     : 'google'
+                            //                            },
+                            //                            googleHybrid : {
+                            //                                name     : 'Google Hybrid',
+                            //                                layerType: 'HYBRID',
+                            //                                type     : 'google'
+                            //                            },
+                            //                            googleRoadmap: {
+                            //                                name     : 'Google Streets',
+                            //                                layerType: 'ROADMAP',
+                            //                                type     : 'google'
+                            //                            }
                         }
                     }
                 },
@@ -214,6 +214,7 @@
                         close              : 'times',
                         completed          : 'check',
                         configuration      : 'equalizer3',
+                        copy               : 'copy3',
                         create             : 'cogs',
                         desc               : 'file-text-o',
                         delete             : 'trash',
