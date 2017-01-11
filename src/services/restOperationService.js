@@ -8,7 +8,7 @@
     angular
         .module('ngApptolia')
         .factory('restOperationService', fn);
-
+    
     fn.$inject = [
         '$templateCache',
         'dialogs',
@@ -23,9 +23,9 @@
     ];
     function fn($templateCache, dialogs, $location, $timeout,
                 $injector, gettextCatalog, NotifyingService, Templ, aptUtils, Restangular) {
-
+        
         var options = null;
-
+        
         return {
             /**
              * conf: {
@@ -41,17 +41,17 @@
             addNew    : addNewFn,
             getOptions: getOptionsFn
         };
-
+        
         function getOptionsFn() {
             return options;
         }
-
+        
         function editFn(conf) {
-
+            
             checkBuilder(conf);
-
+            
             _.merge(conf, conf._builder.list.editConf);
-
+            
             if (conf.discardPopup) {
                 var id      = conf._builder.getPrimaryKey();
                 var segment = [
@@ -64,10 +64,10 @@
                 aptUtils.goto({segment: {name: segment, params: {id: conf.data[id]}}});
                 return;
             }
-
+            
             // if (angular.isObject(conf.data) || conf.popup) {
             if (angular.isObject(conf.data) && conf.popup || conf.popup) {
-
+                
                 var size          = conf.size || 'lg';
                 var readonlyItems = conf.readonlyItems || [];
                 var popupOptions  = {
@@ -79,17 +79,19 @@
                     stay         : conf.stay,
                     readonlyItems: readonlyItems
                 };
-
+                
                 if (angular.isFunction(conf.data.then)) {
                     conf.data.then(function (data) {
                         popupOptions.data = data;
                         showPopup(popupOptions);
                     });
-                } else {
+                }
+                else {
                     showPopup(popupOptions);
                 }
-
-            } else {
+                
+            }
+            else {
                 var segment = [
                     'main',
                     (conf._builder.package ? conf._builder.package : ''),
@@ -99,8 +101,7 @@
                 segment     = segment.join('.').replace(/\.\./g, '.');
                 var id      = angular.isObject(conf.data) ? _.get(conf.data, conf._builder.getPrimaryKey()) : conf.data;
                 if (!id) {
-                    aptUtils.showError('App Error', 'Can not determine how to edit the record!');
-                    return;
+                    throw {type: 'null_id'};
                 }
                 aptUtils.goto({
                     segment: {
@@ -111,7 +112,7 @@
                 });
             }
         }
-
+        
         function deleteFn(conf) {
             var translated = {
                 confirm: gettextCatalog.getString('Are you sure that you want to delete this record?')
@@ -132,7 +133,8 @@
                         var filterObj                             = {};
                         filterObj[_.snakeCase(conf.type) + '_id'] = conf.data[_.snakeCase(conf.type) + '_id'];
                         allData.splice(_.indexOf(allData, _.find(allData, filterObj)), 1);
-                    } else {
+                    }
+                    else {
                         aptUtils.showError('Failed', 'Item could not be deleted.');
                     }
                     Templ.blurPage(false);
@@ -141,7 +143,7 @@
                 Templ.blurPage(false);
             });
         }
-
+        
         function addNewFn(conf) {
             checkBuilder(conf);
             /**
@@ -163,9 +165,9 @@
              *
              */
             if (conf.hasOwnProperty('add_before') && conf.add_before) {
-
+                
                 conf.discardPopup = false;
-
+                
                 /**
                  * Use the angular $injector service to manually inject the Model service
                  */
@@ -173,12 +175,12 @@
                 var moduleService = $injector.get(conf._builder.getServiceName('Service'));
                 var $rootScope    = $injector.get('$rootScope');
                 var $timeout      = $injector.get('$timeout');
-
+                
                 var waitConf = {
                     progress: 0
                 };
                 aptUtils.showWait(waitConf);
-
+                
                 /**
                  * now we post to the model service which will add a new record with and empty dataset.
                  * in return, we will have a data-row having the primary_key id which will be good for editing.
@@ -187,7 +189,7 @@
                 _.merge(_obj, _.get(conf, 'initialData'), {__is_incomplete: 1});
                 // _obj.save().then(function (data) {
                 Restangular.copy(_obj).post().then(function (data) {
-
+                    
                     if (!data || data == 'false') {
                         try {
                             throw new Error('server returned false. make sure database table has __is_incomplete column configured properly.');
@@ -199,16 +201,16 @@
                     }
                     $timeout(function () {
                         waitConf.progress = 100;
-
+                        
                         if (!conf.popup && angular.isDefined(data.__is_incomplete)) {
                             conf.discardPopup = true;
                         }
-
+                        
                         /**
                          * grab the data from the server
                          */
                         conf.data = data;
-
+                        
                         /**
                          * once the data is updated, it should be a real record.
                          * so set the incomplete flag to null
@@ -217,7 +219,7 @@
                          * so that we can decide if this is an edit or new form.
                          */
                         // conf.data.__is_incomplete = null;
-
+                        
                         /**
                          * now call the edit method along with our data
                          */
@@ -228,8 +230,8 @@
                     // aptUtils.showError('Error', error);
                     aptUtils.handleException(_.defaults(error, {type: 'rest-error'}));
                 });
-
-
+                
+                
                 /**
                  * we expect the promise from model.post() will takeover the proceeding.
                  * so we just return here to end the process.
@@ -240,7 +242,7 @@
                 showPopup(conf);
             }
         }
-
+        
         function showPopup(_options) {
             options = _.extend({
                 type         : null,
@@ -250,11 +252,11 @@
                 readonlyItems: null,
                 stay         : null,
             }, _options);
-
+            
             if (!options.suffix) {
                 options.suffix = 'form';
             }
-
+            
             /**
              * vesselPosition gibi type 'ları parçalamak için
              */
@@ -264,7 +266,7 @@
                 if (options.hasOwnProperty('size')) {
                     dialogsOptions.size = options.size;
                 }
-
+                
                 var _path = '/' + options.type + '/edit.html';
                 $templateCache.put(_path,
                     '<div data-apt-' + _.kebabCase(options.type) + '-' + options.suffix + ' ' +
@@ -275,24 +277,24 @@
                     , undefined
                     , dialogsOptions);
             });
-
+            
             function dialogControllerFn($scope, $injector, $uibModalInstance) {
                 var NotifyingService     = $injector.get('NotifyingService');
                 var restOperationService = $injector.get('restOperationService');
                 var aptTempl             = $injector.get('aptTempl');
                 var options              = restOperationService.getOptions();
-
+                
                 if (options.data) {
                     $scope.item = options.data;
                 }
-
+                
                 if (options.readonlyItems) {
                     $scope.readonlyItems = options.readonlyItems;
                 }
-
+                
                 aptTempl.blurPage(true);
-
-
+                
+                
                 NotifyingService.subscribe($scope, 'record.added', function (event, stay) {
                     if (stay.stay) {
                         return;
@@ -300,7 +302,7 @@
                     $uibModalInstance.close('apt:formCloseConfirmed');
                     aptTempl.blurPage(false);
                 }, true);
-
+                
                 // NotifyingService.subscribe($scope, _.camelCase(options.type) + ':updated', function (event, stay) {
                 NotifyingService.subscribe($scope, options._builder.getEventName('updated'), function (event, stay) {
                     if (stay.stay) {
@@ -309,49 +311,49 @@
                     $uibModalInstance.close('apt:formCloseConfirmed');
                     aptTempl.blurPage(false);
                 }, true);
-
+                
                 // NotifyingService.subscribe($scope, _.camelCase(options.type) + '.formCanceled', function () {
                 NotifyingService.subscribe($scope, options._builder.getEventName('formCanceled'), function () {
                     $uibModalInstance.close('apt:formCloseConfirmed');
                     aptTempl.blurPage(false);
                 }, false);
-
+                
                 $scope.$on('modal.closing', function (event, resultOrReason, closing) {
-
+                    
                     if (resultOrReason == 'apt:formCloseConfirmed') {
                         // aptTempl.blurPage(false);
                         return;
                     }
-
+                    
                     // NotifyingService.notify(_.camelCase(options.type) + '.formCancelRequested');
                     NotifyingService.notify(options._builder.getEventName('formCancelRequested'));
                     return event.preventDefault();
-
+                    
                 });
             }
         }
-
+        
         function checkBuilder(conf) {
             if (!conf._builder) {
                 if (!conf.type) {
                     throw new Exception('You must provide either `_builder` or `type` for restOperation to function');
                 }
-
+                
                 var $window = $injector.get('$window');
                 if (!_.has($window, _.camelCase(conf.type + 'Builder'))) {
                     throw new Exception('restOperation could not find `' + _.camelCase(conf.type + 'Builder') + '` in global scope.');
                 }
-
+                
                 conf._builder = $window[_.camelCase(conf.type + 'Builder')];
             }
-
+            
             if (!conf.type) {
                 conf.type = conf._builder.domain;
             }
         }
-
-
+        
+        
     }
-
-
+    
+    
 })();
