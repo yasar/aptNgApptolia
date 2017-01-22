@@ -13,7 +13,7 @@
     "angular-bootstrap-colorpicker": "*",
     "angular-sanitize": "1.5.10",
     "angular-screenfull": "*",
-    "angular-eonasdan-datetimepicker": "*",
+    "moment-picker": "*",
     "angular-marked": "*",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0",
     "angular-nvd3": "*",

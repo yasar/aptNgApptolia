@@ -56,27 +56,17 @@ module.exports = function (grunt) {
 
                 ////////////////////////////////
 
-
-                // 'vendor/angular-route/angular-route.js',
-                // 'vendor/angular-route-segment/build/angular-route-segment.js',
                 'vendor/angular-ui-router/release/angular-ui-router.js',
 
 
                 'vendor/screenfull/dist/screenfull.js',
                 'vendor/angular-screenfull/dist/angular-screenfull.js',
-                'vendor/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
-
-                // this module has dependency on angular-translate and does not comply with angular-gettext
-                // basically, the `translate` filter of gettext is overriden by this module.
-                // so, in common folder, we have a modified version of this module.
-                // it will be automatically included in the project, and we comment out the following line.
-                //'vendor/angular-dialog-service/dist/dialogs.js',
 
                 /**
-                 * see the patched version in patched folder
-                 * note: not using the patched one now.
+                 * eonasdan-datetimepicker is causing angular form to load in $dirty state.
+                 * so, will give a try to moment-picker
                  */
-                // 'vendor/angular-eonasdan-datetimepicker/dist/angular-eonasdan-datetimepicker.js',
+                'vendor/moment-picker/dist/angular-moment-picker.js',
 
                 /**
                  * markdown
