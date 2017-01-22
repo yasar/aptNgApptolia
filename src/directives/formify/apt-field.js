@@ -4,9 +4,9 @@
 
 
 ;(function () {
-
+    
     angular.module('ngApptolia').directive('aptField', fn);
-
+    
     fn.$inject = ['$injector'];
     function fn($injector) {
         var $interpolate   = $injector.get('$interpolate');
@@ -16,8 +16,9 @@
         var $timeout       = $injector.get('$timeout');
         var aptTempl       = $injector.get('aptTempl');
         var aptUtils       = $injector.get('aptUtils');
+        var gettextCatalog = $injector.get('gettextCatalog');
         // var ngAttrs        = {};
-
+        
         return {
             /**
              * scope=true is required
@@ -33,7 +34,7 @@
             compile     : aptField_Compile,
             require     : ['^^?form', 'aptField']
         };
-
+        
         /**
          * attrs can have:
          *      type
@@ -48,28 +49,28 @@
          *      show-label
          *      params
          */
-
-
-
+        
+        
+        
         function aptField_Compile(elem, attrs) {
-
-
+            
+            
             // preserveNgAttrs(elem, attrs);
-
+            
             ///
-
+            
             return {
                 pre : function (scope, elem, attrs) {
                     preserveNgAttrs(elem, attrs);
                 },
                 post: aptField_Link
             };
-
+            
             ///
-
-
+            
+            
             function aptField_Link(scope, elem, attrs, ctrls) {
-
+                
                 var $formController = ctrls[0];
                 if (!$formController) {
                     /**
@@ -83,22 +84,21 @@
                      */
                     $formController = aptUtils.getFormController(scope);
                 }
-                var vm             = ctrls[1];
-                var gettextCatalog = vm.translate ? $injector.get('gettextCatalog') : null;
-
+                var vm = ctrls[1];
+                
                 if (_.has(attrs, 'field')) {
                     vm.field = attrs.field = $interpolate(attrs.field)(scope);
                 }
-
+                
                 if (_.has(attrs, 'type')) {
                     attrs.type = $interpolate(attrs.type)(scope);
                 }
-
+                
                 var bindTo = getBindTo(attrs, scope);
                 if (_.has(attrs, 'params')) {
                     vm.params = $parse(attrs.params)(scope);
                 }
-
+                
                 var $tpl  = $(getTemplate(scope, attrs, vm));
                 var label = _.has(attrs, 'label') && _.includes(['', 'false', 'null'], attrs.label) ? false : true;
                 /**
@@ -108,7 +108,7 @@
                 if (!label && ($tpl.is('[data-label],[label]'))) {
                     $tpl.removeAttr('data-label label');
                 }
-
+                
                 if (label) {
                     /**
                      * if outer element (apt-field) does not have label but the inner (template) element does
@@ -116,14 +116,15 @@
                      */
                     if (!_.has(attrs, 'label') && $tpl.is('[data-label],[label]')) {
                         vm.label = $tpl.attr('data-label') ? $tpl.attr('data-label') : $tpl.attr('label');
-                    } else {
+                    }
+                    else {
                         vm.label = gettextCatalog.getString(aptUtils.grabLabelFromAttrs(attrs), null, _.get(attrs, 'translateContext'));
                     }
                 }
-
-
+                
+                
                 var isSelfContained = false;
-
+                
                 if (!_.isNull(bindTo)) {
                     /**
                      * check the template file `checkbox-input-group.tpl.html`
@@ -139,36 +140,39 @@
                     var tplModel = null;
                     if ($tpl.is('[ng-model],[data-ng-model]')) {
                         tplModel = $tpl;
-                    } else {
+                    }
+                    else {
                         tplModel = $tpl.find('[ng-model],[data-ng-model]');
                     }
                     if (tplModel.length == 0) {
                         $tpl.attr('data-ng-model', bindTo);
-                    } else {
+                    }
+                    else {
                         tplModel.removeAttr('ng-model data-ng-model');
                         tplModel.attr('data-ng-model', bindTo);
                         isSelfContained = true;
                     }
                 }
-
+                
                 if (!isSelfContained) {
                     transferAttributes(attrs, $tpl);
-
+                    
                     var _ngAttrs = elem.data('ngAttrs');
                     transferAttributes(_ngAttrs, $tpl);
-
+                    
                     $tpl = finalize(elem, attrs, $tpl);
-                } else {
+                }
+                else {
                     /**
                      * mastSideFilter didnt work properly.
                      */
                     transferAttributes(attrs, $tpl);
                 }
-
+                
                 if ($formController) {
                     vm.$formController = $formController;
                 }
-
+                
                 /**
                  * when using apt-field for other apt elements, such as:
                  * <apt-field field="type_id" model-base="..."></apt-field>
@@ -181,73 +185,73 @@
                 $timeout(function () {
                     var compiledElement = $compile($tpl)(scope);
                     elem.replaceWith(compiledElement);
-                },100);
+                }, 100);
             }
         }
-
+        
         function fixFormify(elem, attrs, $tpl) {
             var hasFormify = false;
             var hasLabel   = false;
             var label      = null;
-
+            
             if ($tpl.attr('data-apt-formify') != undefined || $tpl.attr('apt-formify') != undefined) {
                 $tpl.removeAttr('data-apt-formify apt-formify');
                 hasFormify = true;
             }
-
+            
             var elHavingFormify = $tpl.find('[apt-formify],[data-apt-formify]');
             if (elHavingFormify.length) {
                 elHavingFormify.removeAttr('apt-formify data-apt-formify');
                 hasFormify = true;
             }
-
+            
             if (hasFormify) {
                 $tpl.attr('data-apt-formify', '');
                 attrs['aptFormify']       = '';
                 attrs.$attr['aptFormify'] = '';
                 elem.attr('apt-formify', '');
             }
-
+            
         }
-
+        
         function getTemplate(scope, attrs, vm) {
             var tpl = undefined,
                 control,
                 attr;
-
+            
             if (_.has(attrs, 'type')) {
                 tpl = $templateCache.get('common/fields/' + attrs.type + '.tpl.html');
             }
-
+            
             if (_.isUndefined(tpl) && _.has(attrs, 'field')) {
                 tpl = $templateCache.get('common/fields/' + attrs.field + '.tpl.html');
             }
-
+            
             if (_.isUndefined(tpl)) {
                 control = getControlObject(scope, attrs, vm);
-
+                
                 tpl = '<' + control.tag;
                 for (attr in control.attrs) {
                     tpl += ' ' + attr + '="' + control.attrs[attr] + '"';
                 }
-
+                
                 if ((!_.has(attrs, 'useFormify') || attrs.useFormify !== 'false') && control.formify) {
                     tpl += ' apt-formify';
                     if (attrs.aptFormify && attrs.aptFormify !== '') {
                         tpl += '="' + attrs.aptFormify + '"';
                     }
                 }
-
+                
                 tpl += control.selfClose ? ' />' : '></' + control.tag + '>';
             }
-
+            
             if (_.has(attrs, 'compile')) {
                 delete attrs.compile;
                 tpl = $compile(tpl)(scope);
             }
-
+            
             return tpl;
-
+            
             function getControlObject(scope, attrs, vm) {
                 var control = {
                     tag      : 'input',
@@ -258,7 +262,7 @@
                     selfClose: true,
                     formify  : true
                 };
-
+                
                 if (attrs.type) {
                     switch (attrs.type) {
                         case 'text':
@@ -286,7 +290,7 @@
                                 formify  : true
                             };
                             break;
-
+                        
                         case 'switch':
                             control = {
                                 tag      : 'input',
@@ -298,7 +302,7 @@
                                 },
                                 formify  : true
                             };
-
+                            
                             if (attrs.ngTrueValue) {
                                 control.attrs['ng-true-value'] = attrs.ngTrueValue;
                             }
@@ -316,7 +320,7 @@
                                 },
                                 formify  : true
                             };
-
+                            
                             if (attrs.ngTrueValue) {
                                 control.attrs['ng-true-value'] = attrs.ngTrueValue;
                             }
@@ -333,19 +337,22 @@
                                 },
                                 formify  : true
                             };
-
+                            
                             if (scope.vmField.params && scope.vmField.params.options) {
                                 if (_.isObject(scope.vmField.params.options)) {
                                     if (_.isObject(scope.vmField.params.options[0])) {
                                         control.attrs['ng-options'] = 'item.value as $root.translate(item.key) for item in vmField.params.options';
-                                    } else {
+                                    }
+                                    else {
                                         if (vm.translate) {
                                             control.attrs['ng-options'] = 'item as $root.translate(item) for item in vmField.params.options';
-                                        } else {
+                                        }
+                                        else {
                                             control.attrs['ng-options'] = 'item as item for item in vmField.params.options';
                                         }
                                     }
-                                } else {
+                                }
+                                else {
                                     control.attrs['ng-options'] = scope.vmField.params.options;
                                 }
                             }
@@ -362,7 +369,7 @@
                                 formify  : true
                             };
                             break;
-
+                        
                         case 'htmleditor':
                             control = {
                                 tag      : 'div',
@@ -374,202 +381,140 @@
                                 formify  : true
                             };
                             break;
-                        // case 'date-ui':
-                        //     control = {
-                        //         tag      : 'input',
-                        //         selfClose: true,
-                        //         attrs    : {
-                        //             type                  : 'text',
-                        //             class                 : 'form-control',
-                        //             'uib-datepicker-popup': aptTempl.appConfig.defaults.formats.screenDateUib,
-                        //             // 'datepicker-options'  : 'dateOptions',
-                        //             'is-open'             : 'vmField.status.open',
-                        //             // 'datepicker-localdate': ''
-                        //         },
-                        //         formify  : true
-                        //     };
-                        //     break;
                         case 'date':
                         case 'date-ui':
-                            aptTempl.appConfig.aeDateOptions = {
-                                format          : aptTempl.appConfig.defaults.formats.screenDate,
-                                locale          : 'tr',
-                                showClear       : true,
-                                showClose       : true,
-                                showTodayButton : true,
-                                keepOpen        : false,
-                                allowInputToggle: true,
-                                keepInvalid     : true,
-                                debug           : false
-                            };
-                            control                          = {
+                            control = {
                                 tag      : 'input',
                                 selfClose: true,
                                 attrs    : {
-                                    type            : 'text',
-                                    class           : 'form-control input-xs',
-                                    'datetimepicker': '',
-                                    options         : '$root.apt.Templ.appConfig.aeDateOptions'
+                                    type           : 'text',
+                                    class          : 'form-control input-xs',
+                                    'moment-picker': getBindTo(attrs, scope),
+                                    format         : aptTempl.appConfig.defaults.formats.screenDate,
+                                    keyboard       : true
                                 },
                                 formify  : false
                             };
                             break;
                         case 'datetime':
-                            aptTempl.appConfig.aeDatetimeOptions = {
-                                format          : aptTempl.appConfig.defaults.formats.screenDateTime,
-                                showClear       : true,
-                                showClose       : true,
-                                showTodayButton : true,
-                                keepOpen        : false,
-                                allowInputToggle: true,
-                                keepInvalid     : true,
-                                debug           : false
-                            };
-                            control                              = {
-                                tag      : 'input',
-                                selfClose: true,
-                                attrs    : {
-                                    type            : 'text',
-                                    class           : 'form-control input-xs',
-                                    'datetimepicker': '',
-                                    options         : '$root.apt.Templ.appConfig.aeDatetimeOptions'
-                                },
-                                formify  : true
-                            };
-                            break;
-
-                        case 'date-range-single':
                             control = {
                                 tag      : 'input',
                                 selfClose: true,
                                 attrs    : {
-                                    type               : 'text',
-                                    class              : 'form-control date-picker input-xs',
-                                    'date-range-picker': '',
-                                    'options'          : '{singleDatePicker: true, showDropdowns: true, locale: {format: ' + aptTempl.appConfig.defaults.formats.screenDate + '}}',
+                                    type           : 'text',
+                                    class          : 'form-control input-xs',
+                                    'moment-picker': getBindTo(attrs, scope),
+                                    format         : aptTempl.appConfig.defaults.formats.screenDateTime,
+                                    keyboard       : true
                                 },
-                                formify  : true
+                                formify  : false
                             };
                             break;
-
-
-                        // case 'date':
-                        //     control = {
-                        //         tag      : 'input',
-                        //         selfClose: true,
-                        //         attrs    : {
-                        //             type                  : 'date',
-                        //             class                 : 'form-control',
-                        //             'datepicker-localdate': ''
-                        //         },
-                        //         formify  : true
-                        //     };
-                        //     break;
                     }
                 }
-
-
+                
+                
                 if (attrs.class) {
                     control.attrs.class += ' ' + attrs.class;
                 }
-
+                
                 control.attrs.name = attrs.field;
-
+                
                 return control;
             }
         }
-
+        
         function getBindTo(attrs, scope) {
             var bindTo = null;
-
+            
             if (_.has(attrs, 'field')) {
                 bindTo = 'formData.' + attrs.field;
-
+                
                 if (_.has(attrs, 'modelBase')) {
                     bindTo = attrs.modelBase + '.' + attrs.field;
-
+                    
                     if (bindTo.indexOf('.') == 0) {
                         bindTo = bindTo.substr(1);
                     }
                 }
             }
-
+            
             return bindTo;
         }
-
-
+        
+        
         function finalize(elem, attrs, $tpl) {
             if (['date', 'date-ui', 'datetime'].indexOf(attrs.type) !== -1) {
-
+                
                 /**
                  * these are html attributes and kebab-case
                  */
                 $tpl.removeAttr('[label help-text]');
-
+                
                 $tpl = $('<div ' + (attrs.useFormify !== 'false' ? 'data-apt-formify ' : '') + 'class="input-group input-group-xs"></div>')
                     .append($tpl)
                     .append('<span class="input-group-addon no-border no-padding"> ' +
                             '<button type="button" data-ng-click="vmField.open()" class="btn btn-default btn-xs">' +
                             '<i class="icon-calendar"></i></button> </span>');
-
+                
                 /**
                  * these are angular attributes and camelCase
                  */
                 transferAttributes(_.pick(attrs, ['label', 'helpText']), $tpl);
             }
-
+            
             else if (attrs.type == 'switch') {
                 $tpl = $('<div class="checkbox checkbox-switchery checkbox-right switchery-xs"></div>')
                     .append($tpl);
             }
-
+            
             if (['switch'].indexOf(attrs.type) == -1) {
                 fixFormify(elem, attrs, $tpl);
             }
-
+            
             if (attrs.holderClass) {
                 $tpl.addClass(attrs.holderClass);
             }
-
-            if(attrs.onChange){
+            
+            if (attrs.onChange) {
                 $tpl.attr('ng-change', attrs.onChange);
                 delete attrs.onChange;
             }
-
+            
             return $tpl;
         }
     };
-
+    
     aptField_Controller.$inject = ['$injector', '$scope', '$attrs'];
     function aptField_Controller($injector, $scope, $attrs) {
         var vm       = this;
         var $parse   = $injector.get('$parse');
         vm.translate = false;
-
+        
         if (_.has($attrs, 'modelBase')) {
             vm.modelBase = $parse(_.get($attrs, 'modelBase'))($scope);
         }
-
+        
         if ((!_.has($attrs, 'translate') || (_.has($attrs, 'translate') && $attrs.translate != 'false')) && $injector.has('gettextCatalog')) {
             vm.translate = true;
         }
-
+        
         vm.reset = reset;
-
+        
         vm.status = {
             open: false
         };
-
+        
         vm.open = function () {
             vm.status.open = true;
         };
-
-
+        
+        
         function reset() {
             $scope.$broadcast('reset-model');
         }
     }
-
+    
     function transferAttributes(attrs, $tpl) {
         _.forOwn(attrs, function (value, key) {
             if (_.includes([
@@ -581,7 +526,7 @@
             $tpl.attr(_.kebabCase(key), value);
         });
     }
-
+    
     function preserveNgAttrs(elem, attrs) {
         var ngAttrs = {};
         _.forIn(attrs, function (value, key) {
@@ -592,7 +537,7 @@
                 elem.removeAttr(_.kebabCase(key));
             }
         });
-
+        
         elem.data('ngAttrs', ngAttrs);
     }
 })();
