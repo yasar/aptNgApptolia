@@ -86,7 +86,7 @@
                     },
                     defaults: {
                         zoomControl    : true,
-                        scrollWheelZoom: false,
+                        scrollWheelZoom: true,
                         doubleClickZoom: true,
                         layerControl   : true,
                         tileLayer      : 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
