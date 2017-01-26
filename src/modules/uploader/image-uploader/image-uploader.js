@@ -252,8 +252,8 @@
                                 settings.return_image_size = 'm.';
 
                                 Restangular.one('/system/image/rotate').customPOST(settings).then(function (data) {
-                                    $scope.uploadFile     = data.data.thumb + '?' + Math.floor((Math.random() * 100000000) + 1);
-                                    $scope.uploadFileOrig = data.data.orig + '?' + Math.floor((Math.random() * 100000000) + 1);
+                                    $scope.uploadFile     = data.thumb + '?' + Math.floor((Math.random() * 100000000) + 1);
+                                    $scope.uploadFileOrig = data.orig + '?' + Math.floor((Math.random() * 100000000) + 1);
                                 });
                             };
 
