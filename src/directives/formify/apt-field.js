@@ -49,9 +49,6 @@
          *      show-label
          *      params
          */
-        
-        
-        
         function aptField_Compile(elem, attrs) {
             
             

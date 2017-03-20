@@ -288,7 +288,7 @@
                     $scope.item = options.data;
                 }
                 
-                if (options.readonlyItems) {
+                if (options.readonlyItems && options.readonlyItems.length>0 ) {
                     $scope.readonlyItems = options.readonlyItems;
                 }
                 
