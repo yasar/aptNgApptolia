@@ -3,11 +3,11 @@
 
     angular.module('aptAuth')
         .factory('aptAuthorizationService', [
-               'aptAuthEnumService', '$injector',
-               function (enums, $injector) {
+               'aptAuthEnumService', 'UserService',
+               function (enums, UserService) {
                 var User      = UserService.getAuthUser();
                 var authorize = function (loginRequired, requiredPermissions, permissionCheckType) {
-                       var UserService        = $injector.get('UserService');
+//                       var UserService        = $injector.get('UserService');
                        var result             = enums.authorised.authorised;
                        var loweredPermissions = [];
                        var hasPermission      = true;

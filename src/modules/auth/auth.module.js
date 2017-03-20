@@ -9,9 +9,9 @@
                'aptAuthorizationService', 'aptAuthEnumService',
                '$timeout',
                'aptUtils',
-               '$injector',
-               function ($rootScope, $location, authorization, enums, $timeout, aptUtils, $injector) {
-                   var UserService                   = $injector.get('UserService');
+               'UserService',
+               function ($rootScope, $location, authorization, enums, $timeout, aptUtils, UserService) {
+//                   var UserService                   = $injector.get('UserService');
                    var User                          = UserService.getAuthUser();
                    var routeChangeRequiredAfterLogin = false,
                        loginRedirectUrl              = null;
