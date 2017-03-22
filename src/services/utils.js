@@ -119,8 +119,15 @@
             options            = _.defaults(options, aptTempl.appConfig.defaults.dialogs.error);
             translate          = _.isUndefined(translate) ? true : translate;
             if (translate) {
-                title   = gettextCatalog.getString(title);
-                message = gettextCatalog.getString(message);
+                title = gettextCatalog.getString(title);
+                if (_.isObject(message)) {
+                    if (_.has(message, 'data.error_message')) {
+                        message = message.data.error_message;
+                    }
+                }
+                else {
+                    message = gettextCatalog.getString(message);
+                }
             }
             return dialogs.error(title, message, options);
         }
