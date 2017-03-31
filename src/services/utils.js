@@ -65,7 +65,8 @@
             showFormDirectiveInPopup         : showFormDirectiveInPopup,
             popupDirective                   : popupDirective,
             formatAddressForPrint            : formatAddressForPrint,
-            grabLabelFromAttrs               : grabLabelFromAttrs
+            grabLabelFromAttrs               : grabLabelFromAttrs,
+            download                         : download
         };
         
         function grabLabelFromAttrs(attrs) {
@@ -884,6 +885,13 @@
                 }
             }
             
+        }
+        
+        function download(fileDownload) {
+            var downloadLink = angular.element('<a></a>');//create a new  <a> tag element
+            downloadLink.attr('href', fileDownload);
+            downloadLink.attr('target', '_blank');
+            downloadLink[0].click();//call click function
         }
     }
     
