@@ -117,20 +117,22 @@
             var dialogs        = $injector.get('dialogs');
             var aptTempl       = $injector.get('aptTempl');
             var gettextCatalog = $injector.get('gettextCatalog');
-            options            = _.defaults(options, aptTempl.appConfig.defaults.dialogs.error);
-            translate          = _.isUndefined(translate) ? true : translate;
-            if (translate) {
-                title = gettextCatalog.getString(title);
+            var _options       = _.defaults(options, aptTempl.appConfig.defaults.dialogs.error);
+            var _translate     = _.isUndefined(translate) ? true : translate;
+            var _message       = null;
+            var _title         = title;
+            if (_translate) {
+                _title = gettextCatalog.getString(title);
                 if (_.isObject(message)) {
                     if (_.has(message, 'data.error_message')) {
-                        message = message.data.error_message;
+                        _message = message.data.error_message;
                     }
                 }
                 else {
-                    message = gettextCatalog.getString(message);
+                    _message = gettextCatalog.getString(message);
                 }
             }
-            return dialogs.error(title, message, options);
+            return dialogs.error(_title, _message, _options);
         }
         
         function showWarning(title, message, options) {
