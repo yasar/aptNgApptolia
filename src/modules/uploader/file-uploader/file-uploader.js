@@ -140,6 +140,7 @@
 
                                     var settings             = angular.copy($scope.settings);
                                     settings.cmd             = 'delete';
+                                    settings.data = settings.data ? settings.data:{};
                                     settings.data.uploadFile = $scope.uploadFile;
 
                                     Restangular.one('/system/file/delete', settings.dbval_recid).customPOST(settings).then(function (data) {
