@@ -46,7 +46,8 @@
                             //$scope.description = $scope.settings.dbval_title;
 
                             if ($scope.model.filename) {
-                                $scope.uploadFile        = $scope.model.upload_path + '/' + $scope.model.file_id + '/' + $scope.model.filename;
+                                // $scope.uploadFile        = $scope.model.upload_path + '/' + $scope.model.file_id + '/' + $scope.model.filename;
+                                $scope.uploadFile        = $scope.model.upload_path + '/' +  $scope.model.filename;
                                 $scope.state.is_uploaded = true;
                                 $scope.state.is_modified = false;
                             } else {
@@ -126,7 +127,8 @@
 
                                 Restangular.all('/system/file/upload').post(settings).then(function (data) {
                                     $scope.model.filename    = data.filename;
-                                    $scope.uploadFile        = $scope.model.upload_path + '/' + $scope.model.file_id + '/' + $scope.model.filename;
+                                    // $scope.uploadFile        = $scope.model.upload_path + '/' + $scope.model.file_id + '/' + $scope.model.filename;
+                                    $scope.uploadFile        = $scope.model.upload_path + '/' + $scope.model.filename;
                                     $scope.state.is_uploaded = true;
                                     $scope.state.is_modified = false;
                                     console.log('file uploaded:' + data);
