@@ -30,7 +30,7 @@
     "restangular": "*",
     "ngstorage": "*",
     "lodash": "*",
-    "moment": "*",
+    "moment": "2.16.0",
     "angular-moment": "*",
     "angular-route": "~1.5",
     "angular-ui-router": "*",
