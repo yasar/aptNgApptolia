@@ -392,7 +392,7 @@ function aptUtilsForm($injector) {
         // }
 
         function updateSubmitLabel(data) {
-            formObj.submitLabel = formObj.mode == 'edit' ? (_.get(data, '__is_incomplete') ? 'Complete' : 'Update') : 'Add'
+            formObj.submitLabel = gettextCatalog.getString(formObj.mode == 'edit' ? (_.get(data, '__is_incomplete') ? 'Complete' : 'Update') : 'Add');
         }
 
         function updateFormMode(data) {
