@@ -175,7 +175,7 @@
                         windowClass: 'bg-warning text-default bg-opacity-50'
                     },
                     error        : {
-                        size       : 'sm',
+                        size       : 'md',
                         keyboard   : true,
                         backdrop   : true,
                         animation  : true,
