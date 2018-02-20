@@ -41,31 +41,31 @@ function aptUtilsForm($injector) {
         var _backupData = null;
 
         var options = angular.extend({
-            itemId        : null,
-            /**
-             * in order to get the watch to work, we have to supply $scope
-             */
-            watch         : false,
-            $scope        : null,
-            readonlyFields: [],
-            /**
-             * when set true, notifyingService will mute
-             */
-            mute          : false,
-            /**
-             * when set true, it will prevent from routing back to listing page
-             * after form is submitted
-             */
-            stay          : false,
-            onDataLoad    : null,
-            /**
-             * Must return a promise object
-             */
-            onBeforeSubmit: null,
-            hasParent     : undefined,
-            name          : undefined,
-            sendWithGet   : null
-        }, _options);
+                                         itemId        : null,
+                                         /**
+                                          * in order to get the watch to work, we have to supply $scope
+                                          */
+                                         watch         : false,
+                                         $scope        : null,
+                                         readonlyFields: [],
+                                         /**
+                                          * when set true, notifyingService will mute
+                                          */
+                                         mute          : false,
+                                         /**
+                                          * when set true, it will prevent from routing back to listing page
+                                          * after form is submitted
+                                          */
+                                         stay          : false,
+                                         onDataLoad    : null,
+                                         /**
+                                          * Must return a promise object
+                                          */
+                                         onBeforeSubmit: null,
+                                         hasParent     : undefined,
+                                         name          : undefined,
+                                         sendWithGet   : null
+                                     }, _options);
 
         if (_.isUndefined(options.hasParent)) {
             options.hasParent = false;
@@ -227,9 +227,10 @@ function aptUtilsForm($injector) {
                 function (newVal, oldVal) {
                     /**
                      * watch ile takip edilin herhangi bir formun id si form yuklenirken undefined veya null oldugundan
-                     * dolayı formu submit ederken form mode new olarak atama yapıyor ve normalde update islemi yapmamız
-                     * gerekirken add işlemi yapıyorduk.watch ile izlenen id tanımlı olarak geldiginde form submit edilirken
-                     * update yapmak için form mode 'edit' olarak atandı.
+                     * dolayı formu submit ederken form mode new olarak atama yapıyor ve normalde update islemi
+                     * yapmamız
+                     * gerekirken add işlemi yapıyorduk.watch ile izlenen id tanımlı olarak geldiginde form submit
+                     * edilirken update yapmak için form mode 'edit' olarak atandı.
                      */
 
 
@@ -322,7 +323,7 @@ function aptUtilsForm($injector) {
                     service.update(formObj.data, mute, _options.sendWithGet).then(function (data) {
                         formObj.isSaving       = false;
                         formObj.isSavingFailed = false;
-                        _.merge(formObj.data, data);
+                        _.merge(formObj.data, data.restangularized ? data.plain() : data);
                         formObj.data = backupDataAndGetCopy(formObj.data);
                         //notify(formObj.data, 'formDataUpdated');
                         updateFormMode(data);
